@@ -34,6 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             handleSave();
         }
+        // ESC key to cancel edit mode
+        if (e.key === 'Escape' && currentEditingId) {
+            cancelEdit();
+        }
     });
     
     // Add input event listener for character counter
@@ -141,11 +145,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Highlight the card being edited
         const allCards = document.querySelectorAll('.thought-card');
-        allCards.forEach(card => card.classList.remove('editing'));
-        const editingCard = document.querySelector(`.thought-card[data-id="${thoughtId}"]`);
-        if (editingCard) {
-            editingCard.classList.add('editing');
-        }
+        allCards.forEach(card => {
+            card.classList.remove('editing');
+            if (card.dataset.id === thoughtId) {
+                card.classList.add('editing');
+            }
+        });
         
         // Focus the textarea
         thoughtInput.focus();
@@ -272,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add Edit button
         const editButton = document.createElement('button');
+        editButton.type = 'button';
         editButton.className = 'edit-btn';
         editButton.textContent = 'Edit';
         editButton.addEventListener('click', function(e) {
@@ -283,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add "Show more" button if thought is truncated
         if (needsTruncation) {
             const toggleButton = document.createElement('button');
+            toggleButton.type = 'button';
             toggleButton.className = 'toggle-text-btn';
             toggleButton.textContent = 'Show more';
             toggleButton.addEventListener('click', function(e) {
