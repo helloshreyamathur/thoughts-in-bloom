@@ -237,6 +237,23 @@ p {
     font-size: 0.75rem;
 }
 
+/* Toggle Text Button (Show more/Show less) */
+.toggle-text-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary-blue);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    transition: color var(--duration-fast) var(--easing-default);
+}
+
+.toggle-text-btn:hover {
+    color: var(--color-text-dark);
+    text-decoration: underline;
+}
+
 /* Animations */
 @keyframes slideInFromBottom {
     from {
