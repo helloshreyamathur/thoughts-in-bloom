@@ -763,7 +763,7 @@ For each phase:
 
 Update this section as you complete phases. Each phase has a corresponding GitHub issue:
 
-- [ ] Phase 0: Environment Setup ([#1](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/1))
+- [x] Phase 0: Environment Setup ([#1](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/1))
 - [ ] Phase 1: Bare Bones ([#2](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/2))
 - [ ] Phase 2: Core Styling ([#3](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/3))
 - [ ] Phase 3: Essential Features ([#4](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/4))
