@@ -4,29 +4,73 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Thoughts in Bloom - Ready');
     
+    // Constants
+    const MAX_CHARS = 1000;
+    const WARNING_THRESHOLD = 500;
+    
     // Get references to DOM elements
     const thoughtInput = document.getElementById('thought-input');
     const saveButton = document.getElementById('save-button');
     const thoughtsContainer = document.getElementById('thoughts-container');
+    const charCounter = document.getElementById('char-counter');
+    const errorMessage = document.getElementById('error-message');
     
     // Load and display existing thoughts on page load
     loadThoughts();
     
+    // Update character counter and button state on initial load
+    updateCharCounter();
+    
     // Add click event listener to save button
     saveButton.addEventListener('click', saveThought);
     
-    // Add keyboard shortcut (Ctrl+Enter to save)
+    // Add keyboard shortcut (Ctrl+Enter or Cmd+Enter to save)
     thoughtInput.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && e.key === 'Enter') {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             saveThought();
         }
     });
+    
+    // Add input event listener for character counter
+    thoughtInput.addEventListener('input', updateCharCounter);
+    
+    function updateCharCounter() {
+        const text = thoughtInput.value;
+        const length = text.length;
+        
+        // Update counter text
+        charCounter.textContent = length + ' / ' + MAX_CHARS;
+        
+        // Update counter color based on length
+        charCounter.classList.remove('warning', 'danger');
+        if (length > MAX_CHARS) {
+            charCounter.classList.add('danger');
+        } else if (length >= WARNING_THRESHOLD) {
+            charCounter.classList.add('warning');
+        }
+        
+        // Update save button state
+        const trimmedText = text.trim();
+        saveButton.disabled = trimmedText.length === 0 || length > MAX_CHARS;
+        
+        // Clear error message when user starts typing
+        if (trimmedText.length > 0) {
+            errorMessage.textContent = '';
+        }
+    }
     
     function saveThought() {
         const text = thoughtInput.value.trim();
         
         // Don't save empty thoughts
         if (!text) {
+            errorMessage.textContent = 'Please enter a thought before saving.';
+            return;
+        }
+        
+        // Don't save if over character limit
+        if (thoughtInput.value.length > MAX_CHARS) {
+            errorMessage.textContent = 'Thought exceeds character limit.';
             return;
         }
         
@@ -50,8 +94,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought saved:', thought);
         
-        // Clear textarea
+        // Clear textarea and update counter
         thoughtInput.value = '';
+        updateCharCounter();
         
         // Create and prepend new card with animation
         const card = createThoughtCard(thought, true);
