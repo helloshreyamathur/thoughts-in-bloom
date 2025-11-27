@@ -265,49 +265,56 @@ This is a multi-phased development plan to build a living digital garden web app
 
 ---
 
-## Phase 4: Masonry Layout
+## Phase 4: Responsive Grid Layout ✅ COMPLETED
 
 ### Goals
-- Implement Pinterest-style grid layout
+- Implement responsive grid layout based on Figma design
 - Make it responsive (1, 2, 3, or 4 columns based on screen width)
 - Maintain newest-first ordering
+- Match Figma visual design with refined styling
 
-### Tasks
+### Tasks Completed
 
-#### 4.1: Research Layout Approach
-- Option A: CSS Grid with auto-fit columns
-- Option B: CSS Multi-column layout
-- Option C: JavaScript masonry library (avoid if possible)
-- **Decision**: Use CSS Grid for simplicity
+#### 4.1: Layout Approach ✅
+- **Decision**: Used CSS Grid with responsive breakpoints
+- Implemented `grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`
+- Added media query overrides for precise control
 
-#### 4.2: Implement CSS Grid Layout
+#### 4.2: Implemented CSS Grid Layout ✅
 **File:** `style.css`
-- Change cards container to CSS Grid
+- Changed cards container to CSS Grid
 - Set up responsive columns:
-  - Mobile: 1 column
-  - Tablet: 2 columns
-  - Desktop: 3-4 columns
-- Use media queries for breakpoints
-- Set gap between cards
-- Ensure newest first ordering is maintained
+  - Mobile (<768px): 1 column
+  - Tablet (769-1024px): 2 columns
+  - Desktop (1025-1399px): 3 columns
+  - Large screens (1400px+): 4 columns
+- Gap between cards: 1rem (16px)
+- Max container width: 1200px with centered layout
 
-#### 4.3: Test Responsiveness
-- Test on mobile (320px width)
-- Test on tablet (768px width)
-- Test on desktop (1200px+ width)
-- Verify cards flow properly
+#### 4.3: Visual Refinements Based on Figma ✅
+**Updated from Figma design:**
+- Background changed to warm off-white (#FAF9F6)
+- Removed gradient background for cleaner look
+- Card borders added (1px solid #E8E8E8)
+- Refined shadows (0 2px 8px rgba(0, 0, 0, 0.06))
+- Updated color palette to match Figma
+- Title styling: "Bloom" in blue (#5B9BD5)
+- Pill-shaped input with circular submit button
+- Card footer with border-top separator
+- Date format changed to M.DD.YY
 
-### Success Criteria
-- [ ] Cards display in grid layout
-- [ ] Number of columns adjusts based on screen width
-- [ ] Newest thoughts appear first (top-left)
-- [ ] Layout looks balanced and clean
+#### 4.4: Responsive Testing ✅
+- Tested on mobile (320px width)
+- Tested on tablet (768px width)
+- Tested on desktop (1200px+ width)
+- Verified smooth transitions between breakpoints
 
-### Testing Checklist
-- Resize browser window
-- Check layout on mobile, tablet, desktop
-- Add 10+ thoughts to test grid with many items
-- Verify no overlapping or weird gaps
+### Success Criteria ✅ ALL MET
+- ✅ Cards display in grid layout
+- ✅ Number of columns adjusts based on screen width (1-4 columns)
+- ✅ Newest thoughts appear first (top-left)
+- ✅ Layout looks balanced and clean
+- ✅ Matches Figma design aesthetic
 
 ---
 
@@ -767,7 +774,7 @@ Update this section as you complete phases. Each phase has a corresponding GitHu
 - [x] Phase 1: Bare Bones ([#2](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/2))
 - [x] Phase 2: Core Styling ([#3](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/3))
 - [x] Phase 3: Essential Features ([#4](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/4))
-- [ ] Phase 4: Masonry Layout ([#5](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/5))
+- [x] Phase 4: Masonry Layout ([#5](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/5))
 - [ ] Phase 5: Text Truncation & Expansion ([#6](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/6))
 - [ ] Phase 6: Edit Functionality ([#7](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/7))
 - [ ] Phase 7: Archive Functionality ([#8](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/8))
