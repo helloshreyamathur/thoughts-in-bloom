@@ -775,7 +775,7 @@ Update this section as you complete phases. Each phase has a corresponding GitHu
 - [x] Phase 2: Core Styling ([#3](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/3))
 - [x] Phase 3: Essential Features ([#4](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/4))
 - [x] Phase 4: Masonry Layout ([#5](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/5))
-- [ ] Phase 5: Text Truncation & Expansion ([#6](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/6))
+- [x] Phase 5: Text Truncation & Expansion ([#6](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/6))
 - [ ] Phase 6: Edit Functionality ([#7](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/7))
 - [ ] Phase 7: Archive Functionality ([#8](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/8))
 - [ ] Phase 8: Tag System ([#9](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/9))
