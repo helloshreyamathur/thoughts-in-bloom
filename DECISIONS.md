@@ -14,6 +14,24 @@ Building "Thoughts in Bloom" - a living digital garden web app where ideas grow 
 - **Data Storage**: Browser localStorage
   - *Rationale*: No server setup required, data persists locally, perfect for personal use on a single device
   - *Limitation*: Data won't sync across devices or browsers
+- **Deployment**: Vercel (connected to GitHub)
+  - *Rationale*: Automatic deployments, free hosting for static sites, instant preview URLs
+  - *Limitation*: Only hosts the app, not the data (localStorage is local)
+
+### Development Tooling
+- **Design**: Figma (mandatory for visual features)
+  - Design mockups before implementing UI changes
+  - Export design assets to `/design` folder
+  - Document colors, spacing, and typography for CSS
+- **Editor**: VSCode with GitHub Copilot
+  - Live Server extension for local preview
+  - Copilot for code patterns and suggestions
+- **Version Control**: GitHub
+  - Main branch = production-ready
+  - Commit after each completed feature
+- **Deployment**: Vercel
+  - Auto-deploy on push to main
+  - Preview deployments for testing
 
 ### Architecture Decisions
 1. **Single Page Application**: All functionality in one HTML file + CSS + JS
