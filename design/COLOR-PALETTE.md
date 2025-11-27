@@ -9,7 +9,7 @@
 | Primary Purple | `#9f7aea` | Gradients, focus states |
 | Light Blue | `#e8f4f8` | Background gradient start |
 | Light Purple | `#f0e6f6` | Background gradient end |
-| Soft Lavender | `#e6e0f5` | Card hover glow |
+| Soft Lavender | `#e6e0f5` | Background gradient end |
 
 ### Text Colors
 | Color Name | Hex Code | Usage |
