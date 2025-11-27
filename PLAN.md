@@ -765,7 +765,7 @@ Update this section as you complete phases. Each phase has a corresponding GitHu
 
 - [x] Phase 0: Environment Setup ([#1](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/1))
 - [x] Phase 1: Bare Bones ([#2](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/2))
-- [ ] Phase 2: Core Styling ([#3](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/3))
+- [x] Phase 2: Core Styling ([#3](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/3))
 - [ ] Phase 3: Essential Features ([#4](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/4))
 - [ ] Phase 4: Masonry Layout ([#5](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/5))
 - [ ] Phase 5: Text Truncation & Expansion ([#6](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/6))
