@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Update save button state
+        // Disabled if: no meaningful content (trimmed is empty) OR exceeds character limit (raw length)
         const trimmedText = text.trim();
         saveButton.disabled = trimmedText.length === 0 || length > MAX_CHARS;
         
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function saveThought() {
         const text = thoughtInput.value.trim();
+        const rawLength = thoughtInput.value.length;
         
         // Don't save empty thoughts
         if (!text) {
@@ -68,8 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Don't save if over character limit
-        if (thoughtInput.value.length > MAX_CHARS) {
+        // Don't save if over character limit (check raw length including whitespace)
+        if (rawLength > MAX_CHARS) {
             errorMessage.textContent = 'Thought exceeds character limit.';
             return;
         }
