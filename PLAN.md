@@ -761,18 +761,18 @@ For each phase:
 
 ## Progress Tracking
 
-Update this section as you complete phases:
+Update this section as you complete phases. Each phase has a corresponding GitHub issue:
 
-- [ ] Phase 0: Environment Setup
-- [ ] Phase 1: Bare Bones
-- [ ] Phase 2: Core Styling
-- [ ] Phase 3: Essential Features
-- [ ] Phase 4: Masonry Layout
-- [ ] Phase 5: Text Truncation & Expansion
-- [ ] Phase 6: Edit Functionality
-- [ ] Phase 7: Archive Functionality
-- [ ] Phase 8: Tag System
-- [ ] Phase 9: Search Functionality
-- [ ] Phase 10: Mobile Refinements
-- [ ] Phase 11: Polish & Bug Fixes
-- [ ] Phase 12: Documentation & Deployment
+- [ ] Phase 0: Environment Setup ([#1](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/1))
+- [ ] Phase 1: Bare Bones ([#2](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/2))
+- [ ] Phase 2: Core Styling ([#3](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/3))
+- [ ] Phase 3: Essential Features ([#4](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/4))
+- [ ] Phase 4: Masonry Layout ([#5](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/5))
+- [ ] Phase 5: Text Truncation & Expansion ([#6](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/6))
+- [ ] Phase 6: Edit Functionality ([#7](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/7))
+- [ ] Phase 7: Archive Functionality ([#8](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/8))
+- [ ] Phase 8: Tag System ([#9](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/9))
+- [ ] Phase 9: Search Functionality ([#10](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/10))
+- [ ] Phase 10: Mobile Refinements ([#11](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/11))
+- [ ] Phase 11: Polish & Bug Fixes ([#12](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/12))
+- [ ] Phase 12: Documentation & Deployment ([#13](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/13))
