@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const MAX_CHARS = 1000;
     const WARNING_THRESHOLD = 500;
+    const PREVIEW_CHAR_LIMIT = 280;
     
     // Get references to DOM elements
     const thoughtInput = document.getElementById('thought-input');
@@ -135,7 +136,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const textElement = document.createElement('p');
         textElement.className = 'thought-text';
-        textElement.textContent = thought.text;
+        
+        const needsTruncation = thought.text.length > PREVIEW_CHAR_LIMIT;
+        
+        if (needsTruncation) {
+            // Store full text in data attribute for toggling
+            textElement.dataset.fullText = thought.text;
+            textElement.dataset.truncated = 'true';
+            textElement.textContent = getTruncatedText(thought.text);
+        } else {
+            textElement.textContent = thought.text;
+        }
         
         const footer = document.createElement('div');
         footer.className = 'thought-footer';
@@ -146,10 +157,48 @@ document.addEventListener('DOMContentLoaded', function() {
         
         footer.appendChild(dateElement);
         
+        // Add "Show more" button if thought is truncated
+        if (needsTruncation) {
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'toggle-text-btn';
+            toggleButton.textContent = 'Show more';
+            toggleButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleTextExpansion(textElement, toggleButton);
+            });
+            footer.appendChild(toggleButton);
+        }
+        
         card.appendChild(textElement);
         card.appendChild(footer);
         
         return card;
+    }
+    
+    function getTruncatedText(text) {
+        return text.substring(0, PREVIEW_CHAR_LIMIT) + '...';
+    }
+    
+    function toggleTextExpansion(textElement, toggleButton) {
+        const isTruncated = textElement.dataset.truncated === 'true';
+        const fullText = textElement.dataset.fullText;
+        
+        // Safety check: if fullText is not available, do nothing
+        if (!fullText) {
+            return;
+        }
+        
+        if (isTruncated) {
+            // Expand to full text
+            textElement.textContent = fullText;
+            textElement.dataset.truncated = 'false';
+            toggleButton.textContent = 'Show less';
+        } else {
+            // Collapse to truncated text
+            textElement.textContent = getTruncatedText(fullText);
+            textElement.dataset.truncated = 'true';
+            toggleButton.textContent = 'Show more';
+        }
     }
     
     function formatDate(isoString) {
