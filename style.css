@@ -115,16 +115,50 @@ p {
     font-weight: 600;
     cursor: pointer;
     transition: transform var(--duration-fast) var(--easing-default),
-                box-shadow var(--duration-fast) var(--easing-default);
+                box-shadow var(--duration-fast) var(--easing-default),
+                opacity var(--duration-fast) var(--easing-default);
 }
 
-#save-button:hover {
+#save-button:hover:not(:disabled) {
     transform: translateY(-3px);
     box-shadow: var(--shadow-button);
 }
 
-#save-button:active {
+#save-button:active:not(:disabled) {
     transform: translateY(-1px);
+}
+
+#save-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Input Footer */
+.input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space-xs);
+    padding: 0 var(--space-xs);
+}
+
+.char-counter {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    transition: color var(--duration-fast) var(--easing-default);
+}
+
+.char-counter.warning {
+    color: #d69e2e;
+}
+
+.char-counter.danger {
+    color: #e53e3e;
+}
+
+.error-message {
+    font-size: 0.875rem;
+    color: #e53e3e;
 }
 
 /* Thoughts Container */
