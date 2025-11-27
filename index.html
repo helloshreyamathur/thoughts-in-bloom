@@ -8,16 +8,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>Thoughts in Bloom</h1>
-        <p>A living digital garden where ideas grow and connect over time.</p>
+        <h1>Thoughts in <span class="bloom">Bloom</span></h1>
         
         <div class="input-section">
-            <textarea id="thought-input" placeholder="What's on your mind?"></textarea>
+            <textarea id="thought-input" placeholder="Hi, what's on your mind today?"></textarea>
+            <button id="save-button" disabled aria-label="Save thought">→</button>
             <div class="input-footer">
                 <span id="char-counter" class="char-counter">0 / 1000</span>
                 <span id="error-message" class="error-message"></span>
             </div>
-            <button id="save-button" disabled>Save</button>
         </div>
         
         <div id="thoughts-container" class="thoughts-container"></div>

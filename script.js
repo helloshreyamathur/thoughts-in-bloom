@@ -137,24 +137,26 @@ document.addEventListener('DOMContentLoaded', function() {
         textElement.className = 'thought-text';
         textElement.textContent = thought.text;
         
+        const footer = document.createElement('div');
+        footer.className = 'thought-footer';
+        
         const dateElement = document.createElement('span');
         dateElement.className = 'thought-date';
         dateElement.textContent = formatDate(thought.date);
         
+        footer.appendChild(dateElement);
+        
         card.appendChild(textElement);
-        card.appendChild(dateElement);
+        card.appendChild(footer);
         
         return card;
     }
     
     function formatDate(isoString) {
         const date = new Date(isoString);
-        return date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit'
-        });
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const year = date.getFullYear().toString().slice(-2);
+        return `${month}.${day}.${year}`;
     }
 });
