@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear textarea
         thoughtInput.value = '';
         
-        // Reload thoughts display
-        loadThoughts();
+        // Create and prepend new card with animation
+        const card = createThoughtCard(thought, true);
+        thoughtsContainer.prepend(card);
     }
     
     function getThoughts() {
@@ -77,9 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    function createThoughtCard(thought) {
+    function createThoughtCard(thought, isNew = false) {
         const card = document.createElement('div');
         card.className = 'thought-card';
+        if (isNew) {
+            card.classList.add('slide-in');
+        }
         card.dataset.id = thought.id;
         
         const textElement = document.createElement('p');

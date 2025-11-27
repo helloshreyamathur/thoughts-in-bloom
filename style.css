@@ -1,3 +1,46 @@
+/* CSS Custom Properties (Design Tokens) */
+:root {
+    /* Primary Colors */
+    --color-primary-blue: #667eea;
+    --color-primary-purple: #9f7aea;
+    --color-light-blue: #e8f4f8;
+    --color-light-purple: #f0e6f6;
+    --color-soft-lavender: #e6e0f5;
+    
+    /* Text Colors */
+    --color-heading: #4a5568;
+    --color-body: #2d3748;
+    --color-subtitle: #718096;
+    --color-muted: #a0aec0;
+    
+    /* Surface Colors */
+    --color-card-bg: #ffffff;
+    --color-border-light: #e2e8f0;
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-button: 0 4px 12px rgba(102, 126, 234, 0.4);
+    --shadow-input-focus: 0 0 0 3px rgba(159, 122, 234, 0.2);
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    
+    /* Animation */
+    --duration-fast: 0.2s;
+    --duration-normal: 0.3s;
+    --duration-slow: 0.4s;
+    --easing-default: ease;
+    --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /* Reset and base styles */
 * {
     margin: 0;
@@ -9,117 +52,136 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     line-height: 1.6;
     min-height: 100vh;
-    background: linear-gradient(135deg, #e8f4f8 0%, #f0e6f6 100%);
+    background: linear-gradient(135deg, var(--color-light-blue) 0%, var(--color-light-purple) 50%, var(--color-soft-lavender) 100%);
+    background-attachment: fixed;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: var(--space-xl);
     text-align: center;
 }
 
 h1 {
-    color: #4a5568;
-    margin-bottom: 1rem;
+    color: var(--color-heading);
+    margin-bottom: var(--space-md);
+    font-weight: 600;
 }
 
 p {
-    color: #718096;
-    margin-bottom: 2rem;
+    color: var(--color-subtitle);
+    margin-bottom: var(--space-xl);
 }
 
 /* Input Section */
 .input-section {
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 #thought-input {
     width: 100%;
-    min-height: 120px;
-    padding: 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    min-height: 140px;
+    padding: var(--space-lg);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--radius-md);
     font-family: inherit;
     font-size: 1rem;
     line-height: 1.6;
     resize: vertical;
-    background: white;
-    transition: border-color 0.3s ease;
+    background: var(--color-card-bg);
+    transition: border-color var(--duration-normal) var(--easing-default),
+                box-shadow var(--duration-normal) var(--easing-default);
 }
 
 #thought-input:focus {
     outline: none;
-    border-color: #9f7aea;
+    border-color: var(--color-primary-purple);
+    box-shadow: var(--shadow-input-focus);
 }
 
 #thought-input::placeholder {
-    color: #a0aec0;
+    color: var(--color-muted);
 }
 
 #save-button {
-    margin-top: 1rem;
-    padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #9f7aea 100%);
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-xl);
+    background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-purple) 100%);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform var(--duration-fast) var(--easing-default),
+                box-shadow var(--duration-fast) var(--easing-default);
 }
 
 #save-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-button);
 }
 
 #save-button:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
 }
 
 /* Thoughts Container */
 .thoughts-container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-md);
     text-align: left;
 }
 
 /* Thought Card */
 .thought-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    animation: slideIn 0.3s ease;
+    background: var(--color-card-bg);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-card);
+    transition: transform var(--duration-normal) var(--easing-default),
+                box-shadow var(--duration-normal) var(--easing-default);
+}
+
+.thought-card.slide-in {
+    animation: slideInFromBottom var(--duration-slow) var(--easing-bounce);
 }
 
 .thought-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
 }
 
 .thought-text {
-    color: #2d3748;
-    margin-bottom: 0.75rem;
+    color: var(--color-body);
+    margin-bottom: var(--space-sm);
     white-space: pre-wrap;
 }
 
 .thought-date {
-    color: #a0aec0;
+    color: var(--color-muted);
     font-size: 0.875rem;
 }
 
-@keyframes slideIn {
+/* Animations */
+@keyframes slideInFromBottom {
     from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
