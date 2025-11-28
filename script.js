@@ -16,9 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const charCounter = document.getElementById('char-counter');
     const errorMessage = document.getElementById('error-message');
     const inputSection = document.querySelector('.input-section');
+    const viewActiveBtn = document.getElementById('view-active');
+    const viewArchivedBtn = document.getElementById('view-archived');
     
     // Edit mode state
     let currentEditingId = null;
+    
+    // View mode state: 'active' or 'archived'
+    let currentViewMode = 'active';
     
     // Load and display existing thoughts on page load
     loadThoughts();
@@ -42,6 +47,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Add input event listener for character counter
     thoughtInput.addEventListener('input', updateCharCounter);
+    
+    // Add click event listeners for view toggle buttons
+    viewActiveBtn.addEventListener('click', function() {
+        setViewMode('active');
+    });
+    
+    viewArchivedBtn.addEventListener('click', function() {
+        setViewMode('archived');
+    });
+    
+    function setViewMode(mode) {
+        currentViewMode = mode;
+        
+        // Update button states
+        if (mode === 'active') {
+            viewActiveBtn.classList.add('active');
+            viewActiveBtn.setAttribute('aria-pressed', 'true');
+            viewArchivedBtn.classList.remove('active');
+            viewArchivedBtn.setAttribute('aria-pressed', 'false');
+        } else {
+            viewArchivedBtn.classList.add('active');
+            viewArchivedBtn.setAttribute('aria-pressed', 'true');
+            viewActiveBtn.classList.remove('active');
+            viewActiveBtn.setAttribute('aria-pressed', 'false');
+        }
+        
+        // Cancel any edit mode when switching views
+        if (currentEditingId) {
+            cancelEdit();
+        }
+        
+        // Re-render thoughts for the selected view
+        loadThoughts();
+    }
     
     function updateCharCounter() {
         const text = thoughtInput.value;
@@ -213,6 +252,48 @@ document.addEventListener('DOMContentLoaded', function() {
         allCards.forEach(card => card.classList.remove('editing'));
     }
     
+    function archiveThought(thoughtId) {
+        const thoughts = getThoughts();
+        const thoughtIndex = thoughts.findIndex(t => t.id === thoughtId);
+        
+        if (thoughtIndex === -1) {
+            console.error('Thought not found for archive:', thoughtId);
+            return;
+        }
+        
+        // Set archived to true
+        thoughts[thoughtIndex].archived = true;
+        
+        // Save to localStorage
+        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        
+        console.log('Thought archived:', thoughts[thoughtIndex]);
+        
+        // Re-render to remove from active view
+        loadThoughts();
+    }
+    
+    function restoreThought(thoughtId) {
+        const thoughts = getThoughts();
+        const thoughtIndex = thoughts.findIndex(t => t.id === thoughtId);
+        
+        if (thoughtIndex === -1) {
+            console.error('Thought not found for restore:', thoughtId);
+            return;
+        }
+        
+        // Set archived to false
+        thoughts[thoughtIndex].archived = false;
+        
+        // Save to localStorage
+        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        
+        console.log('Thought restored:', thoughts[thoughtIndex]);
+        
+        // Re-render to remove from archived view
+        loadThoughts();
+    }
+    
     function getThoughts() {
         const stored = localStorage.getItem('thoughts');
         return stored ? JSON.parse(stored) : [];
@@ -224,12 +305,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear current display
         thoughtsContainer.innerHTML = '';
         
-        // Create card for each thought
-        thoughts.forEach(function(thought) {
-            if (!thought.archived) {
-                const card = createThoughtCard(thought);
-                thoughtsContainer.appendChild(card);
+        // Filter based on current view mode
+        const filteredThoughts = thoughts.filter(function(thought) {
+            if (currentViewMode === 'archived') {
+                return thought.archived === true;
+            } else {
+                return !thought.archived;
             }
+        });
+        
+        // Create card for each thought
+        filteredThoughts.forEach(function(thought) {
+            const card = createThoughtCard(thought);
+            thoughtsContainer.appendChild(card);
         });
     }
     
@@ -238,6 +326,10 @@ document.addEventListener('DOMContentLoaded', function() {
         card.className = 'thought-card';
         if (isNew) {
             card.classList.add('slide-in');
+        }
+        // Add archived class for styling archived cards
+        if (thought.archived) {
+            card.classList.add('archived');
         }
         card.dataset.id = thought.id;
         
@@ -275,16 +367,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const actionsContainer = document.createElement('div');
         actionsContainer.className = 'thought-actions';
         
-        // Add Edit button
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'edit-btn';
-        editButton.textContent = 'Edit';
-        editButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            editThought(thought.id);
-        });
-        actionsContainer.appendChild(editButton);
+        // Add Edit button (only for active thoughts)
+        if (!thought.archived) {
+            const editButton = document.createElement('button');
+            editButton.type = 'button';
+            editButton.className = 'edit-btn';
+            editButton.textContent = 'Edit';
+            editButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                editThought(thought.id);
+            });
+            actionsContainer.appendChild(editButton);
+        }
+        
+        // Add Archive/Restore button
+        const archiveButton = document.createElement('button');
+        archiveButton.type = 'button';
+        archiveButton.className = 'archive-btn';
+        if (thought.archived) {
+            archiveButton.textContent = 'Restore';
+            archiveButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                restoreThought(thought.id);
+            });
+        } else {
+            archiveButton.textContent = 'Archive';
+            archiveButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                archiveThought(thought.id);
+            });
+        }
+        actionsContainer.appendChild(archiveButton);
         
         // Add "Show more" button if thought is truncated
         if (needsTruncation) {

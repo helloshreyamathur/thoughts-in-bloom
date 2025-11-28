@@ -364,3 +364,58 @@ p {
         grid-template-columns: repeat(4, 1fr);
     }
 }
+
+/* View Toggle Buttons */
+.view-toggle {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+}
+
+.view-btn {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xs) var(--space-lg);
+    font-family: inherit;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--easing-default),
+                color var(--duration-fast) var(--easing-default),
+                border-color var(--duration-fast) var(--easing-default);
+}
+
+.view-btn:hover {
+    background: var(--color-hover);
+    color: var(--color-text-body);
+}
+
+.view-btn.active {
+    background: var(--color-text-dark);
+    color: white;
+    border-color: var(--color-text-dark);
+}
+
+/* Archive Button */
+.archive-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    transition: color var(--duration-fast) var(--easing-default);
+}
+
+.archive-btn:hover {
+    color: var(--color-primary-blue);
+}
+
+/* Archived Card Styling */
+.thought-card.archived {
+    opacity: 0.7;
+    background: var(--color-tag-bg);
+}
