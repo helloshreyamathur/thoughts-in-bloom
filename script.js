@@ -343,7 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Apply tag filter if one is set
         if (currentTagFilter) {
             filteredThoughts = filteredThoughts.filter(function(thought) {
-                return thought.tags && thought.tags.includes(currentTagFilter);
+                // Handle backward compatibility for thoughts without tags property
+                const thoughtTags = thought.tags || extractTags(thought.text);
+                return thoughtTags && thoughtTags.includes(currentTagFilter);
             });
         }
         
@@ -381,12 +383,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Create tags container if thought has tags
+        // Handle backward compatibility for thoughts without tags property
+        const thoughtTags = thought.tags || extractTags(thought.text);
         let tagsContainer = null;
-        if (thought.tags && thought.tags.length > 0) {
+        if (thoughtTags && thoughtTags.length > 0) {
             tagsContainer = document.createElement('div');
             tagsContainer.className = 'thought-tags';
             
-            thought.tags.forEach(function(tag) {
+            thoughtTags.forEach(function(tag) {
                 const tagElement = document.createElement('button');
                 tagElement.type = 'button';
                 tagElement.className = 'tag-badge';
@@ -526,8 +530,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const allTags = new Set();
         
         thoughts.forEach(function(thought) {
-            if (thought.tags && thought.tags.length > 0) {
-                thought.tags.forEach(function(tag) {
+            // Handle backward compatibility for thoughts without tags property
+            const thoughtTags = thought.tags || extractTags(thought.text);
+            if (thoughtTags && thoughtTags.length > 0) {
+                thoughtTags.forEach(function(tag) {
                     allTags.add(tag);
                 });
             }
