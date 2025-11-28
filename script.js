@@ -306,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughtsContainer.innerHTML = '';
         
         // Filter based on current view mode
+        // Note: !thought.archived handles both false and undefined (for backward compatibility)
         const filteredThoughts = thoughts.filter(function(thought) {
             if (currentViewMode === 'archived') {
                 return thought.archived === true;
