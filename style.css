@@ -254,6 +254,59 @@ p {
     text-decoration: underline;
 }
 
+/* Edit Button */
+.edit-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    transition: color var(--duration-fast) var(--easing-default);
+}
+
+.edit-btn:hover {
+    color: var(--color-primary-blue);
+}
+
+/* Thought Actions Container */
+.thought-actions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+/* Edit Mode Indicator */
+.input-section.edit-mode {
+    position: relative;
+}
+
+.input-section.edit-mode::before {
+    content: 'Editing thought...';
+    position: absolute;
+    top: -1.5rem;
+    left: var(--space-lg);
+    font-size: 0.75rem;
+    color: var(--color-primary-blue);
+    font-weight: 500;
+}
+
+.input-section.edit-mode #thought-input {
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.15);
+}
+
+.input-section.edit-mode #save-button {
+    background: var(--color-primary-blue);
+}
+
+/* Card Being Edited */
+.thought-card.editing {
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 2px rgba(91, 155, 213, 0.2), var(--shadow-card);
+}
+
 /* Animations */
 @keyframes slideInFromBottom {
     from {

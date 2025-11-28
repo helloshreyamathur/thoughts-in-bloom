@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const thoughtsContainer = document.getElementById('thoughts-container');
     const charCounter = document.getElementById('char-counter');
     const errorMessage = document.getElementById('error-message');
+    const inputSection = document.querySelector('.input-section');
+    
+    // Edit mode state
+    let currentEditingId = null;
     
     // Load and display existing thoughts on page load
     loadThoughts();
@@ -23,12 +27,16 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCharCounter();
     
     // Add click event listener to save button
-    saveButton.addEventListener('click', saveThought);
+    saveButton.addEventListener('click', handleSave);
     
     // Add keyboard shortcut (Ctrl+Enter or Cmd+Enter to save)
     thoughtInput.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            saveThought();
+            handleSave();
+        }
+        // ESC key to cancel edit mode
+        if (e.key === 'Escape' && currentEditingId) {
+            cancelEdit();
         }
     });
     
@@ -58,6 +66,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear error message when user starts typing
         if (trimmedText.length > 0) {
             errorMessage.textContent = '';
+        }
+    }
+    
+    function handleSave() {
+        if (currentEditingId) {
+            updateThought();
+        } else {
+            saveThought();
         }
     }
     
@@ -104,6 +120,97 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create and prepend new card with animation
         const card = createThoughtCard(thought, true);
         thoughtsContainer.prepend(card);
+    }
+    
+    function editThought(thoughtId) {
+        const thoughts = getThoughts();
+        const thought = thoughts.find(t => t.id === thoughtId);
+        
+        if (!thought) {
+            console.error('Thought not found:', thoughtId);
+            return;
+        }
+        
+        // Enter edit mode
+        currentEditingId = thoughtId;
+        
+        // Populate textarea with thought text
+        thoughtInput.value = thought.text;
+        updateCharCounter();
+        
+        // Update UI to show edit mode
+        inputSection.classList.add('edit-mode');
+        saveButton.innerHTML = '✓';
+        saveButton.setAttribute('aria-label', 'Update thought');
+        
+        // Highlight the card being edited
+        const allCards = document.querySelectorAll('.thought-card');
+        allCards.forEach(card => {
+            card.classList.remove('editing');
+            if (card.dataset.id === thoughtId) {
+                card.classList.add('editing');
+            }
+        });
+        
+        // Focus the textarea
+        thoughtInput.focus();
+    }
+    
+    function updateThought() {
+        const text = thoughtInput.value.trim();
+        const rawLength = thoughtInput.value.length;
+        
+        // Don't save empty thoughts
+        if (!text) {
+            errorMessage.textContent = 'Please enter a thought before saving.';
+            return;
+        }
+        
+        // Don't save if over character limit
+        if (rawLength > MAX_CHARS) {
+            errorMessage.textContent = 'Thought exceeds character limit.';
+            return;
+        }
+        
+        // Get existing thoughts and find the one to update
+        const thoughts = getThoughts();
+        const thoughtIndex = thoughts.findIndex(t => t.id === currentEditingId);
+        
+        if (thoughtIndex === -1) {
+            console.error('Thought not found for update:', currentEditingId);
+            cancelEdit();
+            return;
+        }
+        
+        // Update the thought - preserve original date, add updatedAt
+        thoughts[thoughtIndex].text = text;
+        thoughts[thoughtIndex].updatedAt = new Date().toISOString();
+        
+        // Save to localStorage
+        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        
+        console.log('Thought updated:', thoughts[thoughtIndex]);
+        
+        // Reset form to add mode
+        cancelEdit();
+        
+        // Re-render all cards to show updated content
+        loadThoughts();
+    }
+    
+    function cancelEdit() {
+        currentEditingId = null;
+        thoughtInput.value = '';
+        updateCharCounter();
+        
+        // Reset UI
+        inputSection.classList.remove('edit-mode');
+        saveButton.innerHTML = '→';
+        saveButton.setAttribute('aria-label', 'Save thought');
+        
+        // Remove editing highlight from all cards
+        const allCards = document.querySelectorAll('.thought-card');
+        allCards.forEach(card => card.classList.remove('editing'));
     }
     
     function getThoughts() {
@@ -153,21 +260,46 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const dateElement = document.createElement('span');
         dateElement.className = 'thought-date';
-        dateElement.textContent = formatDate(thought.date);
+        
+        // Show creation date and "edited" indicator if updated
+        if (thought.updatedAt) {
+            dateElement.textContent = formatDate(thought.date) + ' (edited)';
+            dateElement.title = 'Last edited: ' + formatDateTime(thought.updatedAt);
+        } else {
+            dateElement.textContent = formatDate(thought.date);
+        }
         
         footer.appendChild(dateElement);
+        
+        // Add actions container for buttons
+        const actionsContainer = document.createElement('div');
+        actionsContainer.className = 'thought-actions';
+        
+        // Add Edit button
+        const editButton = document.createElement('button');
+        editButton.type = 'button';
+        editButton.className = 'edit-btn';
+        editButton.textContent = 'Edit';
+        editButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            editThought(thought.id);
+        });
+        actionsContainer.appendChild(editButton);
         
         // Add "Show more" button if thought is truncated
         if (needsTruncation) {
             const toggleButton = document.createElement('button');
+            toggleButton.type = 'button';
             toggleButton.className = 'toggle-text-btn';
             toggleButton.textContent = 'Show more';
             toggleButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 toggleTextExpansion(textElement, toggleButton);
             });
-            footer.appendChild(toggleButton);
+            actionsContainer.appendChild(toggleButton);
         }
+        
+        footer.appendChild(actionsContainer);
         
         card.appendChild(textElement);
         card.appendChild(footer);
@@ -207,5 +339,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const day = date.getDate();
         const year = date.getFullYear().toString().slice(-2);
         return `${month}.${day}.${year}`;
+    }
+    
+    function formatDateTime(isoString) {
+        const date = new Date(isoString);
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const year = date.getFullYear().toString().slice(-2);
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hour12 = hours % 12 || 12;
+        return `${month}.${day}.${year} at ${hour12}:${minutes} ${ampm}`;
     }
 });
