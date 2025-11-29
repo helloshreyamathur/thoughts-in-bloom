@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputSection = document.querySelector('.input-section');
     const viewActiveBtn = document.getElementById('view-active');
     const viewArchivedBtn = document.getElementById('view-archived');
+    const tagFilterContainer = document.getElementById('tag-filter-container');
     
     // Edit mode state
     let currentEditingId = null;
@@ -25,8 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // View mode state: 'active' or 'archived'
     let currentViewMode = 'active';
     
+    // Tag filter state: null means no filter, otherwise it's the tag to filter by
+    let currentTagFilter = null;
+    
     // Load and display existing thoughts on page load
     loadThoughts();
+    
+    // Render tag filter UI
+    renderTagFilter();
     
     // Update character counter and button state on initial load
     updateCharCounter();
@@ -116,6 +123,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    function extractTags(text) {
+        // Extract hashtags from text using regex
+        const matches = text.match(/#\w+/g);
+        if (!matches) {
+            return [];
+        }
+        // Remove duplicates and convert to lowercase for consistency
+        const uniqueTags = [...new Set(matches.map(tag => tag.toLowerCase()))];
+        return uniqueTags;
+    }
+    
     function saveThought() {
         const text = thoughtInput.value.trim();
         const rawLength = thoughtInput.value.length;
@@ -132,12 +150,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Create thought object
+        // Create thought object with extracted tags
         const thought = {
             id: crypto.randomUUID(),
             text: text,
             date: new Date().toISOString(),
-            tags: [],
+            tags: extractTags(text),
             archived: false
         };
         
@@ -159,6 +177,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create and prepend new card with animation
         const card = createThoughtCard(thought, true);
         thoughtsContainer.prepend(card);
+        
+        // Refresh tag filter UI to include new tags
+        renderTagFilter();
     }
     
     function editThought(thoughtId) {
@@ -221,8 +242,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Update the thought - preserve original date, add updatedAt
+        // Update the thought - preserve original date, add updatedAt, re-extract tags
         thoughts[thoughtIndex].text = text;
+        thoughts[thoughtIndex].tags = extractTags(text);
         thoughts[thoughtIndex].updatedAt = new Date().toISOString();
         
         // Save to localStorage
@@ -235,6 +257,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Re-render all cards to show updated content
         loadThoughts();
+        
+        // Refresh tag filter UI to reflect any tag changes
+        renderTagFilter();
     }
     
     function cancelEdit() {
@@ -307,13 +332,22 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Filter based on current view mode
         // Note: !thought.archived handles both false and undefined (for backward compatibility)
-        const filteredThoughts = thoughts.filter(function(thought) {
+        let filteredThoughts = thoughts.filter(function(thought) {
             if (currentViewMode === 'archived') {
                 return thought.archived === true;
             } else {
                 return !thought.archived;
             }
         });
+        
+        // Apply tag filter if one is set
+        if (currentTagFilter) {
+            filteredThoughts = filteredThoughts.filter(function(thought) {
+                // Handle backward compatibility for thoughts without tags property
+                const thoughtTags = thought.tags || extractTags(thought.text);
+                return thoughtTags && thoughtTags.includes(currentTagFilter);
+            });
+        }
         
         // Create card for each thought
         filteredThoughts.forEach(function(thought) {
@@ -346,6 +380,27 @@ document.addEventListener('DOMContentLoaded', function() {
             textElement.textContent = getTruncatedText(thought.text);
         } else {
             textElement.textContent = thought.text;
+        }
+        
+        // Create tags container if thought has tags
+        // Handle backward compatibility for thoughts without tags property
+        const thoughtTags = thought.tags || extractTags(thought.text);
+        let tagsContainer = null;
+        if (thoughtTags && thoughtTags.length > 0) {
+            tagsContainer = document.createElement('div');
+            tagsContainer.className = 'thought-tags';
+            
+            thoughtTags.forEach(function(tag) {
+                const tagElement = document.createElement('button');
+                tagElement.type = 'button';
+                tagElement.className = 'tag-badge';
+                tagElement.textContent = tag;
+                tagElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    filterByTag(tag);
+                });
+                tagsContainer.appendChild(tagElement);
+            });
         }
         
         const footer = document.createElement('div');
@@ -416,6 +471,9 @@ document.addEventListener('DOMContentLoaded', function() {
         footer.appendChild(actionsContainer);
         
         card.appendChild(textElement);
+        if (tagsContainer) {
+            card.appendChild(tagsContainer);
+        }
         card.appendChild(footer);
         
         return card;
@@ -465,5 +523,74 @@ document.addEventListener('DOMContentLoaded', function() {
         const ampm = hours >= 12 ? 'PM' : 'AM';
         const hour12 = hours % 12 || 12;
         return `${month}.${day}.${year} at ${hour12}:${minutes} ${ampm}`;
+    }
+    
+    function getAllUniqueTags() {
+        const thoughts = getThoughts();
+        const allTags = new Set();
+        
+        thoughts.forEach(function(thought) {
+            // Handle backward compatibility for thoughts without tags property
+            const thoughtTags = thought.tags || extractTags(thought.text);
+            if (thoughtTags && thoughtTags.length > 0) {
+                thoughtTags.forEach(function(tag) {
+                    allTags.add(tag);
+                });
+            }
+        });
+        
+        // Sort tags alphabetically
+        return Array.from(allTags).sort();
+    }
+    
+    function renderTagFilter() {
+        if (!tagFilterContainer) return;
+        
+        const allTags = getAllUniqueTags();
+        
+        // Clear current filter UI
+        tagFilterContainer.innerHTML = '';
+        
+        // If no tags exist, hide the container
+        if (allTags.length === 0) {
+            tagFilterContainer.style.display = 'none';
+            return;
+        }
+        
+        tagFilterContainer.style.display = 'flex';
+        
+        // Add "All" button (clear filter)
+        const allButton = document.createElement('button');
+        allButton.type = 'button';
+        allButton.className = 'filter-tag-btn' + (currentTagFilter === null ? ' active' : '');
+        allButton.textContent = 'All';
+        allButton.addEventListener('click', function() {
+            clearTagFilter();
+        });
+        tagFilterContainer.appendChild(allButton);
+        
+        // Add a button for each unique tag
+        allTags.forEach(function(tag) {
+            const tagButton = document.createElement('button');
+            tagButton.type = 'button';
+            tagButton.className = 'filter-tag-btn' + (currentTagFilter === tag ? ' active' : '');
+            tagButton.textContent = tag;
+            tagButton.addEventListener('click', function() {
+                filterByTag(tag);
+            });
+            tagFilterContainer.appendChild(tagButton);
+        });
+    }
+    
+    function filterByTag(tag) {
+        currentTagFilter = tag;
+        loadThoughts();
+        renderTagFilter();
+    }
+    
+    function clearTagFilter() {
+        currentTagFilter = null;
+        loadThoughts();
+        renderTagFilter();
     }
 });

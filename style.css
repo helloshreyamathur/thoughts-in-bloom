@@ -419,3 +419,64 @@ p {
     opacity: 0.7;
     background: var(--color-tag-bg);
 }
+
+/* Tag Badges on Cards */
+.thought-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.tag-badge {
+    background: var(--color-primary-blue);
+    color: white;
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-lg);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background var(--duration-fast) var(--easing-default),
+                transform var(--duration-fast) var(--easing-default);
+}
+
+.tag-badge:hover {
+    background: var(--color-text-dark);
+    transform: scale(1.05);
+}
+
+/* Tag Filter Container */
+.tag-filter-container {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+    padding: 0 var(--space-md);
+}
+
+.filter-tag-btn {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0.25rem 0.75rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--easing-default),
+                color var(--duration-fast) var(--easing-default),
+                border-color var(--duration-fast) var(--easing-default);
+}
+
+.filter-tag-btn:hover {
+    background: var(--color-hover);
+    color: var(--color-text-body);
+}
+
+.filter-tag-btn.active {
+    background: var(--color-primary-blue);
+    color: white;
+    border-color: var(--color-primary-blue);
+}
