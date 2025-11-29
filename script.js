@@ -97,6 +97,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Mobile: Handle virtual keyboard appearance
+    // Scroll input into view when focused on mobile
+    function handleMobileInputFocus(inputElement) {
+        // Check if on mobile (touch device with small screen)
+        const isMobile = window.matchMedia('(max-width: 768px)').matches && 
+                         ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        
+        if (isMobile) {
+            // Small delay to let the keyboard appear
+            setTimeout(function() {
+                inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+    }
+    
+    thoughtInput.addEventListener('focus', function() {
+        handleMobileInputFocus(thoughtInput);
+    });
+    
+    searchInput.addEventListener('focus', function() {
+        handleMobileInputFocus(searchInput);
+    });
+    
+    // Mobile: Handle viewport resize when keyboard appears/disappears
+    // This helps with iOS Safari where the viewport doesn't resize properly
+    if ('visualViewport' in window) {
+        window.visualViewport.addEventListener('resize', function() {
+            // Adjust scroll position if an input is focused
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement === thoughtInput || activeElement === searchInput)) {
+                // Small delay to ensure keyboard animation completes
+                setTimeout(function() {
+                    activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
+        });
+    }
+    
     function setViewMode(mode) {
         currentViewMode = mode;
         
