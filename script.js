@@ -700,9 +700,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const escapedQuery = escapeRegExp(query);
         const regex = new RegExp('(' + escapedQuery + ')', 'gi');
         const parts = text.split(regex);
+        const lowerQuery = query.toLowerCase();
         
         parts.forEach(function(part) {
-            if (part.toLowerCase() === query.toLowerCase()) {
+            if (part.toLowerCase() === lowerQuery) {
                 const highlight = document.createElement('mark');
                 highlight.className = 'search-highlight';
                 highlight.textContent = part;
