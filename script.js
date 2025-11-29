@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const viewActiveBtn = document.getElementById('view-active');
     const viewArchivedBtn = document.getElementById('view-archived');
     const tagFilterContainer = document.getElementById('tag-filter-container');
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+    const searchResultsCount = document.getElementById('search-results-count');
     
     // Edit mode state
     let currentEditingId = null;
@@ -28,6 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Tag filter state: null means no filter, otherwise it's the tag to filter by
     let currentTagFilter = null;
+    
+    // Search state
+    let currentSearchQuery = '';
+    let searchDebounceTimer = null;
     
     // Load and display existing thoughts on page load
     loadThoughts();
@@ -62,6 +69,32 @@ document.addEventListener('DOMContentLoaded', function() {
     
     viewArchivedBtn.addEventListener('click', function() {
         setViewMode('archived');
+    });
+    
+    // Add input event listener for search with debouncing
+    searchInput.addEventListener('input', function() {
+        // Clear previous debounce timer
+        if (searchDebounceTimer) {
+            clearTimeout(searchDebounceTimer);
+        }
+        
+        // Set new debounce timer (300ms)
+        searchDebounceTimer = setTimeout(function() {
+            handleSearch();
+        }, 300);
+    });
+    
+    // Add click event listener for clear search button
+    clearSearchBtn.addEventListener('click', function() {
+        clearSearch();
+    });
+    
+    // Add keyboard shortcut (Escape to clear search when focused on search input)
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            clearSearch();
+            searchInput.blur();
+        }
     });
     
     function setViewMode(mode) {
@@ -349,6 +382,22 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        // Apply search filter if query exists
+        if (currentSearchQuery) {
+            filteredThoughts = filteredThoughts.filter(function(thought) {
+                return thought.text.toLowerCase().includes(currentSearchQuery);
+            });
+        }
+        
+        // Update search results count
+        if (currentSearchQuery) {
+            const count = filteredThoughts.length;
+            const plural = count === 1 ? '' : 's';
+            searchResultsCount.textContent = count + ' result' + plural + ' found';
+        } else {
+            searchResultsCount.textContent = '';
+        }
+        
         // Create card for each thought
         filteredThoughts.forEach(function(thought) {
             const card = createThoughtCard(thought);
@@ -377,9 +426,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // Store full text in data attribute for toggling
             textElement.dataset.fullText = thought.text;
             textElement.dataset.truncated = 'true';
-            textElement.textContent = getTruncatedText(thought.text);
+            // Apply search highlighting to truncated text
+            const truncatedText = getTruncatedText(thought.text);
+            if (currentSearchQuery) {
+                textElement.appendChild(highlightSearchText(truncatedText, currentSearchQuery));
+            } else {
+                textElement.textContent = truncatedText;
+            }
         } else {
-            textElement.textContent = thought.text;
+            // Apply search highlighting to full text
+            if (currentSearchQuery) {
+                textElement.appendChild(highlightSearchText(thought.text, currentSearchQuery));
+            } else {
+                textElement.textContent = thought.text;
+            }
         }
         
         // Create tags container if thought has tags
@@ -492,14 +552,26 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Clear existing content
+        textElement.innerHTML = '';
+        
         if (isTruncated) {
             // Expand to full text
-            textElement.textContent = fullText;
+            if (currentSearchQuery) {
+                textElement.appendChild(highlightSearchText(fullText, currentSearchQuery));
+            } else {
+                textElement.textContent = fullText;
+            }
             textElement.dataset.truncated = 'false';
             toggleButton.textContent = 'Show less';
         } else {
             // Collapse to truncated text
-            textElement.textContent = getTruncatedText(fullText);
+            const truncatedText = getTruncatedText(fullText);
+            if (currentSearchQuery) {
+                textElement.appendChild(highlightSearchText(truncatedText, currentSearchQuery));
+            } else {
+                textElement.textContent = truncatedText;
+            }
             textElement.dataset.truncated = 'true';
             toggleButton.textContent = 'Show more';
         }
@@ -592,5 +664,55 @@ document.addEventListener('DOMContentLoaded', function() {
         currentTagFilter = null;
         loadThoughts();
         renderTagFilter();
+    }
+    
+    function handleSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        currentSearchQuery = query;
+        
+        // Update clear button visibility
+        clearSearchBtn.style.display = query.length > 0 ? 'flex' : 'none';
+        
+        // Re-render thoughts with search filter
+        loadThoughts();
+    }
+    
+    function clearSearch() {
+        searchInput.value = '';
+        currentSearchQuery = '';
+        clearSearchBtn.style.display = 'none';
+        searchResultsCount.textContent = '';
+        loadThoughts();
+    }
+    
+    function escapeRegExp(string) {
+        // Escape special regex characters to prevent regex injection
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    function highlightSearchText(text, query) {
+        if (!query) {
+            return document.createTextNode(text);
+        }
+        
+        // Create a document fragment to hold the highlighted text
+        const fragment = document.createDocumentFragment();
+        const escapedQuery = escapeRegExp(query);
+        const regex = new RegExp('(' + escapedQuery + ')', 'gi');
+        const parts = text.split(regex);
+        const lowerQuery = query.toLowerCase();
+        
+        parts.forEach(function(part) {
+            if (part.toLowerCase() === lowerQuery) {
+                const highlight = document.createElement('mark');
+                highlight.className = 'search-highlight';
+                highlight.textContent = part;
+                fragment.appendChild(highlight);
+            } else {
+                fragment.appendChild(document.createTextNode(part));
+            }
+        });
+        
+        return fragment;
     }
 });

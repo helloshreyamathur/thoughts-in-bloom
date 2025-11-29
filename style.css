@@ -480,3 +480,84 @@ p {
     color: white;
     border-color: var(--color-primary-blue);
 }
+
+/* Search Section */
+.search-section {
+    max-width: 500px;
+    margin: var(--space-lg) auto;
+    text-align: center;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: var(--space-md);
+    color: var(--color-text-muted);
+    pointer-events: none;
+}
+
+#search-input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-xl) var(--space-sm) calc(var(--space-md) + 26px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-size: 0.9375rem;
+    background: var(--color-card-bg);
+    color: var(--color-text-body);
+    transition: border-color var(--duration-fast) var(--easing-default),
+                box-shadow var(--duration-fast) var(--easing-default);
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.1);
+}
+
+#search-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: var(--space-sm);
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    transition: color var(--duration-fast) var(--easing-default),
+                background var(--duration-fast) var(--easing-default);
+}
+
+.clear-search-btn:hover {
+    color: var(--color-text-dark);
+    background: var(--color-hover);
+}
+
+.search-results-count {
+    margin-top: var(--space-xs);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    min-height: 1.2em;
+}
+
+/* Search highlight */
+.search-highlight {
+    background-color: var(--color-accent-yellow);
+    padding: 0 2px;
+    border-radius: 2px;
+}
