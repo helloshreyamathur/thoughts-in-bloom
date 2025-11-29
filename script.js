@@ -99,16 +99,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mobile: Handle virtual keyboard appearance
     // Scroll input into view when focused on mobile
+    // Using 150ms delay as a reasonable balance for various devices
+    const KEYBOARD_SCROLL_DELAY = 150;
+    
     function handleMobileInputFocus(inputElement) {
-        // Check if on mobile (touch device with small screen)
-        const isMobile = window.matchMedia('(max-width: 768px)').matches && 
-                         ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        // Check if on mobile phone (touch device with phone-sized screen)
+        // Using 480px to better distinguish phones from tablets
+        const isMobilePhone = window.matchMedia('(max-width: 480px)').matches && 
+                              ('ontouchstart' in window || navigator.maxTouchPoints > 0);
         
-        if (isMobile) {
-            // Small delay to let the keyboard appear
+        if (isMobilePhone) {
+            // Small delay to let the keyboard start appearing
             setTimeout(function() {
                 inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
+            }, KEYBOARD_SCROLL_DELAY);
         }
     }
     
@@ -127,10 +131,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Adjust scroll position if an input is focused
             const activeElement = document.activeElement;
             if (activeElement && (activeElement === thoughtInput || activeElement === searchInput)) {
-                // Small delay to ensure keyboard animation completes
+                // Use same delay for consistency
                 setTimeout(function() {
                     activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
+                }, KEYBOARD_SCROLL_DELAY);
             }
         });
     }
