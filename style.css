@@ -761,6 +761,7 @@ p {
 /* Save Button Loading State */
 #save-button.saving {
     pointer-events: none;
+    position: relative;
 }
 
 #save-button.saving::after {
