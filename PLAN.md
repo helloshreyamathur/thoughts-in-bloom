@@ -781,5 +781,5 @@ Update this section as you complete phases. Each phase has a corresponding GitHu
 - [x] Phase 8: Tag System ([#9](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/9))
 - [x] Phase 9: Search Functionality ([#10](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/10))
 - [x] Phase 10: Mobile Refinements ([#11](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/11))
-- [ ] Phase 11: Polish & Bug Fixes ([#12](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/12))
-- [ ] Phase 12: Documentation & Deployment ([#13](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/13))
+- [x] Phase 11: Polish & Bug Fixes ([#12](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/12))
+- [x] Phase 12: Documentation & Deployment ([#13](https://github.com/helloshreyamathur/thoughts-in-bloom/issues/13))
