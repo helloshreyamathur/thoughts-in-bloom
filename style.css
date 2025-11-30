@@ -1,4 +1,23 @@
-/* CSS Custom Properties (Design Tokens) - Based on Figma Design */
+/**
+ * Thoughts in Bloom - Stylesheet
+ * A living digital garden where ideas grow and connect over time.
+ * 
+ * Design System:
+ * - Color palette: Soft blues and purples with white cards (calming, dreamy)
+ * - Typography: System fonts for performance and native feel
+ * - Animations: Subtle slide-in effects when adding new thoughts
+ * - Layout: Responsive CSS Grid with masonry-style card display
+ * 
+ * Browser Support: Modern browsers (Chrome, Firefox, Safari, Edge)
+ * - Uses CSS Custom Properties (CSS Variables)
+ * - Uses CSS Grid and Flexbox
+ * - Uses system fonts stack for optimal performance
+ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   Based on Figma Design System
+   ============================================ */
 :root {
     /* Primary Colors */
     --color-primary-blue: #5B9BD5;
@@ -24,13 +43,13 @@
     --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.1);
     --shadow-button: 0 2px 6px rgba(91, 155, 213, 0.3);
     
-    /* Spacing */
-    --space-xs: 0.5rem;
-    --space-sm: 0.75rem;
-    --space-md: 1rem;
-    --space-lg: 1.25rem;
-    --space-xl: 2rem;
-    --space-2xl: 2.5rem;
+    /* Spacing Scale (8px base) */
+    --space-xs: 0.5rem;    /* 8px */
+    --space-sm: 0.75rem;   /* 12px */
+    --space-md: 1rem;      /* 16px */
+    --space-lg: 1.25rem;   /* 20px */
+    --space-xl: 2rem;      /* 32px */
+    --space-2xl: 2.5rem;   /* 40px */
     
     /* Border Radius */
     --radius-sm: 8px;
@@ -46,7 +65,9 @@
     --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Reset and base styles */
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
 * {
     margin: 0;
     padding: 0;
@@ -61,6 +82,9 @@ body {
     color: var(--color-text-body);
 }
 
+/* ============================================
+   LAYOUT CONTAINER
+   ============================================ */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -86,7 +110,10 @@ p {
     font-size: 0.9375rem;
 }
 
-/* Input Section */
+/* ============================================
+   INPUT SECTION
+   Main thought input area with textarea and save button
+   ============================================ */
 .input-section {
     max-width: 600px;
     margin: 0 auto var(--space-2xl);
@@ -156,7 +183,7 @@ p {
     cursor: not-allowed;
 }
 
-/* Input Footer */
+/* Input Footer - Character counter and error messages */
 .input-footer {
     display: flex;
     justify-content: space-between;
@@ -184,7 +211,10 @@ p {
     color: #e53e3e;
 }
 
-/* Thoughts Container */
+/* ============================================
+   THOUGHTS CONTAINER
+   CSS Grid layout for thought cards
+   ============================================ */
 .thoughts-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -192,7 +222,10 @@ p {
     margin-top: var(--space-2xl);
 }
 
-/* Thought Card */
+/* ============================================
+   THOUGHT CARD
+   Individual card component for displaying thoughts
+   ============================================ */
 .thought-card {
     background: var(--color-card-bg);
     border-radius: var(--radius-md);
@@ -237,6 +270,11 @@ p {
     font-size: 0.75rem;
 }
 
+/* ============================================
+   CARD ACTION BUTTONS
+   Edit, Archive, Show more/less buttons
+   ============================================ */
+
 /* Toggle Text Button (Show more/Show less) */
 .toggle-text-btn {
     background: none;
@@ -277,7 +315,10 @@ p {
     align-items: center;
 }
 
-/* Edit Mode Indicator */
+/* ============================================
+   EDIT MODE STYLES
+   Visual indicators when editing a thought
+   ============================================ */
 .input-section.edit-mode {
     position: relative;
 }
@@ -307,7 +348,10 @@ p {
     box-shadow: 0 0 0 2px rgba(91, 155, 213, 0.2), var(--shadow-card);
 }
 
-/* Animations */
+/* ============================================
+   ANIMATIONS
+   Keyframe animations for cards and loading states
+   ============================================ */
 @keyframes slideInFromBottom {
     from {
         opacity: 0;
@@ -328,7 +372,12 @@ p {
     }
 }
 
-/* Responsive Design */
+/* ============================================
+   RESPONSIVE DESIGN
+   Mobile-first breakpoints for different screen sizes
+   ============================================ */
+
+/* Tablet and mobile (< 768px) */
 @media (max-width: 768px) {
     .container {
         padding: var(--space-lg) var(--space-md);
@@ -463,7 +512,7 @@ p {
     }
 }
 
-/* Small mobile screens (e.g. iPhone SE) */
+/* Small mobile screens (e.g., iPhone SE) */
 @media (max-width: 380px) {
     .container {
         padding: var(--space-md) var(--space-sm);
@@ -511,25 +560,31 @@ p {
     }
 }
 
+/* Tablet breakpoints */
 @media (min-width: 769px) and (max-width: 1024px) {
     .thoughts-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
+/* Desktop breakpoints */
 @media (min-width: 1025px) {
     .thoughts-container {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
+/* Large desktop (> 1400px) */
 @media (min-width: 1400px) {
     .thoughts-container {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
-/* View Toggle Buttons */
+/* ============================================
+   VIEW TOGGLE BUTTONS
+   Active/Archived view switcher
+   ============================================ */
 .view-toggle {
     display: flex;
     justify-content: center;
@@ -562,7 +617,10 @@ p {
     border-color: var(--color-text-dark);
 }
 
-/* Archive Button */
+/* ============================================
+   ARCHIVE FUNCTIONALITY
+   Archive button and archived card styling
+   ============================================ */
 .archive-btn {
     background: none;
     border: none;
@@ -584,7 +642,10 @@ p {
     background: var(--color-tag-bg);
 }
 
-/* Tag Badges on Cards */
+/* ============================================
+   TAG SYSTEM
+   Tag badges on cards and filter buttons
+   ============================================ */
 .thought-tags {
     display: flex;
     flex-wrap: wrap;
@@ -645,7 +706,10 @@ p {
     border-color: var(--color-primary-blue);
 }
 
-/* Search Section */
+/* ============================================
+   SEARCH FUNCTIONALITY
+   Search input, icon, and results display
+   ============================================ */
 .search-section {
     max-width: 500px;
     margin: var(--space-lg) auto;
@@ -726,7 +790,10 @@ p {
     border-radius: 2px;
 }
 
-/* Empty States */
+/* ============================================
+   EMPTY STATES
+   Messages shown when no thoughts match criteria
+   ============================================ */
 .empty-state {
     display: flex;
     flex-direction: column;
@@ -758,7 +825,10 @@ p {
     text-align: center;
 }
 
-/* Save Button Loading State */
+/* ============================================
+   SAVE BUTTON STATES
+   Loading and success animations
+   ============================================ */
 #save-button.saving {
     pointer-events: none;
     position: relative;

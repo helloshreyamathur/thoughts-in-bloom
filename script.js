@@ -1,15 +1,43 @@
-// Thoughts in Bloom - Main JavaScript
-// A living digital garden where ideas grow and connect over time
+/**
+ * Thoughts in Bloom - Main JavaScript
+ * A living digital garden where ideas grow and connect over time.
+ * 
+ * @fileoverview Main application logic for capturing, storing, and displaying thoughts.
+ * Uses browser localStorage for data persistence.
+ * 
+ * @version 1.0.0
+ * @see https://github.com/helloshreyamathur/thoughts-in-bloom
+ * 
+ * Data Structure (stored in localStorage as 'thoughts'):
+ * @typedef {Object} Thought
+ * @property {string} id - Unique identifier (UUID)
+ * @property {string} text - The thought content
+ * @property {string} date - ISO 8601 creation timestamp
+ * @property {string[]} tags - Array of hashtags extracted from text (lowercase)
+ * @property {boolean} archived - Whether the thought is archived
+ * @property {string} [updatedAt] - ISO 8601 timestamp of last edit (optional)
+ */
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Thoughts in Bloom - Ready');
     
-    // Constants
+    // ============================================
+    // CONSTANTS
+    // ============================================
+    
+    /** @const {number} Maximum characters allowed per thought */
     const MAX_CHARS = 1000;
+    
+    /** @const {number} Character count threshold for warning indicator */
     const WARNING_THRESHOLD = 500;
+    
+    /** @const {number} Characters to show before truncating with "Show more" */
     const PREVIEW_CHAR_LIMIT = 280;
     
-    // Get references to DOM elements
+    // ============================================
+    // DOM ELEMENT REFERENCES
+    // ============================================
+    
     const thoughtInput = document.getElementById('thought-input');
     const saveButton = document.getElementById('save-button');
     const thoughtsContainer = document.getElementById('thoughts-container');
@@ -23,18 +51,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearSearchBtn = document.getElementById('clear-search');
     const searchResultsCount = document.getElementById('search-results-count');
     
-    // Edit mode state
+    // ============================================
+    // APPLICATION STATE
+    // ============================================
+    
+    /** @type {string|null} ID of the thought currently being edited, null if not in edit mode */
     let currentEditingId = null;
     
-    // View mode state: 'active' or 'archived'
+    /** @type {'active'|'archived'} Current view mode for filtering thoughts */
     let currentViewMode = 'active';
     
-    // Tag filter state: null means no filter, otherwise it's the tag to filter by
+    /** @type {string|null} Current tag filter, null means show all tags */
     let currentTagFilter = null;
     
-    // Search state
+    /** @type {string} Current search query (lowercase, trimmed) */
     let currentSearchQuery = '';
+    
+    /** @type {number|null} Timer ID for search debouncing */
     let searchDebounceTimer = null;
+    
+    // ============================================
+    // INITIALIZATION
+    // ============================================
     
     // Load and display existing thoughts on page load
     loadThoughts();
@@ -45,10 +83,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update character counter and button state on initial load
     updateCharCounter();
     
-    // Add click event listener to save button
+    // ============================================
+    // EVENT LISTENERS
+    // ============================================
+    
+    // Save button click handler
     saveButton.addEventListener('click', handleSave);
     
-    // Add keyboard shortcut (Ctrl+Enter or Cmd+Enter to save)
+    // Keyboard shortcuts for thought input
+    // Ctrl+Enter or Cmd+Enter: Save thought
+    // Escape: Cancel edit mode
     thoughtInput.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             handleSave();
@@ -59,10 +103,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add input event listener for character counter
+    // Character counter updates on input
     thoughtInput.addEventListener('input', updateCharCounter);
     
-    // Add click event listeners for view toggle buttons
+    // View toggle button handlers
     viewActiveBtn.addEventListener('click', function() {
         setViewMode('active');
     });
@@ -71,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setViewMode('archived');
     });
     
-    // Add input event listener for search with debouncing
+    // Search input with debouncing (300ms delay for performance)
     searchInput.addEventListener('input', function() {
         // Clear previous debounce timer
         if (searchDebounceTimer) {
@@ -84,12 +128,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     });
     
-    // Add click event listener for clear search button
+    // Clear search button handler
     clearSearchBtn.addEventListener('click', function() {
         clearSearch();
     });
     
-    // Add keyboard shortcut (Escape to clear search when focused on search input)
+    // Escape key clears search when focused on search input
     searchInput.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             clearSearch();
@@ -97,11 +141,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // ============================================
+    // MOBILE KEYBOARD HANDLING
+    // ============================================
+    
     // Mobile: Handle virtual keyboard appearance
     // Scroll input into view when focused on mobile
     // Using 150ms delay as a reasonable balance for various devices
+    /** @const {number} Delay before scrolling input into view on mobile */
     const KEYBOARD_SCROLL_DELAY = 150;
     
+    /**
+     * Scrolls an input element into view when focused on mobile phones.
+     * Helps ensure the input remains visible when the virtual keyboard appears.
+     * @param {HTMLElement} inputElement - The input element to scroll into view
+     */
     function handleMobileInputFocus(inputElement) {
         // Check if on mobile phone (touch device with phone-sized screen)
         // Using 480px to better distinguish phones from tablets
@@ -139,6 +193,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // ============================================
+    // VIEW MODE FUNCTIONS
+    // ============================================
+    
+    /**
+     * Sets the current view mode and updates the UI accordingly.
+     * Cancels any active edit mode and re-renders thoughts.
+     * @param {'active'|'archived'} mode - The view mode to set
+     */
     function setViewMode(mode) {
         currentViewMode = mode;
         
@@ -164,6 +227,15 @@ document.addEventListener('DOMContentLoaded', function() {
         loadThoughts();
     }
     
+    // ============================================
+    // CHARACTER COUNTER & VALIDATION
+    // ============================================
+    
+    /**
+     * Updates the character counter display and save button state.
+     * Shows warning/danger colors based on character count thresholds.
+     * Disables save button if input is empty or exceeds MAX_CHARS.
+     */
     function updateCharCounter() {
         const text = thoughtInput.value;
         const length = text.length;
@@ -190,6 +262,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // ============================================
+    // SAVE/UPDATE THOUGHT FUNCTIONS
+    // ============================================
+    
+    /**
+     * Handles the save button click - either saves a new thought or updates existing one.
+     * Routes to saveThought() or updateThought() based on edit mode state.
+     */
     function handleSave() {
         if (currentEditingId) {
             updateThought();
@@ -198,6 +278,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    /**
+     * Extracts hashtags from text content.
+     * @param {string} text - The text to extract tags from
+     * @returns {string[]} Array of unique lowercase tags (including # prefix)
+     * @example
+     * extractTags("Meeting with #john about #project") // ['#john', '#project']
+     */
     function extractTags(text) {
         // Extract hashtags from text using regex
         const matches = text.match(/#\w+/g);
@@ -209,6 +296,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return uniqueTags;
     }
     
+    /**
+     * Saves a new thought to localStorage.
+     * Creates a new thought object with UUID, extracts tags, and prepends to thoughts array.
+     * Includes visual feedback with save button animations.
+     */
     function saveThought() {
         const text = thoughtInput.value.trim();
         const rawLength = thoughtInput.value.length;
@@ -277,6 +369,15 @@ document.addEventListener('DOMContentLoaded', function() {
         renderTagFilter();
     }
     
+    // ============================================
+    // EDIT MODE FUNCTIONS
+    // ============================================
+    
+    /**
+     * Enters edit mode for a specific thought.
+     * Populates the input with the thought's text and highlights the card being edited.
+     * @param {string} thoughtId - The UUID of the thought to edit
+     */
     function editThought(thoughtId) {
         const thoughts = getThoughts();
         const thought = thoughts.find(t => t.id === thoughtId);
@@ -311,6 +412,10 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughtInput.focus();
     }
     
+    /**
+     * Updates an existing thought in localStorage.
+     * Preserves original date, adds updatedAt timestamp, and re-extracts tags.
+     */
     function updateThought() {
         const text = thoughtInput.value.trim();
         const rawLength = thoughtInput.value.length;
@@ -359,6 +464,10 @@ document.addEventListener('DOMContentLoaded', function() {
         renderTagFilter();
     }
     
+    /**
+     * Exits edit mode and resets the input area.
+     * Clears the textarea, resets button appearance, and removes card highlight.
+     */
     function cancelEdit() {
         currentEditingId = null;
         thoughtInput.value = '';
@@ -374,6 +483,15 @@ document.addEventListener('DOMContentLoaded', function() {
         allCards.forEach(card => card.classList.remove('editing'));
     }
     
+    // ============================================
+    // ARCHIVE/RESTORE FUNCTIONS
+    // ============================================
+    
+    /**
+     * Archives a thought (soft delete).
+     * Sets archived flag to true and re-renders the view.
+     * @param {string} thoughtId - The UUID of the thought to archive
+     */
     function archiveThought(thoughtId) {
         const thoughts = getThoughts();
         const thoughtIndex = thoughts.findIndex(t => t.id === thoughtId);
@@ -397,6 +515,11 @@ document.addEventListener('DOMContentLoaded', function() {
         loadThoughts();
     }
     
+    /**
+     * Restores an archived thought back to active state.
+     * Sets archived flag to false and re-renders the view.
+     * @param {string} thoughtId - The UUID of the thought to restore
+     */
     function restoreThought(thoughtId) {
         const thoughts = getThoughts();
         const thoughtIndex = thoughts.findIndex(t => t.id === thoughtId);
@@ -420,6 +543,15 @@ document.addEventListener('DOMContentLoaded', function() {
         loadThoughts();
     }
     
+    // ============================================
+    // LOCALSTORAGE FUNCTIONS
+    // ============================================
+    
+    /**
+     * Retrieves all thoughts from localStorage.
+     * Handles corrupted data gracefully by returning empty array.
+     * @returns {Thought[]} Array of thought objects, or empty array if none exist
+     */
     function getThoughts() {
         try {
             const stored = localStorage.getItem('thoughts');
@@ -440,6 +572,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    /**
+     * Saves thoughts array to localStorage.
+     * Handles QuotaExceededError and other storage errors gracefully.
+     * @param {Thought[]} thoughts - Array of thought objects to save
+     * @returns {boolean} True if save successful, false otherwise
+     */
     function saveThoughtsToStorage(thoughts) {
         try {
             localStorage.setItem('thoughts', JSON.stringify(thoughts));
@@ -455,10 +593,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    /**
+     * Displays an error message to the user.
+     * @param {string} message - The error message to display
+     */
     function showErrorMessage(message) {
         errorMessage.textContent = message;
     }
     
+    // ============================================
+    // DISPLAY/RENDER FUNCTIONS
+    // ============================================
+    
+    /**
+     * Loads and displays thoughts based on current view mode, tag filter, and search query.
+     * Handles filtering logic and shows appropriate empty states.
+     * Uses document fragments for efficient DOM updates.
+     */
     function loadThoughts() {
         const thoughts = getThoughts();
         
@@ -541,6 +692,10 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughtsContainer.appendChild(fragment);
     }
     
+    /**
+     * Displays an empty state message based on the context.
+     * @param {'welcome'|'archive'|'all-archived'|'no-search-results'|'no-tag-results'} type - The type of empty state to show
+     */
     function showEmptyState(type) {
         const emptyState = document.createElement('div');
         emptyState.className = 'empty-state';
@@ -588,6 +743,13 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughtsContainer.appendChild(emptyState);
     }
     
+    /**
+     * Creates a DOM element for a thought card.
+     * Handles text truncation, tags display, action buttons, and search highlighting.
+     * @param {Thought} thought - The thought object to create a card for
+     * @param {boolean} [isNew=false] - Whether this is a newly created thought (triggers animation)
+     * @returns {HTMLDivElement} The created card element
+     */
     function createThoughtCard(thought, isNew = false) {
         const card = document.createElement('div');
         card.className = 'thought-card';
@@ -727,10 +889,25 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
     
+    // ============================================
+    // TEXT UTILITIES
+    // ============================================
+    
+    /**
+     * Truncates text to PREVIEW_CHAR_LIMIT and adds ellipsis.
+     * @param {string} text - The text to truncate
+     * @returns {string} Truncated text with ellipsis
+     */
     function getTruncatedText(text) {
         return text.substring(0, PREVIEW_CHAR_LIMIT) + '...';
     }
     
+    /**
+     * Toggles between truncated and full text display for a thought card.
+     * Updates button text and aria-label accordingly.
+     * @param {HTMLElement} textElement - The paragraph element containing the thought text
+     * @param {HTMLButtonElement} toggleButton - The "Show more/less" button
+     */
     function toggleTextExpansion(textElement, toggleButton) {
         const isTruncated = textElement.dataset.truncated === 'true';
         const fullText = textElement.dataset.fullText;
@@ -767,6 +944,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // ============================================
+    // DATE FORMATTING
+    // ============================================
+    
+    /**
+     * Formats an ISO date string to short format (M.D.YY).
+     * @param {string} isoString - ISO 8601 date string
+     * @returns {string} Formatted date string (e.g., "1.15.24")
+     */
     function formatDate(isoString) {
         const date = new Date(isoString);
         const month = date.getMonth() + 1;
@@ -775,6 +961,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${month}.${day}.${year}`;
     }
     
+    /**
+     * Formats an ISO date string to full date and time format.
+     * Used for tooltip display of edit timestamps.
+     * @param {string} isoString - ISO 8601 date string
+     * @returns {string} Formatted date and time string (e.g., "1.15.24 at 3:45 PM")
+     */
     function formatDateTime(isoString) {
         const date = new Date(isoString);
         const month = date.getMonth() + 1;
@@ -787,6 +979,15 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${month}.${day}.${year} at ${hour12}:${minutes} ${ampm}`;
     }
     
+    // ============================================
+    // TAG FILTER FUNCTIONS
+    // ============================================
+    
+    /**
+     * Collects all unique tags from all thoughts (active and archived).
+     * Used to populate the tag filter UI.
+     * @returns {string[]} Sorted array of unique tags
+     */
     function getAllUniqueTags() {
         const thoughts = getThoughts();
         const allTags = new Set();
@@ -805,6 +1006,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return Array.from(allTags).sort();
     }
     
+    /**
+     * Renders the tag filter button bar.
+     * Shows "All" button plus a button for each unique tag.
+     * Hides the container if no tags exist.
+     */
     function renderTagFilter() {
         if (!tagFilterContainer) return;
         
@@ -848,18 +1054,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    /**
+     * Sets the active tag filter and re-renders thoughts.
+     * @param {string} tag - The tag to filter by
+     */
     function filterByTag(tag) {
         currentTagFilter = tag;
         loadThoughts();
         renderTagFilter();
     }
     
+    /**
+     * Clears the tag filter and shows all thoughts.
+     */
     function clearTagFilter() {
         currentTagFilter = null;
         loadThoughts();
         renderTagFilter();
     }
     
+    // ============================================
+    // SEARCH FUNCTIONS
+    // ============================================
+    
+    /**
+     * Handles search input changes.
+     * Updates the search state and re-renders thoughts with matching results.
+     */
     function handleSearch() {
         const query = searchInput.value.trim().toLowerCase();
         currentSearchQuery = query;
@@ -871,6 +1092,9 @@ document.addEventListener('DOMContentLoaded', function() {
         loadThoughts();
     }
     
+    /**
+     * Clears the search input and resets search state.
+     */
     function clearSearch() {
         searchInput.value = '';
         currentSearchQuery = '';
@@ -879,11 +1103,24 @@ document.addEventListener('DOMContentLoaded', function() {
         loadThoughts();
     }
     
+    /**
+     * Escapes special regex characters in a string.
+     * Prevents regex injection attacks when using user input in RegExp.
+     * @param {string} string - The string to escape
+     * @returns {string} The escaped string safe for use in RegExp
+     */
     function escapeRegExp(string) {
         // Escape special regex characters to prevent regex injection
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
     
+    /**
+     * Creates a document fragment with highlighted search matches.
+     * Wraps matching text in <mark> elements for visual highlighting.
+     * @param {string} text - The full text to search within
+     * @param {string} query - The search query to highlight
+     * @returns {DocumentFragment} Fragment with highlighted text nodes
+     */
     function highlightSearchText(text, query) {
         if (!query) {
             return document.createTextNode(text);
