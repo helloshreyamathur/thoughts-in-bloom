@@ -725,3 +725,67 @@ p {
     padding: 0 2px;
     border-radius: 2px;
 }
+
+/* Empty States */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xl) var(--space-lg);
+    text-align: center;
+    grid-column: 1 / -1;
+    color: var(--color-text-muted);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.8;
+}
+
+.empty-state-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-text-body);
+    margin-bottom: var(--space-xs);
+}
+
+.empty-state-message {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    text-align: center;
+}
+
+/* Save Button Loading State */
+#save-button.saving {
+    pointer-events: none;
+    position: relative;
+}
+
+#save-button.saving::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+#save-button.saving > * {
+    visibility: hidden;
+}
+
+/* Save Success Animation */
+#save-button.save-success {
+    background: #48bb78;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
