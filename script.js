@@ -240,14 +240,34 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add new thought to the beginning (newest first)
         thoughts.unshift(thought);
         
-        // Save to localStorage
-        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        // Save to localStorage with visual feedback
+        saveButton.classList.add('saving');
+        
+        if (!saveThoughtsToStorage(thoughts)) {
+            // Remove the thought we just added since save failed
+            thoughts.shift();
+            saveButton.classList.remove('saving');
+            return;
+        }
         
         console.log('Thought saved:', thought);
+        
+        // Add success animation
+        saveButton.classList.remove('saving');
+        saveButton.classList.add('save-success');
+        setTimeout(function() {
+            saveButton.classList.remove('save-success');
+        }, 600);
         
         // Clear textarea and update counter
         thoughtInput.value = '';
         updateCharCounter();
+        
+        // Remove empty state if it exists
+        const emptyState = thoughtsContainer.querySelector('.empty-state');
+        if (emptyState) {
+            emptyState.remove();
+        }
         
         // Create and prepend new card with animation
         const card = createThoughtCard(thought, true);
@@ -323,7 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughts[thoughtIndex].updatedAt = new Date().toISOString();
         
         // Save to localStorage
-        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        if (!saveThoughtsToStorage(thoughts)) {
+            return;
+        }
         
         console.log('Thought updated:', thoughts[thoughtIndex]);
         
@@ -365,7 +387,9 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughts[thoughtIndex].archived = true;
         
         // Save to localStorage
-        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        if (!saveThoughtsToStorage(thoughts)) {
+            return;
+        }
         
         console.log('Thought archived:', thoughts[thoughtIndex]);
         
@@ -386,7 +410,9 @@ document.addEventListener('DOMContentLoaded', function() {
         thoughts[thoughtIndex].archived = false;
         
         // Save to localStorage
-        localStorage.setItem('thoughts', JSON.stringify(thoughts));
+        if (!saveThoughtsToStorage(thoughts)) {
+            return;
+        }
         
         console.log('Thought restored:', thoughts[thoughtIndex]);
         
@@ -395,8 +421,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function getThoughts() {
-        const stored = localStorage.getItem('thoughts');
-        return stored ? JSON.parse(stored) : [];
+        try {
+            const stored = localStorage.getItem('thoughts');
+            if (!stored) {
+                return [];
+            }
+            const parsed = JSON.parse(stored);
+            // Validate data structure
+            if (!Array.isArray(parsed)) {
+                console.warn('Corrupted localStorage data: expected array, got', typeof parsed);
+                return [];
+            }
+            return parsed;
+        } catch (e) {
+            console.error('Error reading thoughts from localStorage:', e);
+            showErrorMessage('Unable to load saved thoughts. Data may be corrupted.');
+            return [];
+        }
+    }
+    
+    function saveThoughtsToStorage(thoughts) {
+        try {
+            localStorage.setItem('thoughts', JSON.stringify(thoughts));
+            return true;
+        } catch (e) {
+            if (e.name === 'QuotaExceededError' || e.code === 22) {
+                showErrorMessage('Storage is full. Please archive or remove some thoughts.');
+            } else {
+                showErrorMessage('Unable to save thought. Please try again.');
+            }
+            console.error('Error saving to localStorage:', e);
+            return false;
+        }
+    }
+    
+    function showErrorMessage(message) {
+        errorMessage.textContent = message;
     }
     
     function loadThoughts() {
@@ -404,6 +464,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Clear current display
         thoughtsContainer.innerHTML = '';
+        
+        // Check if there are no thoughts at all
+        if (thoughts.length === 0) {
+            showEmptyState('welcome');
+            searchResultsCount.textContent = '';
+            return;
+        }
         
         // Filter based on current view mode
         // Note: !thought.archived handles both false and undefined (for backward compatibility)
@@ -414,6 +481,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 return !thought.archived;
             }
         });
+        
+        // Check for empty archive
+        if (currentViewMode === 'archived' && filteredThoughts.length === 0 && !currentSearchQuery && !currentTagFilter) {
+            showEmptyState('archive');
+            searchResultsCount.textContent = '';
+            return;
+        }
+        
+        // Check for empty active (all archived)
+        if (currentViewMode === 'active' && filteredThoughts.length === 0 && !currentSearchQuery && !currentTagFilter) {
+            showEmptyState('all-archived');
+            searchResultsCount.textContent = '';
+            return;
+        }
         
         // Apply tag filter if one is set
         if (currentTagFilter) {
@@ -440,11 +521,71 @@ document.addEventListener('DOMContentLoaded', function() {
             searchResultsCount.textContent = '';
         }
         
-        // Create card for each thought
+        // Check for no results from search or filter
+        if (filteredThoughts.length === 0) {
+            if (currentSearchQuery) {
+                showEmptyState('no-search-results');
+            } else if (currentTagFilter) {
+                showEmptyState('no-tag-results');
+            }
+            return;
+        }
+        
+        // Create cards using document fragment for better performance with large lists
+        // This minimizes DOM reflows by batching all appendChild operations
+        const fragment = document.createDocumentFragment();
         filteredThoughts.forEach(function(thought) {
             const card = createThoughtCard(thought);
-            thoughtsContainer.appendChild(card);
+            fragment.appendChild(card);
         });
+        thoughtsContainer.appendChild(fragment);
+    }
+    
+    function showEmptyState(type) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        
+        let icon = '';
+        let title = '';
+        let message = '';
+        
+        switch (type) {
+            case 'welcome':
+                icon = '🌱';
+                title = 'Plant your first thought';
+                message = 'Your digital garden is ready. Start capturing ideas above!';
+                break;
+            case 'archive':
+                icon = '📦';
+                title = 'Archive is empty';
+                message = 'Archived thoughts will appear here.';
+                break;
+            case 'all-archived':
+                icon = '🌿';
+                title = 'All thoughts archived';
+                message = 'Your active thoughts have been archived. Add new ones or restore from the archive.';
+                break;
+            case 'no-search-results':
+                icon = '🔍';
+                title = 'No matches found';
+                message = 'Try a different search term.';
+                break;
+            case 'no-tag-results':
+                icon = '🏷️';
+                title = 'No thoughts with this tag';
+                message = 'Try selecting a different tag or clear the filter.';
+                break;
+            default:
+                icon = '💭';
+                title = 'No thoughts here';
+                message = '';
+        }
+        
+        emptyState.innerHTML = '<span class="empty-state-icon">' + icon + '</span>' +
+            '<h3 class="empty-state-title">' + title + '</h3>' +
+            '<p class="empty-state-message">' + message + '</p>';
+        
+        thoughtsContainer.appendChild(emptyState);
     }
     
     function createThoughtCard(thought, isNew = false) {
@@ -497,6 +638,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tagElement.type = 'button';
                 tagElement.className = 'tag-badge';
                 tagElement.textContent = tag;
+                tagElement.setAttribute('aria-label', 'Filter by tag ' + tag);
                 tagElement.addEventListener('click', function(e) {
                     e.stopPropagation();
                     filterByTag(tag);
@@ -531,6 +673,7 @@ document.addEventListener('DOMContentLoaded', function() {
             editButton.type = 'button';
             editButton.className = 'edit-btn';
             editButton.textContent = 'Edit';
+            editButton.setAttribute('aria-label', 'Edit thought');
             editButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 editThought(thought.id);
@@ -544,12 +687,14 @@ document.addEventListener('DOMContentLoaded', function() {
         archiveButton.className = 'archive-btn';
         if (thought.archived) {
             archiveButton.textContent = 'Restore';
+            archiveButton.setAttribute('aria-label', 'Restore thought from archive');
             archiveButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 restoreThought(thought.id);
             });
         } else {
             archiveButton.textContent = 'Archive';
+            archiveButton.setAttribute('aria-label', 'Archive thought');
             archiveButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 archiveThought(thought.id);
@@ -563,6 +708,7 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleButton.type = 'button';
             toggleButton.className = 'toggle-text-btn';
             toggleButton.textContent = 'Show more';
+            toggleButton.setAttribute('aria-label', 'Expand thought text');
             toggleButton.addEventListener('click', function(e) {
                 e.stopPropagation();
                 toggleTextExpansion(textElement, toggleButton);
@@ -606,6 +752,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             textElement.dataset.truncated = 'false';
             toggleButton.textContent = 'Show less';
+            toggleButton.setAttribute('aria-label', 'Collapse thought text');
         } else {
             // Collapse to truncated text
             const truncatedText = getTruncatedText(fullText);
@@ -616,6 +763,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             textElement.dataset.truncated = 'true';
             toggleButton.textContent = 'Show more';
+            toggleButton.setAttribute('aria-label', 'Expand thought text');
         }
     }
     
@@ -678,6 +826,8 @@ document.addEventListener('DOMContentLoaded', function() {
         allButton.type = 'button';
         allButton.className = 'filter-tag-btn' + (currentTagFilter === null ? ' active' : '');
         allButton.textContent = 'All';
+        allButton.setAttribute('aria-label', 'Show all thoughts');
+        allButton.setAttribute('aria-pressed', currentTagFilter === null ? 'true' : 'false');
         allButton.addEventListener('click', function() {
             clearTagFilter();
         });
@@ -689,6 +839,8 @@ document.addEventListener('DOMContentLoaded', function() {
             tagButton.type = 'button';
             tagButton.className = 'filter-tag-btn' + (currentTagFilter === tag ? ' active' : '');
             tagButton.textContent = tag;
+            tagButton.setAttribute('aria-label', 'Filter by ' + tag);
+            tagButton.setAttribute('aria-pressed', currentTagFilter === tag ? 'true' : 'false');
             tagButton.addEventListener('click', function() {
                 filterByTag(tag);
             });

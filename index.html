@@ -11,15 +11,15 @@
         <h1>Thoughts in <span class="bloom">Bloom</span></h1>
         
         <div class="input-section">
-            <textarea id="thought-input" placeholder="Hi, what's on your mind today?"></textarea>
+            <textarea id="thought-input" placeholder="Hi, what's on your mind today?" aria-label="Enter your thought"></textarea>
             <button id="save-button" disabled aria-label="Save thought">→</button>
             <div class="input-footer">
                 <span id="char-counter" class="char-counter">0 / 1000</span>
-                <span id="error-message" class="error-message"></span>
+                <span id="error-message" class="error-message" role="alert" aria-live="assertive"></span>
             </div>
         </div>
         
-        <div class="view-toggle">
+        <div class="view-toggle" role="tablist" aria-label="View selection">
             <button id="view-active" class="view-btn active" aria-pressed="true">Active</button>
             <button id="view-archived" class="view-btn" aria-pressed="false">Archived</button>
         </div>
@@ -33,12 +33,12 @@
                 <input type="text" id="search-input" placeholder="Search thoughts..." aria-label="Search thoughts">
                 <button id="clear-search" class="clear-search-btn" aria-label="Clear search" style="display: none;">×</button>
             </div>
-            <div id="search-results-count" class="search-results-count"></div>
+            <div id="search-results-count" class="search-results-count" role="status" aria-live="polite"></div>
         </div>
         
-        <div id="tag-filter-container" class="tag-filter-container"></div>
+        <div id="tag-filter-container" class="tag-filter-container" role="group" aria-label="Filter by tag"></div>
         
-        <div id="thoughts-container" class="thoughts-container"></div>
+        <div id="thoughts-container" class="thoughts-container" role="region" aria-label="Your thoughts"></div>
     </div>
     <script src="script.js"></script>
 </body>
