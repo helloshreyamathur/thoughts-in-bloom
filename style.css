@@ -331,19 +331,183 @@ p {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        padding: var(--space-xl) var(--space-md);
+        padding: var(--space-lg) var(--space-md);
     }
     
     h1 {
-        font-size: 2rem;
+        font-size: 1.75rem;
+        margin-bottom: var(--space-lg);
     }
     
     .thoughts-container {
         grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    
+    /* Input Section Mobile */
+    .input-section {
+        margin-bottom: var(--space-xl);
     }
     
     #thought-input {
-        padding-right: 60px;
+        padding: var(--space-md) 60px var(--space-md) var(--space-md);
+        min-height: 56px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+    
+    #save-button {
+        width: 44px;
+        height: 44px;
+        right: 6px;
+    }
+    
+    .input-footer {
+        padding: 0 var(--space-md);
+        margin-top: var(--space-xs);
+    }
+    
+    /* View Toggle Mobile - Touch-friendly */
+    .view-toggle {
+        gap: var(--space-sm);
+    }
+    
+    .view-btn {
+        min-height: 44px;
+        min-width: 80px;
+        padding: var(--space-sm) var(--space-lg);
+        font-size: 0.9375rem;
+    }
+    
+    /* Search Section Mobile */
+    .search-section {
+        margin: var(--space-md) auto;
+    }
+    
+    #search-input {
+        min-height: 44px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        padding: var(--space-sm) 44px var(--space-sm) calc(var(--space-md) + 26px);
+    }
+    
+    .clear-search-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5rem;
+    }
+    
+    /* Tag Filter Mobile - Touch-friendly */
+    .tag-filter-container {
+        padding: 0 var(--space-sm);
+        gap: var(--space-sm);
+    }
+    
+    .filter-tag-btn {
+        min-height: 40px;
+        padding: var(--space-xs) var(--space-md);
+        font-size: 0.8125rem;
+    }
+    
+    /* Thought Card Mobile */
+    .thought-card {
+        padding: var(--space-md);
+    }
+    
+    .thought-text {
+        font-size: 0.9375rem;
+        line-height: 1.5;
+    }
+    
+    .thought-footer {
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        padding-top: var(--space-md);
+    }
+    
+    .thought-date {
+        font-size: 0.8125rem;
+    }
+    
+    /* Thought Actions Mobile - Touch-friendly tap targets */
+    .thought-actions {
+        gap: var(--space-md);
+    }
+    
+    .edit-btn,
+    .archive-btn,
+    .toggle-text-btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Tag Badges Mobile - Touch-friendly */
+    .thought-tags {
+        gap: var(--space-sm);
+    }
+    
+    .tag-badge {
+        min-height: 36px;
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.75rem;
+    }
+    
+    /* Edit Mode Indicator Mobile */
+    .input-section.edit-mode::before {
+        font-size: 0.8125rem;
+        top: -1.25rem;
+        left: var(--space-md);
+    }
+}
+
+/* Small mobile screens (e.g. iPhone SE) */
+@media (max-width: 380px) {
+    .container {
+        padding: var(--space-md) var(--space-sm);
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .view-btn {
+        min-width: 70px;
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.875rem;
+    }
+    
+    .thought-actions {
+        flex-wrap: wrap;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 900px) and (orientation: landscape) {
+    .container {
+        padding: var(--space-md) var(--space-lg);
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-md);
+    }
+    
+    .input-section {
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: var(--space-lg);
+    }
+    
+    .thoughts-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .search-section {
+        max-width: 50%;
     }
 }
 

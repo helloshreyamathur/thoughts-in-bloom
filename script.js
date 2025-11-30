@@ -97,6 +97,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Mobile: Handle virtual keyboard appearance
+    // Scroll input into view when focused on mobile
+    // Using 150ms delay as a reasonable balance for various devices
+    const KEYBOARD_SCROLL_DELAY = 150;
+    
+    function handleMobileInputFocus(inputElement) {
+        // Check if on mobile phone (touch device with phone-sized screen)
+        // Using 480px to better distinguish phones from tablets
+        const isMobilePhone = window.matchMedia('(max-width: 480px)').matches && 
+                              ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        
+        if (isMobilePhone) {
+            // Small delay to let the keyboard start appearing
+            setTimeout(function() {
+                inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, KEYBOARD_SCROLL_DELAY);
+        }
+    }
+    
+    thoughtInput.addEventListener('focus', function() {
+        handleMobileInputFocus(thoughtInput);
+    });
+    
+    searchInput.addEventListener('focus', function() {
+        handleMobileInputFocus(searchInput);
+    });
+    
+    // Mobile: Handle viewport resize when keyboard appears/disappears
+    // This helps with iOS Safari where the viewport doesn't resize properly
+    if ('visualViewport' in window) {
+        window.visualViewport.addEventListener('resize', function() {
+            // Adjust scroll position if an input is focused
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement === thoughtInput || activeElement === searchInput)) {
+                // Use same delay for consistency
+                setTimeout(function() {
+                    activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, KEYBOARD_SCROLL_DELAY);
+            }
+        });
+    }
+    
     function setViewMode(mode) {
         currentViewMode = mode;
         
