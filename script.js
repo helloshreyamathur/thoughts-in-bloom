@@ -5,8 +5,8 @@
  * @fileoverview Main application logic for capturing, storing, and displaying thoughts.
  * Uses browser localStorage for data persistence.
  * 
- * @author Shreya Mathur
  * @version 1.0.0
+ * @see https://github.com/helloshreyamathur/thoughts-in-bloom
  * 
  * Data Structure (stored in localStorage as 'thoughts'):
  * @typedef {Object} Thought
