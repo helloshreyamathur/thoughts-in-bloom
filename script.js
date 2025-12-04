@@ -1291,6 +1291,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Make showView globally accessible for constellation.js
+    // Make showView and editThought globally accessible for constellation.js
     window.showView = showView;
+    window.editThought = editThought;
 });

@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('x', 0)
             .attr('y', d => 15 + Math.min(d.connections * 2, 20))
             .attr('text-anchor', 'middle')
-            .attr('fill', '#333')
+            .attr('fill', 'rgba(255, 255, 255, 0.9)')
             .attr('font-size', '12px')
             .attr('font-family', 'var(--font-body)')
             .style('pointer-events', 'none');
@@ -497,7 +497,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function dragEnded(event, d) {
         if (!event.active && currentLayout === 'force') simulation.alphaTarget(0);
-        // Keep node position fixed after dragging
+        // Note: d.fx and d.fy keep the node fixed at its dragged position
+        // To allow the node to be free again, uncomment the following lines:
         // d.fx = null;
         // d.fy = null;
     }
