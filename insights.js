@@ -422,11 +422,15 @@
 
         // Find words that appear in multiple thoughts but aren't tags
         const allTags = new Set();
-        thoughts.forEach(t => (t.tags || []).forEach(tag => allTags.add(tag.toLowerCase())));
+        thoughts.forEach(t => (t.tags || []).forEach(tag => {
+            // Remove # prefix and convert to lowercase for comparison
+            const tagWord = tag.toLowerCase().replace(/^#/, '');
+            allTags.add(tagWord);
+        }));
 
         const themes = [];
         wordContexts.forEach((indices, word) => {
-            if (indices.length >= 3 && !allTags.has('#' + word)) {
+            if (indices.length >= 3 && !allTags.has(word)) {
                 // Get co-occurring words
                 const coOccurring = new Map();
                 indices.forEach(idx => {

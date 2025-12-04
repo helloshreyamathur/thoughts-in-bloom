@@ -156,6 +156,7 @@
     
     /* Primary Colors */
     --color-primary-blue: #5B9BD5;
+    --color-primary-purple: #9B7FD5;
     --color-accent-yellow: #E8F5A5;
     
     /* Background Colors */
@@ -1520,7 +1521,7 @@ p {
 }
 
 .insights-header .bloom {
-    background: linear-gradient(135deg, var(--color-primary-blue) 0%, #9B7FD5 100%);
+    background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1719,7 +1720,7 @@ p {
 
 .bar {
     height: 28px;
-    background: linear-gradient(90deg, var(--color-primary-blue), #9B7FD5);
+    background: linear-gradient(90deg, var(--color-primary-blue), var(--color-primary-purple));
     border-radius: var(--radius-sm);
     transition: width 0.3s ease;
     min-width: 2px;
@@ -1930,7 +1931,7 @@ p {
 
 /* Mood Items */
 .mood-item {
-    border-left-color: #9B7FD5;
+    border-left-color: var(--color-primary-purple);
 }
 
 /* Responsive Design */
@@ -2021,7 +2022,7 @@ p {
 }
 
 .analytics-header .bloom {
-    background: linear-gradient(135deg, var(--color-primary-blue) 0%, #9B7FD5 100%);
+    background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
