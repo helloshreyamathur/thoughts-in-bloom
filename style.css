@@ -241,7 +241,7 @@ p {
     display: flex;
     flex-direction: column;
     break-inside: avoid;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
 }
 
 .thought-card.slide-in {
