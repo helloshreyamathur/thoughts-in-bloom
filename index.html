@@ -10,6 +10,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- D3.js for constellation view -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
     <nav class="sidebar" aria-label="Main navigation">
@@ -49,7 +51,9 @@
             </li>
         </ul>
     </nav>
-    <div class="container">
+    
+    <!-- Home View (default card view) -->
+    <div class="container view-container" id="home-view">
         <h1>Thoughts in <span class="bloom">Bloom</span></h1>
         
         <div class="input-section">
@@ -84,6 +88,74 @@
         
         <div id="thoughts-container" class="thoughts-container" role="region" aria-label="Your thoughts"></div>
     </div>
+    
+    <!-- Constellation View -->
+    <div class="view-container" id="constellation-view" style="display: none;">
+        <div class="constellation-header">
+            <h1>Constellation of <span class="bloom">Thoughts</span></h1>
+            <p class="constellation-subtitle">Zoom in for more detailed connections • Click on any node to explore</p>
+        </div>
+        
+        <div class="constellation-controls">
+            <div class="constellation-search">
+                <input type="text" id="constellation-search-input" placeholder="Search thoughts..." aria-label="Search thoughts in constellation">
+            </div>
+            
+            <div class="constellation-filters">
+                <label for="connection-strength">Connection Strength:</label>
+                <input type="range" id="connection-strength" min="0" max="100" value="20" aria-label="Connection strength threshold">
+                <span id="strength-value">20%</span>
+            </div>
+            
+            <div class="constellation-layout-toggle">
+                <label for="layout-select">Layout:</label>
+                <select id="layout-select" aria-label="Select graph layout">
+                    <option value="force">Force-Directed</option>
+                    <option value="circular">Circular</option>
+                    <option value="hierarchical">Hierarchical</option>
+                </select>
+            </div>
+        </div>
+        
+        <div id="constellation-container" class="constellation-canvas"></div>
+        
+        <!-- Node detail modal -->
+        <div id="node-detail-modal" class="node-modal" style="display: none;">
+            <div class="node-modal-content">
+                <button id="close-modal" class="close-modal-btn" aria-label="Close">&times;</button>
+                <div id="modal-thought-text" class="modal-thought-text"></div>
+                <div id="modal-thought-tags" class="modal-thought-tags"></div>
+                <div class="modal-thought-footer">
+                    <span id="modal-thought-date" class="modal-thought-date"></span>
+                    <button id="modal-edit-btn" class="modal-action-btn">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Placeholder views for other navigation items -->
+    <div class="view-container" id="insights-view" style="display: none;">
+        <div class="container">
+            <h1>Insights</h1>
+            <p>Coming soon...</p>
+        </div>
+    </div>
+    
+    <div class="view-container" id="analytics-view" style="display: none;">
+        <div class="container">
+            <h1>Analytics</h1>
+            <p>Coming soon...</p>
+        </div>
+    </div>
+    
+    <div class="view-container" id="archive-view" style="display: none;">
+        <div class="container">
+            <h1>Archive</h1>
+            <p>Coming soon...</p>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
+    <script src="constellation.js"></script>
 </body>
 </html>
