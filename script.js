@@ -394,6 +394,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought saved:', thought);
         
+        // Invalidate insights cache since thoughts have changed
+        if (typeof window.invalidateInsightsCache === 'function') {
+            window.invalidateInsightsCache();
+        }
+        
         // Add success animation
         saveButton.classList.remove('saving');
         saveButton.classList.add('save-success');
@@ -504,6 +509,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought updated:', thoughts[thoughtIndex]);
         
+        // Invalidate insights cache since thoughts have changed
+        if (typeof window.invalidateInsightsCache === 'function') {
+            window.invalidateInsightsCache();
+        }
+        
         // Reset form to add mode
         cancelEdit();
         
@@ -561,6 +571,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought archived:', thoughts[thoughtIndex]);
         
+        // Invalidate insights cache since thoughts have changed
+        if (typeof window.invalidateInsightsCache === 'function') {
+            window.invalidateInsightsCache();
+        }
+        
         // Re-render to remove from active view
         loadThoughts();
     }
@@ -588,6 +603,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         console.log('Thought restored:', thoughts[thoughtIndex]);
+        
+        // Invalidate insights cache since thoughts have changed
+        if (typeof window.invalidateInsightsCache === 'function') {
+            window.invalidateInsightsCache();
+        }
         
         // Re-render to remove from archived view
         loadThoughts();

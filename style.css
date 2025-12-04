@@ -1647,7 +1647,7 @@ p {
 }
 
 .insights-container .tag-badge.clickable:hover {
-    background: #4a8bc5;
+    background: var(--color-text-dark);
     transform: scale(1.05);
 }
 

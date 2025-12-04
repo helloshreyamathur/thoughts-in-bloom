@@ -108,6 +108,20 @@
         }
     }
 
+    /**
+     * Invalidate insights cache
+     * Should be called whenever thoughts are added, updated, or deleted
+     */
+    function invalidateInsightsCache() {
+        try {
+            localStorage.removeItem(INSIGHTS_CACHE_KEY);
+            localStorage.removeItem(INSIGHTS_CACHE_TIMESTAMP_KEY);
+            console.log('Insights cache invalidated');
+        } catch (e) {
+            console.error('Error invalidating insights cache:', e);
+        }
+    }
+
     // ============================================
     // DATA RETRIEVAL
     // ============================================
@@ -1030,6 +1044,7 @@
     // Initialize when insights view becomes active
     if (typeof window !== 'undefined') {
         window.initializeInsights = initializeInsights;
+        window.invalidateInsightsCache = invalidateInsightsCache;
         
         // Set up event listeners on page load
         if (document.readyState === 'loading') {
