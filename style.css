@@ -35,7 +35,8 @@
     --color-text-dark: #2C2C2C;
     --color-text-body: #4A4A4A;
     --color-text-light: #6B6B6B;
-    --color-text-muted: #8B8B8B;
+    /* Phase P7: Improved for WCAG AA compliance (4.5:1 contrast ratio) */
+    --color-text-muted: #757575;
     
     /* UI Colors */
     --color-border: #E8E8E8;
@@ -225,10 +226,14 @@ p {
     background: var(--color-primary-blue);
     box-shadow: var(--shadow-button);
     transform: translateY(-50%) scale(1.05);
+    /* Phase P7: Performance hint for button interactions */
+    will-change: transform, background-color;
 }
 
 #save-button:active:not(:disabled) {
     transform: translateY(-50%) scale(0.98);
+    /* Phase P7: Tactile feedback with stronger shadow */
+    box-shadow: 0 1px 3px rgba(91, 155, 213, 0.4);
 }
 
 #save-button:disabled {
@@ -329,6 +334,13 @@ p {
     transform: translateY(-3px);
     box-shadow: var(--shadow-card-hover);
     border-color: rgba(255, 255, 255, 1);
+    /* Phase P7: Performance optimization - only hint will-change on hover */
+    will-change: transform, box-shadow;
+}
+
+/* Phase P7: Remove will-change when not interacting for performance */
+.thought-card:not(:hover) {
+    will-change: auto;
 }
 
 .thought-text {
@@ -468,6 +480,23 @@ p {
     to {
         opacity: 1;
     }
+}
+
+/* Phase P7: Page load cascade animation for cards */
+@keyframes cascadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.thought-card.page-load-cascade {
+    animation: cascadeIn 0.5s var(--easing-smooth) forwards;
+    opacity: 0;
 }
 
 /* ============================================
@@ -707,20 +736,33 @@ p {
     font-size: 0.875rem;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: background var(--duration-fast) var(--easing-default),
-                color var(--duration-fast) var(--easing-default),
-                border-color var(--duration-fast) var(--easing-default);
+    /* Phase P7: Enhanced transitions for view toggle */
+    transition: background var(--duration-fast) var(--easing-smooth),
+                color var(--duration-fast) var(--easing-smooth),
+                border-color var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth);
 }
 
 .view-btn:hover {
     background: var(--color-hover);
     color: var(--color-text-body);
+    /* Phase P7: Subtle lift on hover */
+    transform: translateY(-1px);
 }
 
 .view-btn.active {
     background: var(--color-text-dark);
     color: white;
     border-color: var(--color-text-dark);
+    /* Phase P7: Clear active state with shadow */
+    box-shadow: 0 2px 8px rgba(44, 44, 44, 0.2);
+}
+
+/* Phase P7: Active button retains prominence on hover */
+.view-btn.active:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(44, 44, 44, 0.25);
 }
 
 /* ============================================
@@ -772,13 +814,23 @@ p {
     border: none;
     cursor: pointer;
     font-family: inherit;
-    transition: background var(--duration-fast) var(--easing-default),
-                transform var(--duration-fast) var(--easing-default);
+    /* Phase P7: Enhanced transitions for tag micro-interactions */
+    transition: background var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth);
 }
 
 .tag-badge:hover {
     background: var(--color-text-dark);
-    transform: scale(1.05);
+    transform: scale(1.08);
+    /* Phase P7: Subtle shadow on hover for depth */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Phase P7: Active/pressed state for tag badges */
+.tag-badge:active {
+    transform: scale(1.02);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Tag Filter Container */
@@ -800,20 +852,36 @@ p {
     font-size: 0.75rem;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: background var(--duration-fast) var(--easing-default),
-                color var(--duration-fast) var(--easing-default),
-                border-color var(--duration-fast) var(--easing-default);
+    /* Phase P7: Enhanced transitions for filter tags */
+    transition: background var(--duration-fast) var(--easing-smooth),
+                color var(--duration-fast) var(--easing-smooth),
+                border-color var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth);
 }
 
 .filter-tag-btn:hover {
     background: var(--color-hover);
     color: var(--color-text-body);
+    /* Phase P7: Subtle lift on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .filter-tag-btn.active {
     background: var(--color-primary-blue);
     color: white;
     border-color: var(--color-primary-blue);
+    /* Phase P7: Clear active state with shadow */
+    box-shadow: 0 2px 8px rgba(91, 155, 213, 0.3);
+    font-weight: 500;
+}
+
+/* Phase P7: Active state remains clear even on hover */
+.filter-tag-btn.active:hover {
+    background: var(--color-text-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(44, 44, 44, 0.3);
 }
 
 /* ============================================
@@ -972,9 +1040,21 @@ p {
 }
 
 .empty-state-icon {
-    font-size: 3rem;
-    margin-bottom: var(--space-md);
-    opacity: 0.8;
+    font-size: 4rem;
+    margin-bottom: var(--space-lg);
+    opacity: 0.85;
+    /* Phase P7: Subtle floating animation for empty state */
+    animation: floatingIcon 3s ease-in-out infinite;
+}
+
+/* Phase P7: Floating animation for empty state icon */
+@keyframes floatingIcon {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .empty-state-title {
@@ -1024,4 +1104,71 @@ p {
     to {
         transform: rotate(360deg);
     }
+}
+
+/* ============================================
+   PHASE P7: ACCESSIBILITY & FOCUS INDICATORS
+   Enhanced keyboard navigation and focus states
+   ============================================ */
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    /* Keep functional animations but make them instant */
+    .thought-card.page-load-cascade,
+    .thought-card.slide-in,
+    .empty-state-icon {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Enhanced focus indicators for all interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(91, 155, 213, 0.15);
+}
+
+/* Specific focus styles for tag buttons */
+.tag-badge:focus-visible,
+.filter-tag-btn:focus-visible {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: 2px;
+    transform: scale(1.05);
+}
+
+/* View toggle button focus */
+.view-btn:focus-visible {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(91, 155, 213, 0.15);
+}
+
+/* Card action buttons focus */
+.edit-btn:focus-visible,
+.archive-btn:focus-visible,
+.toggle-text-btn:focus-visible {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: 2px;
+    text-decoration: underline;
+}
+
+/* Search button focus */
+.search-toggle-btn:focus-visible,
+.clear-search-btn:focus-visible {
+    outline: 2px solid var(--color-primary-blue);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(91, 155, 213, 0.15);
 }
