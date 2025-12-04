@@ -727,8 +727,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create cards using document fragment for better performance with large lists
         // This minimizes DOM reflows by batching all appendChild operations
         const fragment = document.createDocumentFragment();
-        filteredThoughts.forEach(function(thought) {
+        filteredThoughts.forEach(function(thought, index) {
             const card = createThoughtCard(thought);
+            // Phase P7: Add staggered page load animation (50ms delay per card)
+            // Only on initial page load, not when filtering/searching
+            if (!currentSearchQuery && !currentTagFilter) {
+                card.style.animationDelay = (index * 50) + 'ms';
+                card.classList.add('page-load-cascade');
+            }
             fragment.appendChild(card);
         });
         thoughtsContainer.appendChild(fragment);
