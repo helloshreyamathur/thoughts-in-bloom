@@ -435,13 +435,25 @@ p {
     
     /* Search Section Mobile */
     .search-section {
-        margin: var(--space-md) auto;
+        top: var(--space-lg);
+        right: var(--space-md);
+    }
+    
+    .search-toggle-btn {
+        width: 44px;
+        height: 44px;
+        --search-toggle-width-mobile: 56px; /* Button (44px) + gap (12px) */
+    }
+    
+    .search-section:not(.collapsed) .search-input-wrapper {
+        width: calc(100vw - 2 * var(--space-md) - var(--search-toggle-width-mobile));
+        max-width: 280px;
     }
     
     #search-input {
         min-height: 44px;
         font-size: 16px; /* Prevents iOS zoom on focus */
-        padding: var(--space-sm) 44px var(--space-sm) calc(var(--space-md) + 26px);
+        padding: var(--space-sm) 44px var(--space-sm) var(--space-md);
     }
     
     .clear-search-btn {
@@ -559,10 +571,6 @@ p {
     
     .thoughts-container {
         column-count: 2;
-    }
-    
-    .search-section {
-        max-width: 50%;
     }
 }
 
@@ -714,36 +722,83 @@ p {
 
 /* ============================================
    SEARCH FUNCTIONALITY
-   Search input, icon, and results display
+   Collapsible search with icon button and slide-out input
    ============================================ */
 .search-section {
-    max-width: 500px;
-    margin: var(--space-lg) auto;
-    text-align: center;
+    position: fixed;
+    top: var(--space-2xl);
+    right: var(--space-2xl);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
+/* Search Toggle Button (Collapsed State) */
+.search-toggle-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-card);
+    transition: all var(--duration-normal) var(--easing-default);
+    flex-shrink: 0;
+}
+
+.search-toggle-btn:hover {
+    background: var(--color-primary-blue);
+    border-color: var(--color-primary-blue);
+    box-shadow: var(--shadow-card-hover);
+    transform: scale(1.05);
+}
+
+.search-toggle-btn:hover .search-icon {
+    color: white;
+}
+
+.search-toggle-btn .search-icon {
+    color: var(--color-text-muted);
+    transition: color var(--duration-normal) var(--easing-default);
+}
+
+/* When expanded, hide the toggle button */
+.search-section:not(.collapsed) .search-toggle-btn {
+    display: none;
+}
+
+/* Search Input Wrapper (Expanded State) */
 .search-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity var(--duration-normal) var(--easing-default),
+                width var(--duration-normal) var(--easing-default);
 }
 
-.search-icon {
-    position: absolute;
-    left: var(--space-md);
-    color: var(--color-text-muted);
-    pointer-events: none;
+.search-section:not(.collapsed) .search-input-wrapper {
+    opacity: 1;
+    width: 320px;
 }
 
 #search-input {
     width: 100%;
-    padding: var(--space-sm) var(--space-xl) var(--space-sm) calc(var(--space-md) + 26px);
+    padding: var(--space-sm) var(--space-xl) var(--space-sm) var(--space-md);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
     font-family: inherit;
     font-size: 0.9375rem;
     background: var(--color-card-bg);
     color: var(--color-text-body);
+    box-shadow: var(--shadow-card);
     transition: border-color var(--duration-fast) var(--easing-default),
                 box-shadow var(--duration-fast) var(--easing-default);
 }
@@ -751,7 +806,7 @@ p {
 #search-input:focus {
     outline: none;
     border-color: var(--color-primary-blue);
-    box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.1);
+    box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.1), var(--shadow-card);
 }
 
 #search-input::placeholder {
@@ -783,10 +838,19 @@ p {
 }
 
 .search-results-count {
+    position: absolute;
+    top: 100%;
+    right: 0;
     margin-top: var(--space-xs);
     font-size: 0.75rem;
     color: var(--color-text-muted);
     min-height: 1.2em;
+    white-space: nowrap;
+}
+
+/* Hide results count in collapsed state */
+.search-section.collapsed .search-results-count {
+    display: none;
 }
 
 /* Search highlight */
