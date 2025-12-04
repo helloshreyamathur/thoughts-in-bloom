@@ -1281,5 +1281,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         localStorage.setItem('activeView', viewName);
+        
+        // Initialize constellation view when it becomes active
+        if (viewName === 'constellation' && typeof window.initializeConstellation === 'function') {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                window.initializeConstellation();
+            }, 100);
+        }
     }
+    
+    // Make showView globally accessible for constellation.js
+    window.showView = showView;
 });
