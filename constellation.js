@@ -43,6 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
      * Setup the SVG canvas and D3 force simulation
      */
     function setupConstellationCanvas() {
+        // Check if D3 is available
+        if (typeof d3 === 'undefined') {
+            console.error('D3.js library is not loaded. Please check your internet connection.');
+            showD3ErrorMessage();
+            return;
+        }
+        
         const container = d3.select('#constellation-container');
         const width = container.node().offsetWidth;
         const height = container.node().offsetHeight;
@@ -361,6 +368,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h3 class="empty-state-title">No thoughts to visualize</h3>
                 <p class="empty-state-message">Add some thoughts to see your constellation!</p>
             `);
+    }
+    
+    /**
+     * Show error message when D3.js fails to load
+     */
+    function showD3ErrorMessage() {
+        const container = document.getElementById('constellation-container');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div class="empty-state">
+                <span class="empty-state-icon">⚠️</span>
+                <h3 class="empty-state-title">Visualization Library Not Available</h3>
+                <p class="empty-state-message">The D3.js library could not be loaded. Please check your internet connection and refresh the page.</p>
+            </div>
+        `;
     }
     
     // ============================================
