@@ -1292,6 +1292,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.initializeConstellation();
             }, 100);
         }
+        
+        // Initialize insights view when it becomes active
+        if (viewName === 'insights' && typeof window.initializeInsights === 'function') {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                window.initializeInsights();
+            }, 100);
+        }
     }
     
     // Make showView and editThought globally accessible for constellation.js
