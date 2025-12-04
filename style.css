@@ -19,6 +19,10 @@
    Based on Figma Design System
    ============================================ */
 :root {
+    /* Typography */
+    --font-title: 'Young Serif', serif;
+    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    
     /* Primary Colors */
     --color-primary-blue: #5B9BD5;
     --color-accent-yellow: #E8F5A5;
@@ -75,7 +79,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    font-family: var(--font-body);
     line-height: 1.6;
     min-height: 100vh;
     background: var(--color-bg-main);
@@ -92,9 +96,10 @@ body {
 }
 
 h1 {
+    font-family: var(--font-title);
     color: var(--color-text-dark);
     margin-bottom: var(--space-xl);
-    font-weight: 600;
+    font-weight: 400;
     font-size: 3rem;
     text-align: center;
 }
