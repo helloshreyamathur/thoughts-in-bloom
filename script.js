@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const clearSearchBtn = document.getElementById('clear-search');
     const searchResultsCount = document.getElementById('search-results-count');
+    const searchToggleBtn = document.getElementById('search-toggle-btn');
+    const searchSection = document.querySelector('.search-section');
     
     // ============================================
     // APPLICATION STATE
@@ -69,6 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     /** @type {number|null} Timer ID for search debouncing */
     let searchDebounceTimer = null;
+    
+    /** @type {boolean} Whether the search UI is currently expanded */
+    let isSearchExpanded = false;
     
     // ============================================
     // INITIALIZATION
@@ -133,11 +138,34 @@ document.addEventListener('DOMContentLoaded', function() {
         clearSearch();
     });
     
-    // Escape key clears search when focused on search input
+    // Escape key clears search or collapses when focused on search input
     searchInput.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            clearSearch();
-            searchInput.blur();
+            if (currentSearchQuery) {
+                clearSearch();
+            } else {
+                collapseSearch();
+            }
+        }
+    });
+    
+    // Search toggle button handler
+    searchToggleBtn.addEventListener('click', function() {
+        expandSearch();
+    });
+    
+    // Global keyboard shortcut: Ctrl+K / Cmd+K to open search
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            expandSearch();
+        }
+    });
+    
+    // Click outside to collapse search
+    document.addEventListener('click', function(e) {
+        if (isSearchExpanded && searchSection && !searchSection.contains(e.target)) {
+            collapseSearch();
         }
     });
     
@@ -1076,6 +1104,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     // SEARCH FUNCTIONS
     // ============================================
+    
+    /**
+     * Expands the search UI and focuses the input.
+     */
+    function expandSearch() {
+        if (isSearchExpanded) return;
+        
+        isSearchExpanded = true;
+        searchSection.classList.remove('collapsed');
+        searchToggleBtn.setAttribute('aria-expanded', 'true');
+        
+        // Auto-focus the input after the animation starts
+        setTimeout(function() {
+            searchInput.focus();
+        }, 100);
+    }
+    
+    /**
+     * Collapses the search UI.
+     * If there's an active search, it clears it first.
+     */
+    function collapseSearch() {
+        if (!isSearchExpanded) return;
+        
+        isSearchExpanded = false;
+        searchSection.classList.add('collapsed');
+        searchToggleBtn.setAttribute('aria-expanded', 'false');
+        searchInput.blur();
+        
+        // Clear search if there's an active query
+        if (currentSearchQuery) {
+            clearSearch();
+        }
+    }
     
     /**
      * Handles search input changes.
