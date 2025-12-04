@@ -1100,6 +1100,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tagButton.type = 'button';
             tagButton.className = 'filter-tag-btn' + (currentTagFilter === tag ? ' active' : '');
             tagButton.textContent = tag;
+            tagButton.setAttribute('data-tag', tag);
             tagButton.setAttribute('aria-label', 'Filter by ' + tag);
             tagButton.setAttribute('aria-pressed', currentTagFilter === tag ? 'true' : 'false');
             tagButton.addEventListener('click', function() {

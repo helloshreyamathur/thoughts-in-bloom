@@ -21,6 +21,7 @@
     const RECENT_DAYS = 7;
     const RECENT_MONTH = 30;
     const MIN_WORD_LENGTH = 4; // Minimum word length for analysis
+    const PREVIEW_TEXT_LENGTH = 100; // Characters to show in connection previews
     
     // Common words to exclude from analysis (English stop words)
     const STOP_WORDS = new Set([
@@ -316,8 +317,8 @@
                 
                 if (commonWords.length >= 2) {
                     unexpected.push({
-                        thought1: { id: t1.id, text: t1.text.substring(0, 100), tags: t1.tags },
-                        thought2: { id: t2.id, text: t2.text.substring(0, 100), tags: t2.tags },
+                        thought1: { id: t1.id, text: t1.text.substring(0, PREVIEW_TEXT_LENGTH), tags: t1.tags },
+                        thought2: { id: t2.id, text: t2.text.substring(0, PREVIEW_TEXT_LENGTH), tags: t2.tags },
                         commonWords: commonWords.slice(0, 5),
                         strength: commonWords.length
                     });
@@ -363,7 +364,7 @@
             })
             .map(thought => ({
                 id: thought.id,
-                text: thought.text.substring(0, 100),
+                text: thought.text.substring(0, PREVIEW_TEXT_LENGTH),
                 date: thought.date
             }))
             .slice(0, 10);
@@ -979,6 +980,7 @@
 
     /**
      * Handle click on tag badges to filter thoughts
+     * Navigates to home view and triggers tag filter
      */
     function handleTagClick(tag) {
         console.log('Filtering by tag:', tag);
@@ -988,15 +990,21 @@
             window.showView('home');
         }
         
-        // Wait for view to load, then filter
+        // Wait for view to load, then filter using data attribute
         setTimeout(() => {
-            // Trigger tag filter (assumes filterByTag function exists in main script.js)
-            const tagButtons = document.querySelectorAll('.filter-tag-btn');
-            tagButtons.forEach(btn => {
-                if (btn.textContent === tag) {
-                    btn.click();
-                }
-            });
+            // Find tag button by data-tag attribute for reliability
+            const tagButtons = document.querySelectorAll('.filter-tag-btn[data-tag="' + tag + '"]');
+            if (tagButtons.length > 0) {
+                tagButtons[0].click();
+            } else {
+                // Fallback: search by text content
+                const allButtons = document.querySelectorAll('.filter-tag-btn');
+                allButtons.forEach(btn => {
+                    if (btn.textContent.trim() === tag) {
+                        btn.click();
+                    }
+                });
+            }
         }, 100);
     }
 

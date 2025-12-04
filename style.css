@@ -1634,23 +1634,19 @@ p {
     gap: var(--space-sm);
 }
 
-.tag-badge {
-    display: inline-block;
+/* Insights page uses larger tag badges */
+.insights-container .tag-badge {
     padding: 6px 12px;
-    background: var(--color-primary-blue);
-    color: white;
-    border: none;
-    border-radius: var(--radius-pill);
     font-size: 0.875rem;
     font-weight: 500;
 }
 
-.tag-badge.clickable {
+.insights-container .tag-badge.clickable {
     cursor: pointer;
     transition: background 0.2s, transform 0.1s;
 }
 
-.tag-badge.clickable:hover {
+.insights-container .tag-badge.clickable:hover {
     background: #4a8bc5;
     transform: scale(1.05);
 }
