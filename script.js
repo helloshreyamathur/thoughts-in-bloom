@@ -114,6 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Save button click handler
     saveButton.addEventListener('click', handleSave);
     
+    // Textarea input handler - updates character counter and button state
+    thoughtInput.addEventListener('input', updateCharCounter);
+    
     // Sidebar Toggle
     sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('expanded');
