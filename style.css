@@ -67,6 +67,13 @@
     --duration-normal: 0.3s;
     --easing-default: ease-in-out;
     --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Phase P4: Ultra-Subtle Pastel Colors (5-10% opacity) */
+    --pastel-blue: rgba(173, 216, 230, 0.08);
+    --pastel-purple: rgba(221, 160, 221, 0.06);
+    --pastel-pink: rgba(255, 192, 203, 0.05);
+    --pastel-peach: rgba(255, 218, 185, 0.07);
+    --pastel-mint: rgba(189, 252, 201, 0.06);
 }
 
 /* ============================================
@@ -84,6 +91,40 @@ body {
     min-height: 100vh;
     background: var(--color-bg-main);
     color: var(--color-text-body);
+    position: relative;
+}
+
+/* Phase P4: Animated Background Gradient (60s breathing animation) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(
+        135deg,
+        var(--pastel-blue) 0%,
+        var(--pastel-purple) 25%,
+        var(--pastel-pink) 50%,
+        var(--pastel-peach) 75%,
+        var(--pastel-mint) 100%
+    );
+    background-size: 400% 400%;
+    animation: breathingGradient 60s ease-in-out infinite;
+}
+
+@keyframes breathingGradient {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    33% {
+        background-position: 50% 100%;
+    }
+    66% {
+        background-position: 100% 50%;
+    }
 }
 
 /* ============================================
@@ -242,6 +283,47 @@ p {
     flex-direction: column;
     break-inside: avoid;
     margin-bottom: var(--space-md);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Phase P4: Random Pastel Washes for Cards (2-5% opacity) */
+.thought-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.thought-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Card tint variations */
+.thought-card.tint-blue::before {
+    background: var(--pastel-blue);
+}
+
+.thought-card.tint-purple::before {
+    background: var(--pastel-purple);
+}
+
+.thought-card.tint-pink::before {
+    background: var(--pastel-pink);
+}
+
+.thought-card.tint-peach::before {
+    background: var(--pastel-peach);
+}
+
+.thought-card.tint-mint::before {
+    background: var(--pastel-mint);
 }
 
 .thought-card.slide-in {

@@ -804,6 +804,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         card.dataset.id = thought.id;
         
+        // Phase P4: Add random pastel tint to each card
+        const tints = ['tint-blue', 'tint-purple', 'tint-pink', 'tint-peach', 'tint-mint'];
+        const randomTint = tints[Math.floor(Math.random() * tints.length)];
+        card.classList.add(randomTint);
+        
         const textElement = document.createElement('p');
         textElement.className = 'thought-text';
         
