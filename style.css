@@ -442,10 +442,11 @@ p {
     .search-toggle-btn {
         width: 44px;
         height: 44px;
+        --search-toggle-width-mobile: 56px; /* Button (44px) + gap (12px) */
     }
     
     .search-section:not(.collapsed) .search-input-wrapper {
-        width: calc(100vw - 2 * var(--space-md) - 56px);
+        width: calc(100vw - 2 * var(--space-md) - var(--search-toggle-width-mobile));
         max-width: 280px;
     }
     

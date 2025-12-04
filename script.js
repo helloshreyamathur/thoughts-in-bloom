@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let searchDebounceTimer = null;
     
     /** @type {boolean} Whether the search UI is currently expanded */
-    let isSearchExpanded = false;
+    let isSearchExpanded = false; // Matches initial HTML class="collapsed"
     
     // ============================================
     // INITIALIZATION
@@ -155,19 +155,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Global keyboard shortcut: Ctrl+K / Cmd+K to open search
+    // Only intercept if not currently typing in a form field
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-            e.preventDefault();
-            expandSearch();
+            const activeElement = document.activeElement;
+            const isTyping = activeElement && (
+                activeElement.tagName === 'INPUT' ||
+                activeElement.tagName === 'TEXTAREA' ||
+                activeElement.isContentEditable
+            );
+            
+            // Only prevent default and expand if not typing in a field
+            if (!isTyping) {
+                e.preventDefault();
+                expandSearch();
+            }
         }
     });
     
-    // Click outside to collapse search
-    document.addEventListener('click', function(e) {
-        if (isSearchExpanded && searchSection && !searchSection.contains(e.target)) {
+    /**
+     * Handler for click-outside to collapse search.
+     * @param {MouseEvent} e - The click event
+     */
+    function handleClickOutside(e) {
+        if (searchSection && !searchSection.contains(e.target)) {
             collapseSearch();
         }
-    });
+    }
     
     // ============================================
     // MOBILE KEYBOARD HANDLING
@@ -1107,6 +1121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     /**
      * Expands the search UI and focuses the input.
+     * Adds click-outside listener for better performance.
      */
     function expandSearch() {
         if (isSearchExpanded) return;
@@ -1114,6 +1129,9 @@ document.addEventListener('DOMContentLoaded', function() {
         isSearchExpanded = true;
         searchSection.classList.remove('collapsed');
         searchToggleBtn.setAttribute('aria-expanded', 'true');
+        
+        // Add click-outside listener only when expanded
+        document.addEventListener('click', handleClickOutside);
         
         // Auto-focus the input after the animation starts
         setTimeout(function() {
@@ -1124,6 +1142,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * Collapses the search UI.
      * If there's an active search, it clears it first.
+     * Removes click-outside listener for better performance.
      */
     function collapseSearch() {
         if (!isSearchExpanded) return;
@@ -1132,6 +1151,9 @@ document.addEventListener('DOMContentLoaded', function() {
         searchSection.classList.add('collapsed');
         searchToggleBtn.setAttribute('aria-expanded', 'false');
         searchInput.blur();
+        
+        // Remove click-outside listener when collapsed
+        document.removeEventListener('click', handleClickOutside);
         
         // Clear search if there's an active query
         if (currentSearchQuery) {
