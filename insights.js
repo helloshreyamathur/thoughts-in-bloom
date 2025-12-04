@@ -176,8 +176,10 @@
         const insights = {
             patterns: computePatternInsights(thoughts),
             connections: computeConnectionInsights(thoughts),
-            temporal: computeTemporalInsights(thoughts),
-            content: computeContentInsights(thoughts),
+            hiddenThemes: computeHiddenThemes(thoughts),
+            thoughtEvolution: computeThoughtEvolution(thoughts),
+            questionPatterns: computeQuestionPatterns(thoughts),
+            moodAnalysis: computeMoodAnalysis(thoughts),
             meta: {
                 totalThoughts: thoughts.length,
                 computedAt: new Date().toISOString()
@@ -198,8 +200,10 @@
         return {
             patterns: { mostActive: [], recentThemes: [], emerging: [], dormant: [] },
             connections: { unexpected: [], clusters: [], standalone: [] },
-            temporal: { peakHours: [], productiveDays: [], streak: { current: 0, longest: 0 } },
-            content: { avgLength: 0, uniqueWords: 0, mostUsed: [] },
+            hiddenThemes: [],
+            thoughtEvolution: [],
+            questionPatterns: [],
+            moodAnalysis: { overall: 'neutral', patterns: [] },
             meta: { totalThoughts: 0, computedAt: new Date().toISOString() }
         };
     }
@@ -391,151 +395,318 @@
     }
 
     // ============================================
-    // TEMPORAL INSIGHTS
+    // HIDDEN THEMES DETECTION
     // ============================================
 
     /**
-     * Compute temporal pattern insights
+     * Detect hidden themes using word frequency and co-occurrence analysis
+     * Finds implicit topics not explicitly captured by tags
      * @param {Array} thoughts - Array of thought objects
-     * @returns {Object} Temporal insights
+     * @returns {Array} Array of hidden theme insights
      */
-    function computeTemporalInsights(thoughts) {
-        const hourCounts = new Array(24).fill(0);
-        const dayCounts = new Array(7).fill(0);
-        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    function computeHiddenThemes(thoughts) {
+        if (thoughts.length < 5) return [];
+
+        // Extract all words and their contexts
+        const wordContexts = new Map(); // word -> array of thought indices
         
-        // Count by hour and day of week
-        thoughts.forEach(thought => {
-            const date = new Date(thought.date);
-            hourCounts[date.getHours()]++;
-            dayCounts[date.getDay()]++;
-        });
-
-        // Peak Thinking Hours (top 5)
-        const peakHours = hourCounts
-            .map((count, hour) => ({
-                hour,
-                hourLabel: formatHour(hour),
-                count
-            }))
-            .filter(h => h.count > 0)
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 5);
-
-        // Most Productive Days (top 3)
-        const productiveDays = dayCounts
-            .map((count, day) => ({
-                day: dayNames[day],
-                count
-            }))
-            .filter(d => d.count > 0)
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 3);
-
-        // Thought Streaks (consecutive days with thoughts)
-        const dates = thoughts
-            .map(t => {
-                const d = new Date(t.date);
-                return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-            })
-            .sort((a, b) => b - a); // newest first
-
-        const uniqueDates = [...new Set(dates)];
-        
-        let currentStreak = 0;
-        let longestStreak = 0;
-        let tempStreak = 1;
-
-        // Calculate current streak (from most recent date)
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const todayTime = today.getTime();
-        const yesterday = todayTime - 24 * 60 * 60 * 1000;
-
-        if (uniqueDates.length > 0) {
-            const mostRecent = uniqueDates[0];
-            if (mostRecent === todayTime || mostRecent === yesterday) {
-                currentStreak = 1;
-                for (let i = 1; i < uniqueDates.length; i++) {
-                    const expectedPrev = uniqueDates[i - 1] - 24 * 60 * 60 * 1000;
-                    if (uniqueDates[i] === expectedPrev) {
-                        currentStreak++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Calculate longest streak
-        for (let i = 1; i < uniqueDates.length; i++) {
-            const expectedPrev = uniqueDates[i - 1] - 24 * 60 * 60 * 1000;
-            if (uniqueDates[i] === expectedPrev) {
-                tempStreak++;
-                longestStreak = Math.max(longestStreak, tempStreak);
-            } else {
-                tempStreak = 1;
-            }
-        }
-        
-        longestStreak = Math.max(longestStreak, tempStreak, currentStreak);
-
-        return {
-            peakHours,
-            productiveDays,
-            streak: { current: currentStreak, longest: longestStreak }
-        };
-    }
-
-    /**
-     * Format hour in 12-hour format
-     * @param {number} hour - Hour in 24-hour format (0-23)
-     * @returns {string} Formatted hour string
-     */
-    function formatHour(hour) {
-        if (hour === 0) return '12 AM';
-        if (hour < 12) return hour + ' AM';
-        if (hour === 12) return '12 PM';
-        return (hour - 12) + ' PM';
-    }
-
-    // ============================================
-    // CONTENT ANALYSIS
-    // ============================================
-
-    /**
-     * Compute content analysis insights
-     * @param {Array} thoughts - Array of thought objects
-     * @returns {Object} Content insights
-     */
-    function computeContentInsights(thoughts) {
-        // Average thought length
-        const totalLength = thoughts.reduce((sum, t) => sum + t.text.length, 0);
-        const avgLength = thoughts.length > 0 ? Math.round(totalLength / thoughts.length) : 0;
-
-        // Vocabulary diversity (unique words)
-        const allWords = new Set();
-        const wordCounts = new Map();
-
-        thoughts.forEach(thought => {
+        thoughts.forEach((thought, idx) => {
             const words = extractWords(thought.text);
             words.forEach(word => {
-                allWords.add(word);
-                wordCounts.set(word, (wordCounts.get(word) || 0) + 1);
+                if (!wordContexts.has(word)) {
+                    wordContexts.set(word, []);
+                }
+                wordContexts.get(word).push(idx);
             });
         });
 
-        // Most used words (top 20)
-        const mostUsed = Array.from(wordCounts.entries())
-            .map(([word, count]) => ({ word, count }))
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 20);
+        // Find words that appear in multiple thoughts but aren't tags
+        const allTags = new Set();
+        thoughts.forEach(t => (t.tags || []).forEach(tag => {
+            // Remove # prefix and convert to lowercase for comparison
+            const tagWord = tag.toLowerCase().replace(/^#/, '');
+            allTags.add(tagWord);
+        }));
 
-        return {
-            avgLength,
-            uniqueWords: allWords.size,
-            mostUsed
-        };
+        const themes = [];
+        wordContexts.forEach((indices, word) => {
+            if (indices.length >= 3 && !allTags.has(word)) {
+                // Get co-occurring words
+                const coOccurring = new Map();
+                indices.forEach(idx => {
+                    const thoughtWords = extractWords(thoughts[idx].text);
+                    thoughtWords.forEach(w => {
+                        if (w !== word) {
+                            coOccurring.set(w, (coOccurring.get(w) || 0) + 1);
+                        }
+                    });
+                });
+
+                const topCoOccurring = Array.from(coOccurring.entries())
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 3)
+                    .map(([w]) => w);
+
+                if (topCoOccurring.length > 0) {
+                    themes.push({
+                        theme: word,
+                        relatedWords: topCoOccurring,
+                        count: indices.length,
+                        thoughtIds: indices.map(i => thoughts[i].id),
+                        description: `"${word}" appears ${indices.length} times, often with: ${topCoOccurring.join(', ')}`
+                    });
+                }
+            }
+        });
+
+        return themes.sort((a, b) => b.count - a.count).slice(0, 5);
+    }
+
+    // ============================================
+    // THOUGHT EVOLUTION TRACKING
+    // ============================================
+
+    /**
+     * Track how ideas and topics evolve over time
+     * @param {Array} thoughts - Array of thought objects
+     * @returns {Array} Array of evolution insights
+     */
+    function computeThoughtEvolution(thoughts) {
+        if (thoughts.length < 10) return [];
+
+        const evolutions = [];
+        
+        // Sort thoughts by date
+        const sorted = [...thoughts].sort((a, b) => 
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+
+        // Group by tags to track tag-based evolution
+        const tagGroups = new Map();
+        sorted.forEach(thought => {
+            (thought.tags || []).forEach(tag => {
+                if (!tagGroups.has(tag)) {
+                    tagGroups.set(tag, []);
+                }
+                tagGroups.get(tag).push(thought);
+            });
+        });
+
+        // Analyze each tag group with enough data
+        tagGroups.forEach((groupThoughts, tag) => {
+            if (groupThoughts.length >= 4) {
+                // Split into early and late periods
+                const midpoint = Math.floor(groupThoughts.length / 2);
+                const early = groupThoughts.slice(0, midpoint);
+                const late = groupThoughts.slice(midpoint);
+
+                // Extract common words from each period
+                const earlyWords = new Set();
+                const lateWords = new Set();
+
+                early.forEach(t => {
+                    extractWords(t.text).forEach(w => earlyWords.add(w));
+                });
+                late.forEach(t => {
+                    extractWords(t.text).forEach(w => lateWords.add(w));
+                });
+
+                // Find unique words in each period
+                const uniqueToEarly = [...earlyWords].filter(w => !lateWords.has(w)).slice(0, 3);
+                const uniqueToLate = [...lateWords].filter(w => !earlyWords.has(w)).slice(0, 3);
+
+                if (uniqueToLate.length > 0) {
+                    const firstDate = new Date(early[0].date).toLocaleDateString();
+                    const lastDate = new Date(late[late.length - 1].date).toLocaleDateString();
+                    
+                    evolutions.push({
+                        tag,
+                        early: { date: firstDate, keywords: uniqueToEarly },
+                        late: { date: lastDate, keywords: uniqueToLate },
+                        description: `Your thinking on ${tag} evolved from "${uniqueToEarly.join(', ')}" to "${uniqueToLate.join(', ')}"`,
+                        thoughtIds: groupThoughts.map(t => t.id)
+                    });
+                }
+            }
+        });
+
+        return evolutions.slice(0, 3);
+    }
+
+    // ============================================
+    // QUESTION PATTERNS
+    // ============================================
+
+    /**
+     * Identify recurring questions and uncertainties
+     * @param {Array} thoughts - Array of thought objects
+     * @returns {Array} Array of question pattern insights
+     */
+    function computeQuestionPatterns(thoughts) {
+        const questions = [];
+        const questionWords = ['how', 'what', 'why', 'when', 'where', 'who', 'should', 'could', 'would'];
+
+        thoughts.forEach(thought => {
+            const text = thought.text.toLowerCase();
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim());
+            
+            sentences.forEach(sentence => {
+                const trimmed = sentence.trim();
+                if (trimmed.length > 10) {
+                    const words = trimmed.split(/\s+/);
+                    const hasQuestionWord = questionWords.some(qw => words.includes(qw));
+                    const hasQuestionMark = thought.text.includes('?');
+                    
+                    if (hasQuestionWord || hasQuestionMark) {
+                        questions.push({
+                            text: trimmed.substring(0, 100) + (trimmed.length > 100 ? '...' : ''),
+                            thoughtId: thought.id,
+                            date: thought.date
+                        });
+                    }
+                }
+            });
+        });
+
+        // Group similar questions
+        const grouped = new Map();
+        questions.forEach(q => {
+            const keywords = q.text.split(/\s+/).filter(w => 
+                w.length > 4 && !STOP_WORDS.has(w.toLowerCase())
+            );
+            
+            const key = keywords.slice(0, 2).join(' ');
+            if (key && key.length > 3) {
+                if (!grouped.has(key)) {
+                    grouped.set(key, []);
+                }
+                grouped.get(key).push(q);
+            }
+        });
+
+        const patterns = [];
+        grouped.forEach((questions, key) => {
+            if (questions.length >= 2) {
+                patterns.push({
+                    theme: key,
+                    count: questions.length,
+                    examples: questions.slice(0, 2),
+                    description: `You've explored "${key}" ${questions.length} times`
+                });
+            }
+        });
+
+        return patterns.sort((a, b) => b.count - a.count).slice(0, 5);
+    }
+
+    // ============================================
+    // MOOD & TONE ANALYSIS
+    // ============================================
+
+    /**
+     * Analyze emotional patterns and tone in thoughts
+     * @param {Array} thoughts - Array of thought objects
+     * @returns {Object} Mood analysis insights
+     */
+    function computeMoodAnalysis(thoughts) {
+        if (thoughts.length < 3) {
+            return { overall: 'neutral', patterns: [] };
+        }
+
+        // Simple sentiment word lists
+        const positiveWords = [
+            'happy', 'joy', 'excited', 'love', 'great', 'wonderful', 'amazing', 
+            'excellent', 'good', 'better', 'best', 'success', 'achieve', 'win',
+            'grateful', 'thankful', 'appreciate', 'proud', 'hopeful', 'inspired'
+        ];
+        
+        const negativeWords = [
+            'sad', 'angry', 'frustrated', 'difficult', 'hard', 'problem', 'worry',
+            'concerned', 'stress', 'anxious', 'fear', 'fail', 'lose', 'wrong',
+            'bad', 'worse', 'worst', 'struggle', 'challenge', 'doubt'
+        ];
+
+        const reflectiveWords = [
+            'think', 'realize', 'understand', 'learn', 'discover', 'reflect',
+            'consider', 'wonder', 'question', 'explore', 'insight', 'perspective'
+        ];
+
+        let positiveCount = 0;
+        let negativeCount = 0;
+        let reflectiveCount = 0;
+
+        const moodByThought = thoughts.map(thought => {
+            const text = thought.text.toLowerCase();
+            const words = text.split(/\s+/);
+            
+            let pos = 0, neg = 0, ref = 0;
+            
+            words.forEach(word => {
+                if (positiveWords.includes(word)) pos++;
+                if (negativeWords.includes(word)) neg++;
+                if (reflectiveWords.includes(word)) ref++;
+            });
+
+            positiveCount += pos;
+            negativeCount += neg;
+            reflectiveCount += ref;
+
+            let mood = 'neutral';
+            if (ref > pos && ref > neg) mood = 'reflective';
+            else if (pos > neg) mood = 'positive';
+            else if (neg > pos) mood = 'questioning';
+
+            return { thoughtId: thought.id, mood, date: thought.date };
+        });
+
+        const total = positiveCount + negativeCount + reflectiveCount;
+        let overall = 'neutral';
+        if (reflectiveCount > positiveCount && reflectiveCount > negativeCount) {
+            overall = 'reflective';
+        } else if (positiveCount > negativeCount) {
+            overall = 'optimistic';
+        } else if (negativeCount > positiveCount) {
+            overall = 'questioning';
+        }
+
+        // Group by time periods
+        const patterns = [];
+        
+        // Check weekend vs weekday mood
+        const weekendThoughts = thoughts.filter(t => {
+            const day = new Date(t.date).getDay();
+            return day === 0 || day === 6;
+        });
+        
+        if (weekendThoughts.length >= 2) {
+            const weekendReflective = weekendThoughts.filter(t => {
+                const mood = moodByThought.find(m => m.thoughtId === t.id);
+                return mood && mood.mood === 'reflective';
+            }).length;
+            
+            if (weekendReflective / weekendThoughts.length > 0.5) {
+                patterns.push({
+                    pattern: 'Weekend Reflection',
+                    description: 'You tend to write more reflective thoughts on weekends'
+                });
+            }
+        }
+
+        if (positiveCount > negativeCount * 1.5) {
+            patterns.push({
+                pattern: 'Optimistic Tone',
+                description: `Your thoughts lean positive (${Math.round((positiveCount / total) * 100)}% positive sentiment)`
+            });
+        }
+
+        if (reflectiveCount > total * 0.4) {
+            patterns.push({
+                pattern: 'Deep Thinker',
+                description: 'Your thoughts often explore ideas deeply and reflectively'
+            });
+        }
+
+        return { overall, patterns };
     }
 
     // ============================================
@@ -565,7 +736,7 @@
         header.className = 'insights-header';
         header.innerHTML = `
             <h1>Insights & <span class="bloom">Discoveries</span></h1>
-            <p class="insights-subtitle">Patterns, connections, and discoveries from your ${insights.meta.totalThoughts} thoughts</p>
+            <p class="insights-subtitle">AI-powered discoveries and unique patterns from your ${insights.meta.totalThoughts} thoughts</p>
         `;
         mainContent.appendChild(header);
 
@@ -587,11 +758,21 @@
         const grid = document.createElement('div');
         grid.className = 'insights-grid';
 
-        // Render each category
-        grid.appendChild(renderPatternInsights(insights.patterns));
-        grid.appendChild(renderTemporalInsights(insights.temporal));
-        grid.appendChild(renderContentInsights(insights.content));
+        // Render each category - focus on discoveries
+        if (insights.hiddenThemes && insights.hiddenThemes.length > 0) {
+            grid.appendChild(renderHiddenThemes(insights.hiddenThemes));
+        }
+        if (insights.thoughtEvolution && insights.thoughtEvolution.length > 0) {
+            grid.appendChild(renderThoughtEvolution(insights.thoughtEvolution));
+        }
+        if (insights.questionPatterns && insights.questionPatterns.length > 0) {
+            grid.appendChild(renderQuestionPatterns(insights.questionPatterns));
+        }
+        if (insights.moodAnalysis && insights.moodAnalysis.patterns.length > 0) {
+            grid.appendChild(renderMoodAnalysis(insights.moodAnalysis));
+        }
         grid.appendChild(renderConnectionInsights(insights.connections));
+        grid.appendChild(renderPatternInsights(insights.patterns));
 
         mainContent.appendChild(grid);
         container.appendChild(mainContent);
@@ -705,170 +886,173 @@
     }
 
     /**
-     * Render temporal insights section
-     * @param {Object} temporal - Temporal insights data
-     * @returns {HTMLElement} Temporal insights section
+     * Render hidden themes section
+     * @param {Array} themes - Hidden themes data
+     * @returns {HTMLElement} Hidden themes section
      */
-    function renderTemporalInsights(temporal) {
+    function renderHiddenThemes(themes) {
         const section = document.createElement('div');
         section.className = 'insight-section';
         
         const title = document.createElement('h2');
         title.className = 'insight-section-title';
-        title.textContent = '⏰ Time Patterns';
+        title.textContent = '🔍 Hidden Themes';
         section.appendChild(title);
 
-        // Thought Streaks
-        const streakCard = createInsightCard(
-            'Thought Streaks',
-            'Your thinking consistency',
-            'streak'
+        const card = createInsightCard(
+            'Implicit Topics',
+            'Recurring themes not captured by tags',
+            'hidden-themes'
         );
         
-        const streakContent = document.createElement('div');
-        streakContent.className = 'streak-display';
-        streakContent.innerHTML = `
-            <div class="metric-row">
-                <div class="metric-item">
-                    <div class="metric-value">${temporal.streak.current}</div>
-                    <div class="metric-label">Current Streak</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value">${temporal.streak.longest}</div>
-                    <div class="metric-label">Longest Streak</div>
-                </div>
-            </div>
-        `;
-        streakCard.appendChild(streakContent);
-        section.appendChild(streakCard);
-
-        // Peak Hours
-        if (temporal.peakHours.length > 0) {
-            const card = createInsightCard(
-                'Peak Thinking Times',
-                'When you capture most thoughts',
-                'peak-hours'
-            );
-            
-            const chart = document.createElement('div');
-            chart.className = 'bar-chart';
-            const maxCount = temporal.peakHours[0].count;
-            
-            temporal.peakHours.forEach(item => {
-                const barContainer = document.createElement('div');
-                barContainer.className = 'bar-container';
-                
-                const barWidth = (item.count / maxCount) * 100;
-                barContainer.innerHTML = `
-                    <div class="bar-label">${item.hourLabel}</div>
-                    <div class="bar-wrapper">
-                        <div class="bar" style="width: ${barWidth}%"></div>
-                        <span class="bar-value">${item.count}</span>
-                    </div>
-                `;
-                chart.appendChild(barContainer);
-            });
-            
-            card.appendChild(chart);
-            section.appendChild(card);
-        }
-
-        // Productive Days
-        if (temporal.productiveDays.length > 0) {
-            const card = createInsightCard(
-                'Most Productive Days',
-                'Days with highest thought activity',
-                'productive-days'
-            );
-            
-            const chart = document.createElement('div');
-            chart.className = 'bar-chart';
-            const maxCount = temporal.productiveDays[0].count;
-            
-            temporal.productiveDays.forEach(item => {
-                const barContainer = document.createElement('div');
-                barContainer.className = 'bar-container';
-                
-                const barWidth = (item.count / maxCount) * 100;
-                barContainer.innerHTML = `
-                    <div class="bar-label">${item.day}</div>
-                    <div class="bar-wrapper">
-                        <div class="bar" style="width: ${barWidth}%"></div>
-                        <span class="bar-value">${item.count}</span>
-                    </div>
-                `;
-                chart.appendChild(barContainer);
-            });
-            
-            card.appendChild(chart);
-            section.appendChild(card);
-        }
-
+        const list = document.createElement('div');
+        list.className = 'discovery-list';
+        
+        themes.forEach(theme => {
+            const item = document.createElement('div');
+            item.className = 'discovery-item';
+            item.innerHTML = `
+                <div class="discovery-title">${theme.theme}</div>
+                <div class="discovery-description">${theme.description}</div>
+                <div class="discovery-meta">${theme.count} thoughts</div>
+            `;
+            list.appendChild(item);
+        });
+        
+        card.appendChild(list);
+        section.appendChild(card);
+        
         return section;
     }
 
     /**
-     * Render content insights section
-     * @param {Object} content - Content insights data
-     * @returns {HTMLElement} Content insights section
+     * Render thought evolution section
+     * @param {Array} evolutions - Evolution insights
+     * @returns {HTMLElement} Evolution section
      */
-    function renderContentInsights(content) {
+    function renderThoughtEvolution(evolutions) {
         const section = document.createElement('div');
         section.className = 'insight-section';
         
         const title = document.createElement('h2');
         title.className = 'insight-section-title';
-        title.textContent = '📝 Content Analysis';
+        title.textContent = '🌱 Thought Evolution';
         section.appendChild(title);
 
-        // Writing Metrics
-        const metricsCard = createInsightCard(
-            'Writing Metrics',
-            'Your thought characteristics',
-            'metrics'
+        const card = createInsightCard(
+            'How Your Ideas Changed',
+            'Track how your thinking evolved over time',
+            'evolution'
         );
         
-        const metricsContent = document.createElement('div');
-        metricsContent.className = 'metric-row';
-        metricsContent.innerHTML = `
-            <div class="metric-item">
-                <div class="metric-value">${content.avgLength}</div>
-                <div class="metric-label">Avg. Length</div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-value">${content.uniqueWords}</div>
-                <div class="metric-label">Unique Words</div>
-            </div>
-        `;
-        metricsCard.appendChild(metricsContent);
-        section.appendChild(metricsCard);
+        const list = document.createElement('div');
+        list.className = 'discovery-list';
+        
+        evolutions.forEach(evo => {
+            const item = document.createElement('div');
+            item.className = 'discovery-item evolution-item';
+            item.innerHTML = `
+                <div class="discovery-title">Evolution of ${evo.tag}</div>
+                <div class="evolution-timeline">
+                    <div class="evolution-period">
+                        <span class="period-label">Early (${evo.early.date})</span>
+                        <span class="period-keywords">${evo.early.keywords.join(', ')}</span>
+                    </div>
+                    <div class="evolution-arrow">→</div>
+                    <div class="evolution-period">
+                        <span class="period-label">Recent (${evo.late.date})</span>
+                        <span class="period-keywords">${evo.late.keywords.join(', ')}</span>
+                    </div>
+                </div>
+                <div class="discovery-description">${evo.description}</div>
+            `;
+            list.appendChild(item);
+        });
+        
+        card.appendChild(list);
+        section.appendChild(card);
+        
+        return section;
+    }
 
-        // Most Used Words
-        if (content.mostUsed.length > 0) {
-            const card = createInsightCard(
-                'Most Used Words',
-                'Your frequently used vocabulary',
-                'word-cloud'
-            );
-            
-            const wordCloud = document.createElement('div');
-            wordCloud.className = 'word-cloud';
-            
-            const maxCount = content.mostUsed[0].count;
-            content.mostUsed.slice(0, 15).forEach(item => {
-                const word = document.createElement('span');
-                word.className = 'word-cloud-item';
-                const size = 0.8 + (item.count / maxCount) * 1.2; // Scale from 0.8 to 2.0
-                word.style.fontSize = size + 'em';
-                word.textContent = item.word;
-                word.title = `Used ${item.count} times`;
-                wordCloud.appendChild(word);
-            });
-            
-            card.appendChild(wordCloud);
-            section.appendChild(card);
-        }
+    /**
+     * Render question patterns section
+     * @param {Array} patterns - Question pattern data
+     * @returns {HTMLElement} Question patterns section
+     */
+    function renderQuestionPatterns(patterns) {
+        const section = document.createElement('div');
+        section.className = 'insight-section';
+        
+        const title = document.createElement('h2');
+        title.className = 'insight-section-title';
+        title.textContent = '❓ Recurring Questions';
+        section.appendChild(title);
 
+        const card = createInsightCard(
+            'What You Keep Exploring',
+            'Themes you question repeatedly',
+            'questions'
+        );
+        
+        const list = document.createElement('div');
+        list.className = 'discovery-list';
+        
+        patterns.forEach(pattern => {
+            const item = document.createElement('div');
+            item.className = 'discovery-item';
+            item.innerHTML = `
+                <div class="discovery-title">${pattern.theme}</div>
+                <div class="discovery-description">${pattern.description}</div>
+                <div class="question-examples">
+                    ${pattern.examples.map(ex => `<div class="question-example">"${ex.text}"</div>`).join('')}
+                </div>
+            `;
+            list.appendChild(item);
+        });
+        
+        card.appendChild(list);
+        section.appendChild(card);
+        
+        return section;
+    }
+
+    /**
+     * Render mood analysis section
+     * @param {Object} mood - Mood analysis data
+     * @returns {HTMLElement} Mood analysis section
+     */
+    function renderMoodAnalysis(mood) {
+        const section = document.createElement('div');
+        section.className = 'insight-section';
+        
+        const title = document.createElement('h2');
+        title.className = 'insight-section-title';
+        title.textContent = '💭 Mood & Tone';
+        section.appendChild(title);
+
+        const card = createInsightCard(
+            'Emotional Patterns',
+            `Overall tone: ${mood.overall}`,
+            'mood'
+        );
+        
+        const list = document.createElement('div');
+        list.className = 'discovery-list';
+        
+        mood.patterns.forEach(pattern => {
+            const item = document.createElement('div');
+            item.className = 'discovery-item mood-item';
+            item.innerHTML = `
+                <div class="discovery-title">${pattern.pattern}</div>
+                <div class="discovery-description">${pattern.description}</div>
+            `;
+            list.appendChild(item);
+        });
+        
+        card.appendChild(list);
+        section.appendChild(card);
+        
         return section;
     }
 

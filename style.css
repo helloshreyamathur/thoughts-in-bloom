@@ -156,6 +156,7 @@
     
     /* Primary Colors */
     --color-primary-blue: #5B9BD5;
+    --color-primary-purple: #9B7FD5;
     --color-accent-yellow: #E8F5A5;
     
     /* Background Colors */
@@ -1520,7 +1521,7 @@ p {
 }
 
 .insights-header .bloom {
-    background: linear-gradient(135deg, var(--color-primary-blue) 0%, #9B7FD5 100%);
+    background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1719,7 +1720,7 @@ p {
 
 .bar {
     height: 28px;
-    background: linear-gradient(90deg, var(--color-primary-blue), #9B7FD5);
+    background: linear-gradient(90deg, var(--color-primary-blue), var(--color-primary-purple));
     border-radius: var(--radius-sm);
     transition: width 0.3s ease;
     min-width: 2px;
@@ -1840,6 +1841,99 @@ p {
     font-weight: 600;
 }
 
+/* Discovery Items */
+.discovery-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.discovery-item {
+    padding: var(--space-md);
+    background: var(--color-tag-bg);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-primary-blue);
+}
+
+.discovery-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    margin-bottom: var(--space-xs);
+}
+
+.discovery-description {
+    font-size: 0.95rem;
+    color: var(--color-text-body);
+    margin-bottom: var(--space-xs);
+    line-height: 1.5;
+}
+
+.discovery-meta {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* Evolution Timeline */
+.evolution-timeline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin: var(--space-sm) 0;
+    padding: var(--space-sm);
+    background: white;
+    border-radius: var(--radius-sm);
+}
+
+.evolution-period {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.period-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.period-keywords {
+    font-size: 0.9rem;
+    color: var(--color-text-dark);
+    font-style: italic;
+}
+
+.evolution-arrow {
+    font-size: 1.5rem;
+    color: var(--color-primary-blue);
+    font-weight: bold;
+}
+
+/* Question Examples */
+.question-examples {
+    margin-top: var(--space-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.question-example {
+    padding: var(--space-xs) var(--space-sm);
+    background: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    color: var(--color-text-body);
+    font-style: italic;
+    border-left: 3px solid var(--color-accent-yellow);
+}
+
+/* Mood Items */
+.mood-item {
+    border-left-color: var(--color-primary-purple);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .insights-container {
@@ -1880,6 +1974,16 @@ p {
         align-items: flex-start;
         gap: var(--space-xs);
     }
+    
+    .evolution-timeline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .evolution-arrow {
+        transform: rotate(90deg);
+        align-self: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1893,5 +1997,138 @@ p {
     
     .word-cloud {
         padding: var(--space-sm);
+    }
+}
+
+/* ============================================
+   ANALYTICS PAGE STYLES
+   ============================================ */
+.analytics-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-lg);
+}
+
+.analytics-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.analytics-header h1 {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    color: var(--color-text-dark);
+    margin-bottom: var(--space-sm);
+}
+
+.analytics-header .bloom {
+    background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.analytics-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.analytics-empty-state {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.analytics-empty-state .empty-state-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: var(--space-md);
+}
+
+.analytics-empty-state h3 {
+    font-size: 1.5rem;
+    color: var(--color-text-dark);
+    margin-bottom: var(--space-sm);
+}
+
+.analytics-empty-state p {
+    color: var(--color-text-light);
+    font-size: 1rem;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+}
+
+.analytics-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.analytics-section-title {
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    margin: 0;
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.analytics-card {
+    background: var(--color-card-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.analytics-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.analytics-card-header {
+    margin-bottom: var(--space-md);
+}
+
+.analytics-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    margin: 0 0 var(--space-xs) 0;
+}
+
+.analytics-card-description {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+/* Responsive Design for Analytics */
+@media (max-width: 768px) {
+    .analytics-container {
+        padding: var(--space-lg) var(--space-md);
+    }
+    
+    .analytics-header h1 {
+        font-size: 2rem;
+    }
+    
+    .analytics-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .analytics-header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .analytics-card {
+        padding: var(--space-md);
     }
 }
