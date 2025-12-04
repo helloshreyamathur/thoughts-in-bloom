@@ -394,9 +394,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought saved:', thought);
         
-        // Invalidate insights cache since thoughts have changed
+        // Invalidate insights and analytics cache since thoughts have changed
         if (typeof window.invalidateInsightsCache === 'function') {
             window.invalidateInsightsCache();
+        }
+        if (typeof window.invalidateAnalyticsCache === 'function') {
+            window.invalidateAnalyticsCache();
         }
         
         // Add success animation
@@ -509,9 +512,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought updated:', thoughts[thoughtIndex]);
         
-        // Invalidate insights cache since thoughts have changed
+        // Invalidate insights and analytics cache since thoughts have changed
         if (typeof window.invalidateInsightsCache === 'function') {
             window.invalidateInsightsCache();
+        }
+        if (typeof window.invalidateAnalyticsCache === 'function') {
+            window.invalidateAnalyticsCache();
         }
         
         // Reset form to add mode
@@ -571,9 +577,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought archived:', thoughts[thoughtIndex]);
         
-        // Invalidate insights cache since thoughts have changed
+        // Invalidate insights and analytics cache since thoughts have changed
         if (typeof window.invalidateInsightsCache === 'function') {
             window.invalidateInsightsCache();
+        }
+        if (typeof window.invalidateAnalyticsCache === 'function') {
+            window.invalidateAnalyticsCache();
         }
         
         // Re-render to remove from active view
@@ -604,9 +613,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Thought restored:', thoughts[thoughtIndex]);
         
-        // Invalidate insights cache since thoughts have changed
+        // Invalidate insights and analytics cache since thoughts have changed
         if (typeof window.invalidateInsightsCache === 'function') {
             window.invalidateInsightsCache();
+        }
+        if (typeof window.invalidateAnalyticsCache === 'function') {
+            window.invalidateAnalyticsCache();
         }
         
         // Re-render to remove from archived view
@@ -1319,6 +1331,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Small delay to ensure DOM is ready
             setTimeout(() => {
                 window.initializeInsights();
+            }, 100);
+        }
+        
+        // Initialize analytics view when it becomes active
+        if (viewName === 'analytics' && typeof window.initializeAnalytics === 'function') {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                window.initializeAnalytics();
             }, 100);
         }
     }
