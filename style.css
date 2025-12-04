@@ -218,12 +218,11 @@ p {
 
 /* ============================================
    THOUGHTS CONTAINER
-   CSS Grid layout for thought cards
+   CSS Masonry layout for thought cards using column-count
    ============================================ */
 .thoughts-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
+    column-count: 3;
+    column-gap: 1rem;
     margin-top: var(--space-2xl);
 }
 
@@ -241,6 +240,8 @@ p {
                 box-shadow var(--duration-fast) var(--easing-default);
     display: flex;
     flex-direction: column;
+    break-inside: avoid;
+    margin-bottom: 1rem;
 }
 
 .thought-card.slide-in {
@@ -394,8 +395,8 @@ p {
     }
     
     .thoughts-container {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
+        column-count: 1;
+        column-gap: var(--space-md);
     }
     
     /* Input Section Mobile */
@@ -557,7 +558,7 @@ p {
     }
     
     .thoughts-container {
-        grid-template-columns: repeat(2, 1fr);
+        column-count: 2;
     }
     
     .search-section {
@@ -568,21 +569,21 @@ p {
 /* Tablet breakpoints */
 @media (min-width: 769px) and (max-width: 1024px) {
     .thoughts-container {
-        grid-template-columns: repeat(2, 1fr);
+        column-count: 2;
     }
 }
 
 /* Desktop breakpoints */
 @media (min-width: 1025px) {
     .thoughts-container {
-        grid-template-columns: repeat(3, 1fr);
+        column-count: 3;
     }
 }
 
 /* Large desktop (> 1400px) */
 @media (min-width: 1400px) {
     .thoughts-container {
-        grid-template-columns: repeat(4, 1fr);
+        column-count: 4;
     }
 }
 
@@ -806,7 +807,7 @@ p {
     justify-content: center;
     padding: var(--space-2xl) var(--space-lg);
     text-align: center;
-    grid-column: 1 / -1;
+    column-span: all;
     color: var(--color-text-muted);
 }
 
