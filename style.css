@@ -288,10 +288,10 @@ p {
     /* Phase P5: Layered shadow system for depth */
     box-shadow: var(--shadow-card);
     border: 1px solid rgba(255, 255, 255, 0.8);
-    /* Phase P5: Smooth 200ms transitions for micro-interactions */
-    transition: transform 200ms var(--easing-smooth),
-                box-shadow 200ms var(--easing-smooth),
-                border-color 200ms var(--easing-smooth);
+    /* Phase P5: Smooth transitions for micro-interactions */
+    transition: transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth),
+                border-color var(--duration-fast) var(--easing-smooth);
     display: flex;
     flex-direction: column;
     break-inside: avoid;
@@ -374,9 +374,9 @@ p {
     cursor: pointer;
     padding: 0;
     font-family: inherit;
-    /* Phase P5: Smooth 200ms transition */
-    transition: color 200ms var(--easing-smooth),
-                transform 200ms var(--easing-smooth);
+    /* Phase P5: Smooth transitions */
+    transition: color var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth);
 }
 
 .toggle-text-btn:hover {
@@ -395,9 +395,9 @@ p {
     cursor: pointer;
     padding: 0;
     font-family: inherit;
-    /* Phase P5: Smooth 200ms transition */
-    transition: color 200ms var(--easing-smooth), 
-                transform 200ms var(--easing-smooth);
+    /* Phase P5: Smooth transitions */
+    transition: color var(--duration-fast) var(--easing-smooth), 
+                transform var(--duration-fast) var(--easing-smooth);
 }
 
 .edit-btn:hover {
@@ -735,9 +735,9 @@ p {
     cursor: pointer;
     padding: 0;
     font-family: inherit;
-    /* Phase P5: Smooth 200ms transition */
-    transition: color 200ms var(--easing-smooth),
-                transform 200ms var(--easing-smooth);
+    /* Phase P5: Smooth transitions */
+    transition: color var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth);
 }
 
 .archive-btn:hover {
