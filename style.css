@@ -42,9 +42,15 @@
     --color-tag-bg: #F5F5F5;
     --color-hover: rgba(0, 0, 0, 0.05);
     
-    /* Shadows */
-    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.1);
+    /* Shadows - Phase P5: Layered shadow system for depth */
+    --shadow-card: 
+        0 1px 2px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(0, 0, 0, 0.03),
+        0 8px 16px rgba(0, 0, 0, 0.04);
+    --shadow-card-hover: 
+        0 2px 4px rgba(0, 0, 0, 0.03),
+        0 8px 16px rgba(0, 0, 0, 0.05),
+        0 16px 32px rgba(0, 0, 0, 0.06);
     --shadow-button: 0 2px 6px rgba(91, 155, 213, 0.3);
     
     /* Spacing Scale (8px base) */
@@ -62,11 +68,12 @@
     --radius-pill: 30px;
     --radius-full: 50%;
     
-    /* Animation */
+    /* Animation - Phase P5: Smooth 200ms transitions */
     --duration-fast: 0.2s;
     --duration-normal: 0.3s;
     --easing-default: ease-in-out;
     --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --easing-smooth: cubic-bezier(0.4, 0.0, 0.2, 1);
     
     /* Phase P4: Ultra-Subtle Pastel Colors (5-10% opacity) */
     --pastel-blue: rgba(173, 216, 230, 0.08);
@@ -272,13 +279,19 @@ p {
    Individual card component for displaying thoughts
    ============================================ */
 .thought-card {
-    background: var(--color-card-bg);
+    /* Phase P5: Glassmorphism effect - semi-transparent white with subtle blur */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border-radius: var(--radius-md);
     padding: var(--space-lg);
+    /* Phase P5: Layered shadow system for depth */
     box-shadow: var(--shadow-card);
-    border: 1px solid var(--color-border);
-    transition: transform var(--duration-fast) var(--easing-default),
-                box-shadow var(--duration-fast) var(--easing-default);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    /* Phase P5: Smooth transitions for micro-interactions */
+    transition: transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth),
+                border-color var(--duration-fast) var(--easing-smooth);
     display: flex;
     flex-direction: column;
     break-inside: avoid;
@@ -286,34 +299,36 @@ p {
 }
 
 /* Phase P4: Random Pastel Washes for Cards (2-5% opacity) */
-/* Card tint variations - ultra-subtle background washes */
+/* Phase P5: Updated with glassmorphism - ultra-subtle background washes */
 .thought-card.tint-blue {
-    background: linear-gradient(135deg, var(--color-card-bg) 0%, var(--pastel-blue) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(173, 216, 230, 0.15) 100%);
 }
 
 .thought-card.tint-purple {
-    background: linear-gradient(135deg, var(--color-card-bg) 0%, var(--pastel-purple) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 160, 221, 0.12) 100%);
 }
 
 .thought-card.tint-pink {
-    background: linear-gradient(135deg, var(--color-card-bg) 0%, var(--pastel-pink) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 192, 203, 0.10) 100%);
 }
 
 .thought-card.tint-peach {
-    background: linear-gradient(135deg, var(--color-card-bg) 0%, var(--pastel-peach) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 218, 185, 0.13) 100%);
 }
 
 .thought-card.tint-mint {
-    background: linear-gradient(135deg, var(--color-card-bg) 0%, var(--pastel-mint) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(189, 252, 201, 0.12) 100%);
 }
 
 .thought-card.slide-in {
     animation: slideInFromBottom 0.4s var(--easing-bounce);
 }
 
+/* Phase P5: Enhanced hover effect - lift slightly with intensified shadow */
 .thought-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-card-hover);
+    border-color: rgba(255, 255, 255, 1);
 }
 
 .thought-text {
@@ -321,7 +336,10 @@ p {
     margin-bottom: var(--space-md);
     white-space: pre-wrap;
     font-size: 0.9375rem;
-    line-height: 1.6;
+    /* Phase P5: Increased line-height for better readability */
+    line-height: 1.7;
+    /* Phase P5: Optimized letter-spacing for DM Sans */
+    letter-spacing: 0.01em;
     flex-grow: 1;
 }
 
@@ -335,8 +353,11 @@ p {
 }
 
 .thought-date {
+    /* Phase P5: Properly muted timestamp/metadata */
     color: var(--color-text-muted);
     font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    opacity: 0.8;
 }
 
 /* ============================================
@@ -353,12 +374,16 @@ p {
     cursor: pointer;
     padding: 0;
     font-family: inherit;
-    transition: color var(--duration-fast) var(--easing-default);
+    /* Phase P5: Smooth transitions */
+    transition: color var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth);
 }
 
 .toggle-text-btn:hover {
     color: var(--color-text-dark);
     text-decoration: underline;
+    /* Phase P5: Subtle micro-interaction */
+    transform: scale(1.05);
 }
 
 /* Edit Button */
@@ -370,11 +395,15 @@ p {
     cursor: pointer;
     padding: 0;
     font-family: inherit;
-    transition: color var(--duration-fast) var(--easing-default);
+    /* Phase P5: Smooth transitions */
+    transition: color var(--duration-fast) var(--easing-smooth), 
+                transform var(--duration-fast) var(--easing-smooth);
 }
 
 .edit-btn:hover {
     color: var(--color-primary-blue);
+    /* Phase P5: Subtle micro-interaction */
+    transform: scale(1.05);
 }
 
 /* Thought Actions Container */
@@ -706,11 +735,15 @@ p {
     cursor: pointer;
     padding: 0;
     font-family: inherit;
-    transition: color var(--duration-fast) var(--easing-default);
+    /* Phase P5: Smooth transitions */
+    transition: color var(--duration-fast) var(--easing-smooth),
+                transform var(--duration-fast) var(--easing-smooth);
 }
 
 .archive-btn:hover {
     color: var(--color-primary-blue);
+    /* Phase P5: Subtle micro-interaction */
+    transform: scale(1.05);
 }
 
 /* Archived Card Styling */
