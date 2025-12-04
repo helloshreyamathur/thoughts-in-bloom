@@ -53,6 +53,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchToggleBtn = document.getElementById('search-toggle-btn');
     const searchSection = document.querySelector('.search-section');
     
+    // Sidebar Navigation
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
     // ============================================
     // APPLICATION STATE
     // ============================================
@@ -88,6 +93,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update character counter and button state on initial load
     updateCharCounter();
     
+    // Restore Sidebar State on Load
+    if (localStorage.getItem('sidebarExpanded') === 'true') {
+        sidebar.classList.add('expanded');
+    }
+    
+    // Restore Active View on Load
+    const savedView = localStorage.getItem('activeView') || 'home';
+    showView(savedView);
+    sidebarItems.forEach(item => {
+        if (item.getAttribute('data-view') === savedView) {
+            item.classList.add('active');
+        }
+    });
+    
     // ============================================
     // EVENT LISTENERS
     // ============================================
@@ -95,21 +114,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Save button click handler
     saveButton.addEventListener('click', handleSave);
     
-    // Keyboard shortcuts for thought input
-    // Ctrl+Enter or Cmd+Enter: Save thought
-    // Escape: Cancel edit mode
-    thoughtInput.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-            handleSave();
-        }
-        // ESC key to cancel edit mode
-        if (e.key === 'Escape' && currentEditingId) {
-            cancelEdit();
-        }
+    // Sidebar Toggle
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('expanded');
+        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
     });
-    
-    // Character counter updates on input
-    thoughtInput.addEventListener('input', updateCharCounter);
     
     // View toggle button handlers
     viewActiveBtn.addEventListener('click', function() {
@@ -182,10 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
             collapseSearch();
         }
     }
-    
-    // ============================================
-    // MOBILE KEYBOARD HANDLING
-    // ============================================
     
     // Mobile: Handle virtual keyboard appearance
     // Scroll input into view when focused on mobile
@@ -1234,5 +1239,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         return fragment;
+    }
+    
+    // Sidebar Navigation Logic
+    // Expand/Collapse Sidebar
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('expanded');
+        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+    });
+    
+    // Restore Sidebar State on Load
+    if (localStorage.getItem('sidebarExpanded') === 'true') {
+        sidebar.classList.add('expanded');
+    }
+    
+    // View Switching Logic
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove active class from all items
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            
+            // Add active class to clicked item
+            item.classList.add('active');
+
+            // Get the view name from data attribute
+            const viewName = item.getAttribute('data-view');
+
+            // Show the selected view
+            showView(viewName);
+        });
+    });
+
+    // Show View Function
+    function showView(viewName) {
+        const views = document.querySelectorAll('.view-container');
+        views.forEach(view => {
+            if (view.id === `${viewName}-view`) {
+                view.style.display = 'block';
+            } else {
+                view.style.display = 'none';
+            }
+        });
+        localStorage.setItem('activeView', viewName);
     }
 });

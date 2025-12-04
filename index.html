@@ -12,6 +12,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="sidebar" aria-label="Main navigation">
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Collapse sidebar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+        </button>
+        <ul class="sidebar-menu">
+            <li class="sidebar-item active" data-view="home">
+                <button aria-label="Home" class="sidebar-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7"/><path d="M9 22V12H15V22"/></svg>
+                    <span class="sidebar-label">Home</span>
+                </button>
+            </li>
+            <li class="sidebar-item" data-view="constellation">
+                <button aria-label="Constellation" class="sidebar-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 8.6 15a1.65 1.65 0 0 0-1.82-.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0 .33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 15 8.6a1.65 1.65 0 0 0 1.82.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 15z"/></svg>
+                    <span class="sidebar-label">Constellation</span>
+                </button>
+            </li>
+            <li class="sidebar-item" data-view="insights">
+                <button aria-label="Insights" class="sidebar-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H11V6H13V2Z"/><path d="M13 18H11V22H13V18Z"/><path d="M4.22 4.22L2.81 5.63L5.63 8.45L7.04 7.04L4.22 4.22Z"/><path d="M18.36 18.36L16.95 19.77L19.77 22.59L21.18 21.18L18.36 18.36Z"/><path d="M2 13H6V11H2V13Z"/><path d="M18 13H22V11H18V13Z"/><path d="M4.22 19.78L7.04 16.96L5.63 15.55L2.81 18.37L4.22 19.78Z"/><path d="M19.78 4.22L16.96 7.04L18.37 8.45L21.19 5.63L19.78 4.22Z"/><circle cx="12" cy="12" r="5"/></svg>
+                    <span class="sidebar-label">Insights</span>
+                </button>
+            </li>
+            <li class="sidebar-item" data-view="analytics">
+                <button aria-label="Analytics" class="sidebar-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="8"/><rect x="9" y="8" width="4" height="12"/><rect x="15" y="4" width="4" height="16"/></svg>
+                    <span class="sidebar-label">Analytics</span>
+                </button>
+            </li>
+            <li class="sidebar-item" data-view="archive">
+                <button aria-label="Archive" class="sidebar-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="4" rx="2"/><path d="M3 7V21a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/><path d="M9 10v6"/><path d="M15 10v6"/></svg>
+                    <span class="sidebar-label">Archive</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
     <div class="container">
         <h1>Thoughts in <span class="bloom">Bloom</span></h1>
         

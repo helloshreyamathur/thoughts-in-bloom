@@ -1,3 +1,134 @@
+/* ============================================
+   SIDEBAR NAVIGATION
+   ============================================ */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 64px;
+    background: #fff;
+    border-right: 1px solid var(--color-border);
+    box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+    transition: width 0.3s var(--easing-default);
+}
+
+.sidebar.expanded {
+    width: 220px;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    margin: 16px 0 8px 0;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    transition: background 0.2s;
+}
+.sidebar-toggle:hover {
+    background: var(--color-hover);
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.sidebar-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: none;
+    border: none;
+    color: var(--color-text-dark);
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: background 0.2s, color 0.2s;
+    position: relative;
+}
+.sidebar-btn:hover, .sidebar-item.active .sidebar-btn {
+    background: var(--color-hover);
+    color: var(--color-primary-blue);
+}
+
+.sidebar-label {
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity 0.2s, margin 0.2s;
+    margin-left: -8px;
+}
+.sidebar.expanded .sidebar-label {
+    opacity: 1;
+    pointer-events: auto;
+    margin-left: 0;
+}
+
+.sidebar svg {
+    min-width: 24px;
+    min-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    display: block;
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 0;
+        min-width: 0;
+        overflow-x: hidden;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+        transition: width 0.3s;
+    }
+    .sidebar.expanded {
+        width: 220px;
+        min-width: 180px;
+    }
+    .container {
+        margin-left: 0 !important;
+    }
+}
+
+/* Push main content right when sidebar is expanded (desktop) */
+@media (min-width: 701px) {
+    .container {
+        margin-left: 64px;
+        transition: margin-left 0.3s;
+    }
+    .sidebar.expanded ~ .container {
+        margin-left: 220px;
+    }
+}
 /**
  * Thoughts in Bloom - Stylesheet
  * A living digital garden where ideas grow and connect over time.
