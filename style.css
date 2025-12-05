@@ -1338,7 +1338,7 @@ p {
 
 .node:hover path {
     stroke-width: 3;
-    filter: drop-shadow(0 0 12px currentColor) drop-shadow(0 0 6px currentColor);
+    filter: drop-shadow(0 0 10px currentColor);
 }
 
 .node text {

@@ -333,13 +333,25 @@ document.addEventListener('DOMContentLoaded', function() {
         if (simulation) simulation.stop();
     }
     
+    // Star shape configuration
+    const STAR_INNER_RATIO = 0.4; // Inner points are 40% of outer radius
+    
+    // Cache for star paths to improve performance
+    const starPathCache = new Map();
+    
     /**
      * Generate 4-pointed star path
      * @param {number} size - The size of the star (radius to outer points)
      * @returns {string} SVG path string for 4-pointed star
      */
     function createStarPath(size) {
-        const innerRadius = size * 0.4; // Inner points are 40% of outer radius
+        // Check cache first
+        const cacheKey = Math.round(size * 10) / 10; // Round to 1 decimal place
+        if (starPathCache.has(cacheKey)) {
+            return starPathCache.get(cacheKey);
+        }
+        
+        const innerRadius = size * STAR_INNER_RATIO;
         const outerRadius = size;
         
         // 4-pointed star: alternating outer and inner points at 45° intervals
@@ -352,7 +364,10 @@ document.addEventListener('DOMContentLoaded', function() {
             points.push(`${i === 0 ? 'M' : 'L'} ${x},${y}`);
         }
         points.push('Z'); // Close path
-        return points.join(' ');
+        
+        const path = points.join(' ');
+        starPathCache.set(cacheKey, path);
+        return path;
     }
     
     /**
