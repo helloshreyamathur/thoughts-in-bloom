@@ -1508,9 +1508,15 @@ p {
    ============================================ */
 
 .insights-container {
-    max-width: 1400px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: var(--space-xl) var(--space-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    margin-left: 64px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.expanded ~ #insights-view .insights-container {
+    margin-left: 220px;
 }
 
 .insights-header {
@@ -1562,8 +1568,8 @@ p {
 
 .insights-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-lg);
 }
 
 .insight-section {
@@ -1574,7 +1580,7 @@ p {
 
 .insight-section-title {
     font-family: var(--font-body);
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--color-text-dark);
     margin: 0;
@@ -1583,16 +1589,58 @@ p {
 }
 
 .insight-card {
-    background: var(--color-card-bg);
+    /* Glassmorphism effect - semi-transparent white with subtle blur */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    /* Layered shadow system for depth */
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    /* Smooth transitions for micro-interactions */
+    transition: transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth),
+                border-color var(--duration-fast) var(--easing-smooth);
+    /* Slide-in animation */
+    animation: slideInFromBottom 0.4s var(--easing-bounce);
+}
+
+/* Pastel gradient backgrounds for cards - layered with glassmorphism */
+.insight-card:nth-child(5n+1) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(173, 216, 230, 0.15) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.insight-card:nth-child(5n+2) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 160, 221, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.insight-card:nth-child(5n+3) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 192, 203, 0.10) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.insight-card:nth-child(5n+4) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 218, 185, 0.13) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.insight-card:nth-child(5n+5) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(189, 252, 201, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .insight-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(255, 255, 255, 1);
 }
 
 .insight-card-header {
@@ -1600,7 +1648,7 @@ p {
 }
 
 .insight-card-title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-text-dark);
     margin: 0 0 var(--space-xs) 0;
@@ -1943,6 +1991,7 @@ p {
 @media (max-width: 768px) {
     .insights-container {
         padding: var(--space-lg) var(--space-md);
+        margin-left: 0 !important;
     }
     
     .insights-header h1 {
@@ -1951,6 +2000,10 @@ p {
     
     .insights-subtitle {
         font-size: 0.9rem;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
     }
     
     .metric-row {
@@ -2009,9 +2062,15 @@ p {
    ANALYTICS PAGE STYLES
    ============================================ */
 .analytics-container {
-    max-width: 1400px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: var(--space-xl) var(--space-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    margin-left: 64px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.expanded ~ #analytics-view .analytics-container {
+    margin-left: 220px;
 }
 
 .analytics-header {
@@ -2063,8 +2122,8 @@ p {
 
 .analytics-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--space-lg);
 }
 
 .analytics-section {
@@ -2075,7 +2134,7 @@ p {
 
 .analytics-section-title {
     font-family: var(--font-body);
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--color-text-dark);
     margin: 0;
@@ -2084,16 +2143,58 @@ p {
 }
 
 .analytics-card {
-    background: var(--color-card-bg);
+    /* Glassmorphism effect - semi-transparent white with subtle blur */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    /* Layered shadow system for depth */
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    /* Smooth transitions for micro-interactions */
+    transition: transform var(--duration-fast) var(--easing-smooth),
+                box-shadow var(--duration-fast) var(--easing-smooth),
+                border-color var(--duration-fast) var(--easing-smooth);
+    /* Slide-in animation */
+    animation: slideInFromBottom 0.4s var(--easing-bounce);
+}
+
+/* Pastel gradient backgrounds for cards - layered with glassmorphism */
+.analytics-card:nth-child(5n+1) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(173, 216, 230, 0.15) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.analytics-card:nth-child(5n+2) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 160, 221, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.analytics-card:nth-child(5n+3) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 192, 203, 0.10) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.analytics-card:nth-child(5n+4) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 218, 185, 0.13) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.analytics-card:nth-child(5n+5) {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(189, 252, 201, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .analytics-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: rgba(255, 255, 255, 1);
 }
 
 .analytics-card-header {
@@ -2101,7 +2202,7 @@ p {
 }
 
 .analytics-card-title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-text-dark);
     margin: 0 0 var(--space-xs) 0;
@@ -2117,6 +2218,7 @@ p {
 @media (max-width: 768px) {
     .analytics-container {
         padding: var(--space-lg) var(--space-md);
+        margin-left: 0 !important;
     }
     
     .analytics-header h1 {
@@ -2125,6 +2227,10 @@ p {
     
     .analytics-subtitle {
         font-size: 0.9rem;
+    }
+    
+    .analytics-grid {
+        grid-template-columns: 1fr;
     }
 }
 
