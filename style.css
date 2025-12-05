@@ -1567,9 +1567,9 @@ p {
 }
 
 .insights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
 }
 
 .insight-section {
@@ -2002,10 +2002,6 @@ p {
         font-size: 0.9rem;
     }
     
-    .insights-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .metric-row {
         gap: var(--space-md);
     }
@@ -2121,9 +2117,9 @@ p {
 }
 
 .analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
 }
 
 .analytics-section {
@@ -2227,10 +2223,6 @@ p {
     
     .analytics-subtitle {
         font-size: 0.9rem;
-    }
-    
-    .analytics-grid {
-        grid-template-columns: 1fr;
     }
 }
 
