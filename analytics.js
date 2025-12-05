@@ -332,7 +332,7 @@
         container.innerHTML = '';
 
         const mainContent = document.createElement('div');
-        mainContent.className = 'analytics-container';
+        mainContent.className = 'container';
 
         const header = document.createElement('div');
         header.className = 'analytics-header';
