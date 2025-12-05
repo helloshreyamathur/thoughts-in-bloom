@@ -1569,6 +1569,7 @@ p {
 .insights-grid {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: var(--space-xl);
 }
 
@@ -2119,6 +2120,7 @@ p {
 .analytics-grid {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: var(--space-xl);
 }
 
