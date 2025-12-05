@@ -792,6 +792,10 @@
         title.textContent = '🏷️ Tag Patterns';
         section.appendChild(title);
 
+        // Create masonry container for cards
+        const masonryContainer = document.createElement('div');
+        masonryContainer.className = 'insight-cards-masonry';
+
         // Most Active Tags
         if (patterns.mostActive.length > 0) {
             const card = createInsightCard(
@@ -813,7 +817,7 @@
             });
             
             card.appendChild(list);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
         // Recent Themes
@@ -835,7 +839,7 @@
             });
             
             card.appendChild(list);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
         // Emerging Topics
@@ -857,7 +861,7 @@
             });
             
             card.appendChild(list);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
         // Dormant Topics
@@ -879,9 +883,10 @@
             });
             
             card.appendChild(list);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
+        section.appendChild(masonryContainer);
         return section;
     }
 
@@ -1070,6 +1075,10 @@
         title.textContent = '🔗 Connections';
         section.appendChild(title);
 
+        // Create masonry container for cards
+        const masonryContainer = document.createElement('div');
+        masonryContainer.className = 'insight-cards-masonry';
+
         // Tag Clusters
         if (connections.clusters.length > 0) {
             const card = createInsightCard(
@@ -1095,7 +1104,7 @@
             });
             
             card.appendChild(list);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
         // Unexpected Links
@@ -1129,7 +1138,7 @@
             });
             
             card.appendChild(list);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
         // Standalone Thoughts
@@ -1144,9 +1153,10 @@
             count.className = 'standalone-count';
             count.textContent = `${connections.standalone.length} standalone thoughts`;
             card.appendChild(count);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
+        section.appendChild(masonryContainer);
         return section;
     }
 
