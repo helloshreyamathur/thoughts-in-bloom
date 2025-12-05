@@ -1949,6 +1949,7 @@ p {
 @media (max-width: 768px) {
     .insights-container {
         padding: var(--space-lg) var(--space-md);
+        margin-left: 0 !important;
     }
     
     .insights-header h1 {
@@ -2129,6 +2130,7 @@ p {
 @media (max-width: 768px) {
     .analytics-container {
         padding: var(--space-lg) var(--space-md);
+        margin-left: 0 !important;
     }
     
     .analytics-header h1 {
