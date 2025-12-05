@@ -1567,9 +1567,9 @@ p {
 }
 
 .insights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
 }
 
 .insight-section {
@@ -1580,12 +1580,22 @@ p {
 
 .insight-section-title {
     font-family: var(--font-body);
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--color-text-dark);
     margin: 0;
-    padding-bottom: var(--space-sm);
-    border-bottom: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.insight-section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-purple));
+    border-radius: 2px;
+    flex-shrink: 0;
 }
 
 .insight-card {
@@ -1987,6 +1997,19 @@ p {
     border-left-color: var(--color-primary-purple);
 }
 
+/* Masonry Layout for Cards Within Sections */
+.insight-cards-masonry {
+    column-count: 3;
+    column-gap: var(--space-md);
+}
+
+.insight-cards-masonry .insight-card {
+    break-inside: avoid;
+    margin-bottom: var(--space-md);
+    display: inline-block;
+    width: 100%;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .insights-container {
@@ -2004,6 +2027,10 @@ p {
     
     .insights-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .insight-cards-masonry {
+        column-count: 2;
     }
     
     .metric-row {
@@ -2055,6 +2082,10 @@ p {
     
     .word-cloud {
         padding: var(--space-sm);
+    }
+    
+    .insight-cards-masonry {
+        column-count: 1;
     }
 }
 
@@ -2121,9 +2152,9 @@ p {
 }
 
 .analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
 }
 
 .analytics-section {
@@ -2134,12 +2165,22 @@ p {
 
 .analytics-section-title {
     font-family: var(--font-body);
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--color-text-dark);
     margin: 0;
-    padding-bottom: var(--space-sm);
-    border-bottom: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.analytics-section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-purple));
+    border-radius: 2px;
+    flex-shrink: 0;
 }
 
 .analytics-card {
@@ -2214,6 +2255,19 @@ p {
     margin: 0;
 }
 
+/* Masonry Layout for Cards Within Sections */
+.analytics-cards-masonry {
+    column-count: 3;
+    column-gap: var(--space-md);
+}
+
+.analytics-cards-masonry .analytics-card {
+    break-inside: avoid;
+    margin-bottom: var(--space-md);
+    display: inline-block;
+    width: 100%;
+}
+
 /* Responsive Design for Analytics */
 @media (max-width: 768px) {
     .analytics-container {
@@ -2232,6 +2286,10 @@ p {
     .analytics-grid {
         grid-template-columns: 1fr;
     }
+    
+    .analytics-cards-masonry {
+        column-count: 2;
+    }
 }
 
 @media (max-width: 480px) {
@@ -2241,5 +2299,9 @@ p {
     
     .analytics-card {
         padding: var(--space-md);
+    }
+    
+    .analytics-cards-masonry {
+        column-count: 1;
     }
 }

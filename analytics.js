@@ -375,6 +375,10 @@
         title.textContent = '📈 Productivity';
         section.appendChild(title);
 
+        // Create masonry container for cards
+        const masonryContainer = document.createElement('div');
+        masonryContainer.className = 'analytics-cards-masonry';
+
         const streakCard = createAnalyticsCard(
             'Thought Streaks',
             'Your consistency in capturing thoughts',
@@ -396,8 +400,9 @@
             </div>
         `;
         streakCard.appendChild(streakContent);
-        section.appendChild(streakCard);
+        masonryContainer.appendChild(streakCard);
 
+        section.appendChild(masonryContainer);
         return section;
     }
 
@@ -409,6 +414,10 @@
         title.className = 'analytics-section-title';
         title.textContent = '⏰ Time Patterns';
         section.appendChild(title);
+
+        // Create masonry container for cards
+        const masonryContainer = document.createElement('div');
+        masonryContainer.className = 'analytics-cards-masonry';
 
         if (temporal.peakHours.length > 0) {
             const card = createAnalyticsCard(
@@ -437,7 +446,7 @@
             });
             
             card.appendChild(chart);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
         if (temporal.productiveDays.length > 0) {
@@ -467,9 +476,10 @@
             });
             
             card.appendChild(chart);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
+        section.appendChild(masonryContainer);
         return section;
     }
 
@@ -481,6 +491,10 @@
         title.className = 'analytics-section-title';
         title.textContent = '📝 Content Metrics';
         section.appendChild(title);
+
+        // Create masonry container for cards
+        const masonryContainer = document.createElement('div');
+        masonryContainer.className = 'analytics-cards-masonry';
 
         const metricsCard = createAnalyticsCard(
             'Writing Statistics',
@@ -501,7 +515,7 @@
             </div>
         `;
         metricsCard.appendChild(metricsContent);
-        section.appendChild(metricsCard);
+        masonryContainer.appendChild(metricsCard);
 
         if (content.mostUsed.length > 0) {
             const card = createAnalyticsCard(
@@ -525,9 +539,10 @@
             });
             
             card.appendChild(wordCloud);
-            section.appendChild(card);
+            masonryContainer.appendChild(card);
         }
 
+        section.appendChild(masonryContainer);
         return section;
     }
 
