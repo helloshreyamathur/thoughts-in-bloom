@@ -1562,8 +1562,8 @@ p {
 
 .insights-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
 }
 
 .insight-section {
@@ -2063,8 +2063,8 @@ p {
 
 .analytics-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
 }
 
 .analytics-section {
