@@ -1167,17 +1167,28 @@ p {
 .view-container {
     width: 100%;
     min-height: 100vh;
+    margin-left: 64px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.expanded ~ .view-container {
+    margin-left: 220px;
 }
 
 #constellation-view {
     position: fixed;
     top: 0;
-    left: 64px;
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     overflow: hidden;
     z-index: 10;
+    margin-left: 64px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.expanded ~ #constellation-view {
+    margin-left: 220px;
 }
 
 @media (max-width: 700px) {
