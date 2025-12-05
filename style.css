@@ -1510,7 +1510,7 @@ p {
 .insights-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--space-lg) var(--space-md);
     margin-left: 64px;
     transition: margin-left 0.3s;
 }
@@ -1594,7 +1594,7 @@ p {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    padding: var(--space-md);
     /* Layered shadow system for depth */
     box-shadow: var(--shadow-card);
     border: 1px solid rgba(255, 255, 255, 0.8);
@@ -2064,7 +2064,7 @@ p {
 .analytics-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: var(--space-2xl) var(--space-xl);
+    padding: var(--space-lg) var(--space-md);
     margin-left: 64px;
     transition: margin-left 0.3s;
 }
@@ -2148,7 +2148,7 @@ p {
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    padding: var(--space-md);
     /* Layered shadow system for depth */
     box-shadow: var(--shadow-card);
     border: 1px solid rgba(255, 255, 255, 0.8);
