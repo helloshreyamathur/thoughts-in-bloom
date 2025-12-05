@@ -44,14 +44,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const charCounter = document.getElementById('char-counter');
     const errorMessage = document.getElementById('error-message');
     const inputSection = document.querySelector('.input-section');
-    const viewActiveBtn = document.getElementById('view-active');
-    const viewArchivedBtn = document.getElementById('view-archived');
     const tagFilterContainer = document.getElementById('tag-filter-container');
     const searchInput = document.getElementById('search-input');
     const clearSearchBtn = document.getElementById('clear-search');
     const searchResultsCount = document.getElementById('search-results-count');
     const searchToggleBtn = document.getElementById('search-toggle-btn');
     const searchSection = document.querySelector('.search-section');
+    
+    // Archive View Elements
+    const archiveThoughtsContainer = document.getElementById('archive-thoughts-container');
+    const archiveTagFilterContainer = document.getElementById('archive-tag-filter-container');
+    const archiveSearchInput = document.getElementById('archive-search-input');
+    const archiveClearSearchBtn = document.getElementById('archive-clear-search');
+    const archiveSearchResultsCount = document.getElementById('archive-search-results-count');
+    const archiveSearchToggleBtn = document.getElementById('archive-search-toggle-btn');
+    const archiveSearchSection = document.querySelector('#archive-view .search-section');
     
     // Sidebar Navigation
     const sidebar = document.querySelector('.sidebar');
@@ -65,13 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
     /** @type {string|null} ID of the thought currently being edited, null if not in edit mode */
     let currentEditingId = null;
     
-    /** @type {'active'|'archived'} Current view mode for filtering thoughts */
-    let currentViewMode = 'active';
-    
-    /** @type {string|null} Current tag filter, null means show all tags */
+    /** @type {string|null} Current tag filter for home view, null means show all tags */
     let currentTagFilter = null;
     
-    /** @type {string} Current search query (lowercase, trimmed) */
+    /** @type {string} Current search query for home view (lowercase, trimmed) */
     let currentSearchQuery = '';
     
     /** @type {number|null} Timer ID for search debouncing */
@@ -79,6 +83,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     /** @type {boolean} Whether the search UI is currently expanded */
     let isSearchExpanded = false; // Matches initial HTML class="collapsed"
+    
+    // Archive View State
+    /** @type {string|null} Current tag filter for archive view, null means show all tags */
+    let archiveTagFilter = null;
+    
+    /** @type {string} Current search query for archive view (lowercase, trimmed) */
+    let archiveSearchQuery = '';
+    
+    /** @type {number|null} Timer ID for archive search debouncing */
+    let archiveSearchDebounceTimer = null;
+    
+    /** @type {boolean} Whether the archive search UI is currently expanded */
+    let isArchiveSearchExpanded = false;
     
     // ============================================
     // INITIALIZATION
@@ -123,16 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
     });
     
-    // View toggle button handlers
-    viewActiveBtn.addEventListener('click', function() {
-        setViewMode('active');
-    });
-    
-    viewArchivedBtn.addEventListener('click', function() {
-        setViewMode('archived');
-    });
-    
-    // Search input with debouncing (300ms delay for performance)
+    // Home View Search input with debouncing (300ms delay for performance)
     searchInput.addEventListener('input', function() {
         // Clear previous debounce timer
         if (searchDebounceTimer) {
@@ -228,53 +236,59 @@ document.addEventListener('DOMContentLoaded', function() {
         handleMobileInputFocus(searchInput);
     });
     
+    // Archive View Search input with debouncing (300ms delay for performance)
+    if (archiveSearchInput) {
+        archiveSearchInput.addEventListener('input', function() {
+            // Clear previous debounce timer
+            if (archiveSearchDebounceTimer) {
+                clearTimeout(archiveSearchDebounceTimer);
+            }
+            
+            // Set new debounce timer (300ms)
+            archiveSearchDebounceTimer = setTimeout(function() {
+                handleArchiveSearch();
+            }, 300);
+        });
+        
+        // Clear search button handler
+        archiveClearSearchBtn.addEventListener('click', function() {
+            clearArchiveSearch();
+        });
+        
+        // Escape key clears search or collapses when focused on search input
+        archiveSearchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (archiveSearchQuery) {
+                    clearArchiveSearch();
+                } else {
+                    collapseArchiveSearch();
+                }
+            }
+        });
+        
+        // Search toggle button handler
+        archiveSearchToggleBtn.addEventListener('click', function() {
+            expandArchiveSearch();
+        });
+        
+        archiveSearchInput.addEventListener('focus', function() {
+            handleMobileInputFocus(archiveSearchInput);
+        });
+    }
+    
     // Mobile: Handle viewport resize when keyboard appears/disappears
     // This helps with iOS Safari where the viewport doesn't resize properly
     if ('visualViewport' in window) {
         window.visualViewport.addEventListener('resize', function() {
             // Adjust scroll position if an input is focused
             const activeElement = document.activeElement;
-            if (activeElement && (activeElement === thoughtInput || activeElement === searchInput)) {
+            if (activeElement && (activeElement === thoughtInput || activeElement === searchInput || activeElement === archiveSearchInput)) {
                 // Use same delay for consistency
                 setTimeout(function() {
                     activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, KEYBOARD_SCROLL_DELAY);
             }
         });
-    }
-    
-    // ============================================
-    // VIEW MODE FUNCTIONS
-    // ============================================
-    
-    /**
-     * Sets the current view mode and updates the UI accordingly.
-     * Cancels any active edit mode and re-renders thoughts.
-     * @param {'active'|'archived'} mode - The view mode to set
-     */
-    function setViewMode(mode) {
-        currentViewMode = mode;
-        
-        // Update button states
-        if (mode === 'active') {
-            viewActiveBtn.classList.add('active');
-            viewActiveBtn.setAttribute('aria-pressed', 'true');
-            viewArchivedBtn.classList.remove('active');
-            viewArchivedBtn.setAttribute('aria-pressed', 'false');
-        } else {
-            viewArchivedBtn.classList.add('active');
-            viewArchivedBtn.setAttribute('aria-pressed', 'true');
-            viewActiveBtn.classList.remove('active');
-            viewActiveBtn.setAttribute('aria-pressed', 'false');
-        }
-        
-        // Cancel any edit mode when switching views
-        if (currentEditingId) {
-            cancelEdit();
-        }
-        
-        // Re-render thoughts for the selected view
-        loadThoughts();
     }
     
     // ============================================
@@ -587,6 +601,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Re-render to remove from active view
         loadThoughts();
+        // Also update tag filter UI
+        renderTagFilter();
     }
     
     /**
@@ -622,7 +638,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Re-render to remove from archived view
-        loadThoughts();
+        loadArchivedThoughts();
+        // Also update tag filter UI for archive view
+        renderArchiveTagFilter();
     }
     
     // ============================================
@@ -688,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     
     /**
-     * Loads and displays thoughts based on current view mode, tag filter, and search query.
+     * Loads and displays active thoughts based on tag filter and search query.
      * Handles filtering logic and shows appropriate empty states.
      * Uses document fragments for efficient DOM updates.
      */
@@ -705,25 +723,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Filter based on current view mode
+        // Filter to show only active (non-archived) thoughts
         // Note: !thought.archived handles both false and undefined (for backward compatibility)
         let filteredThoughts = thoughts.filter(function(thought) {
-            if (currentViewMode === 'archived') {
-                return thought.archived === true;
-            } else {
-                return !thought.archived;
-            }
+            return !thought.archived;
         });
         
-        // Check for empty archive
-        if (currentViewMode === 'archived' && filteredThoughts.length === 0 && !currentSearchQuery && !currentTagFilter) {
-            showEmptyState('archive');
-            searchResultsCount.textContent = '';
-            return;
-        }
-        
         // Check for empty active (all archived)
-        if (currentViewMode === 'active' && filteredThoughts.length === 0 && !currentSearchQuery && !currentTagFilter) {
+        if (filteredThoughts.length === 0 && !currentSearchQuery && !currentTagFilter) {
             showEmptyState('all-archived');
             searchResultsCount.textContent = '';
             return;
@@ -772,6 +779,75 @@ document.addEventListener('DOMContentLoaded', function() {
             fragment.appendChild(card);
         });
         thoughtsContainer.appendChild(fragment);
+    }
+    
+    /**
+     * Loads and displays archived thoughts based on tag filter and search query.
+     * Handles filtering logic and shows appropriate empty states.
+     * Uses document fragments for efficient DOM updates.
+     */
+    function loadArchivedThoughts() {
+        if (!archiveThoughtsContainer) return;
+        
+        const thoughts = getThoughts();
+        
+        // Clear current display
+        archiveThoughtsContainer.innerHTML = '';
+        
+        // Filter to show only archived thoughts
+        let filteredThoughts = thoughts.filter(function(thought) {
+            return thought.archived === true;
+        });
+        
+        // Check for empty archive
+        if (filteredThoughts.length === 0 && !archiveSearchQuery && !archiveTagFilter) {
+            showArchiveEmptyState('archive');
+            if (archiveSearchResultsCount) archiveSearchResultsCount.textContent = '';
+            return;
+        }
+        
+        // Apply tag filter if one is set
+        if (archiveTagFilter) {
+            filteredThoughts = filteredThoughts.filter(function(thought) {
+                // Handle backward compatibility for thoughts without tags property
+                const thoughtTags = thought.tags || extractTags(thought.text);
+                return thoughtTags && thoughtTags.includes(archiveTagFilter);
+            });
+        }
+        
+        // Apply search filter if query exists
+        if (archiveSearchQuery) {
+            filteredThoughts = filteredThoughts.filter(function(thought) {
+                return thought.text.toLowerCase().includes(archiveSearchQuery);
+            });
+        }
+        
+        // Update search results count
+        if (archiveSearchQuery && archiveSearchResultsCount) {
+            const count = filteredThoughts.length;
+            const plural = count === 1 ? '' : 's';
+            archiveSearchResultsCount.textContent = count + ' result' + plural + ' found';
+        } else if (archiveSearchResultsCount) {
+            archiveSearchResultsCount.textContent = '';
+        }
+        
+        // Check for no results from search or filter
+        if (filteredThoughts.length === 0) {
+            if (archiveSearchQuery) {
+                showArchiveEmptyState('no-search-results');
+            } else if (archiveTagFilter) {
+                showArchiveEmptyState('no-tag-results');
+            }
+            return;
+        }
+        
+        // Create cards using document fragment for better performance with large lists
+        const fragment = document.createDocumentFragment();
+        filteredThoughts.forEach(function(thought) {
+            const card = createThoughtCard(thought, false, archiveSearchQuery);
+            fragment.appendChild(card);
+        });
+        archiveThoughtsContainer.appendChild(fragment);
     }
     
     /**
@@ -826,13 +902,57 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
+     * Displays an empty state message in the archive view based on the context.
+     * @param {'archive'|'no-search-results'|'no-tag-results'} type - The type of empty state to show
+     */
+    function showArchiveEmptyState(type) {
+        if (!archiveThoughtsContainer) return;
+        
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        
+        let icon = '';
+        let title = '';
+        let message = '';
+        
+        switch (type) {
+            case 'archive':
+                icon = '📦';
+                title = 'Archive is empty';
+                message = 'Archived thoughts will appear here.';
+                break;
+            case 'no-search-results':
+                icon = '🔍';
+                title = 'No matches found';
+                message = 'Try a different search term.';
+                break;
+            case 'no-tag-results':
+                icon = '🏷️';
+                title = 'No thoughts with this tag';
+                message = 'Try selecting a different tag or clear the filter.';
+                break;
+            default:
+                icon = '📦';
+                title = 'No archived thoughts';
+                message = '';
+        }
+        
+        emptyState.innerHTML = '<span class="empty-state-icon">' + icon + '</span>' +
+            '<h3 class="empty-state-title">' + title + '</h3>' +
+            '<p class="empty-state-message">' + message + '</p>';
+        
+        archiveThoughtsContainer.appendChild(emptyState);
+    }
+    
+    /**
      * Creates a DOM element for a thought card.
      * Handles text truncation, tags display, action buttons, and search highlighting.
      * @param {Thought} thought - The thought object to create a card for
      * @param {boolean} [isNew=false] - Whether this is a newly created thought (triggers animation)
+     * @param {string} [searchQuery=''] - Search query to highlight in the card text
      * @returns {HTMLDivElement} The created card element
      */
-    function createThoughtCard(thought, isNew = false) {
+    function createThoughtCard(thought, isNew = false, searchQuery = '') {
         const card = document.createElement('div');
         card.className = 'thought-card';
         if (isNew) {
@@ -852,23 +972,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const textElement = document.createElement('p');
         textElement.className = 'thought-text';
         
+        // Use provided searchQuery or fall back to current home search query
+        const effectiveSearchQuery = searchQuery || currentSearchQuery;
+        
         const needsTruncation = thought.text.length > PREVIEW_CHAR_LIMIT;
         
         if (needsTruncation) {
             // Store full text in data attribute for toggling
             textElement.dataset.fullText = thought.text;
             textElement.dataset.truncated = 'true';
+            textElement.dataset.searchQuery = effectiveSearchQuery; // Store for toggle function
             // Apply search highlighting to truncated text
             const truncatedText = getTruncatedText(thought.text);
-            if (currentSearchQuery) {
-                textElement.appendChild(highlightSearchText(truncatedText, currentSearchQuery));
+            if (effectiveSearchQuery) {
+                textElement.appendChild(highlightSearchText(truncatedText, effectiveSearchQuery));
             } else {
                 textElement.textContent = truncatedText;
             }
         } else {
             // Apply search highlighting to full text
-            if (currentSearchQuery) {
-                textElement.appendChild(highlightSearchText(thought.text, currentSearchQuery));
+            if (effectiveSearchQuery) {
+                textElement.appendChild(highlightSearchText(thought.text, effectiveSearchQuery));
             } else {
                 textElement.textContent = thought.text;
             }
@@ -890,7 +1014,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 tagElement.setAttribute('aria-label', 'Filter by tag ' + tag);
                 tagElement.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    filterByTag(tag);
+                    // Use appropriate filter function based on thought's archived status
+                    if (thought.archived) {
+                        filterArchiveByTag(tag);
+                    } else {
+                        filterByTag(tag);
+                    }
                 });
                 tagsContainer.appendChild(tagElement);
             });
@@ -998,6 +1127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function toggleTextExpansion(textElement, toggleButton) {
         const isTruncated = textElement.dataset.truncated === 'true';
         const fullText = textElement.dataset.fullText;
+        const searchQuery = textElement.dataset.searchQuery || '';
         
         // Safety check: if fullText is not available, do nothing
         if (!fullText) {
@@ -1009,8 +1139,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (isTruncated) {
             // Expand to full text
-            if (currentSearchQuery) {
-                textElement.appendChild(highlightSearchText(fullText, currentSearchQuery));
+            if (searchQuery) {
+                textElement.appendChild(highlightSearchText(fullText, searchQuery));
             } else {
                 textElement.textContent = fullText;
             }
@@ -1020,8 +1150,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Collapse to truncated text
             const truncatedText = getTruncatedText(fullText);
-            if (currentSearchQuery) {
-                textElement.appendChild(highlightSearchText(truncatedText, currentSearchQuery));
+            if (searchQuery) {
+                textElement.appendChild(highlightSearchText(truncatedText, searchQuery));
             } else {
                 textElement.textContent = truncatedText;
             }
@@ -1162,6 +1292,91 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ============================================
+    // ARCHIVE TAG FILTER FUNCTIONS
+    // ============================================
+    
+    /**
+     * Renders the tag filter button bar for the archive view.
+     * Shows "All" button plus a button for each unique tag in archived thoughts.
+     * Hides the container if no tags exist.
+     */
+    function renderArchiveTagFilter() {
+        if (!archiveTagFilterContainer) return;
+        
+        const thoughts = getThoughts();
+        const archivedThoughts = thoughts.filter(t => t.archived === true);
+        const allTags = new Set();
+        
+        archivedThoughts.forEach(function(thought) {
+            const thoughtTags = thought.tags || extractTags(thought.text);
+            if (thoughtTags && thoughtTags.length > 0) {
+                thoughtTags.forEach(function(tag) {
+                    allTags.add(tag);
+                });
+            }
+        });
+        
+        const sortedTags = Array.from(allTags).sort();
+        
+        // Clear current filter UI
+        archiveTagFilterContainer.innerHTML = '';
+        
+        // If no tags exist, hide the container
+        if (sortedTags.length === 0) {
+            archiveTagFilterContainer.style.display = 'none';
+            return;
+        }
+        
+        archiveTagFilterContainer.style.display = 'flex';
+        
+        // Add "All" button (clear filter)
+        const allButton = document.createElement('button');
+        allButton.type = 'button';
+        allButton.className = 'filter-tag-btn' + (archiveTagFilter === null ? ' active' : '');
+        allButton.textContent = 'All';
+        allButton.setAttribute('aria-label', 'Show all archived thoughts');
+        allButton.setAttribute('aria-pressed', archiveTagFilter === null ? 'true' : 'false');
+        allButton.addEventListener('click', function() {
+            clearArchiveTagFilter();
+        });
+        archiveTagFilterContainer.appendChild(allButton);
+        
+        // Add a button for each unique tag
+        sortedTags.forEach(function(tag) {
+            const tagButton = document.createElement('button');
+            tagButton.type = 'button';
+            tagButton.className = 'filter-tag-btn' + (archiveTagFilter === tag ? ' active' : '');
+            tagButton.textContent = tag;
+            tagButton.setAttribute('data-tag', tag);
+            tagButton.setAttribute('aria-label', 'Filter by ' + tag);
+            tagButton.setAttribute('aria-pressed', archiveTagFilter === tag ? 'true' : 'false');
+            tagButton.addEventListener('click', function() {
+                filterArchiveByTag(tag);
+            });
+            archiveTagFilterContainer.appendChild(tagButton);
+        });
+    }
+    
+    /**
+     * Sets the active tag filter for archive view and re-renders archived thoughts.
+     * @param {string} tag - The tag to filter by
+     */
+    function filterArchiveByTag(tag) {
+        archiveTagFilter = tag;
+        loadArchivedThoughts();
+        renderArchiveTagFilter();
+    }
+    
+    /**
+     * Clears the archive tag filter and shows all archived thoughts.
+     */
+    function clearArchiveTagFilter() {
+        archiveTagFilter = null;
+        loadArchivedThoughts();
+        renderArchiveTagFilter();
+    }
+    
+    // ============================================
     // SEARCH FUNCTIONS
     // ============================================
     
@@ -1231,6 +1446,92 @@ document.addEventListener('DOMContentLoaded', function() {
         clearSearchBtn.style.display = 'none';
         searchResultsCount.textContent = '';
         loadThoughts();
+    }
+    
+    // ============================================
+    // ARCHIVE SEARCH FUNCTIONS
+    // ============================================
+    
+    /**
+     * Handler for click-outside to collapse archive search.
+     * @param {MouseEvent} e - The click event
+     */
+    function handleArchiveClickOutside(e) {
+        if (archiveSearchSection && !archiveSearchSection.contains(e.target)) {
+            collapseArchiveSearch();
+        }
+    }
+    
+    /**
+     * Expands the archive search UI and focuses the input.
+     * Adds click-outside listener for better performance.
+     */
+    function expandArchiveSearch() {
+        if (!archiveSearchSection || isArchiveSearchExpanded) return;
+        
+        isArchiveSearchExpanded = true;
+        archiveSearchSection.classList.remove('collapsed');
+        archiveSearchToggleBtn.setAttribute('aria-expanded', 'true');
+        
+        // Add click-outside listener only when expanded
+        document.addEventListener('click', handleArchiveClickOutside);
+        
+        // Auto-focus the input after the animation starts
+        setTimeout(function() {
+            if (archiveSearchInput) archiveSearchInput.focus();
+        }, 100);
+    }
+    
+    /**
+     * Collapses the archive search UI.
+     * If there's an active search, it clears it first.
+     * Removes click-outside listener for better performance.
+     */
+    function collapseArchiveSearch() {
+        if (!archiveSearchSection || !isArchiveSearchExpanded) return;
+        
+        isArchiveSearchExpanded = false;
+        archiveSearchSection.classList.add('collapsed');
+        archiveSearchToggleBtn.setAttribute('aria-expanded', 'false');
+        if (archiveSearchInput) archiveSearchInput.blur();
+        
+        // Remove click-outside listener when collapsed
+        document.removeEventListener('click', handleArchiveClickOutside);
+        
+        // Clear search if there's an active query
+        if (archiveSearchQuery) {
+            clearArchiveSearch();
+        }
+    }
+    
+    /**
+     * Handles archive search input changes.
+     * Updates the search state and re-renders archived thoughts with matching results.
+     */
+    function handleArchiveSearch() {
+        if (!archiveSearchInput) return;
+        const query = archiveSearchInput.value.trim().toLowerCase();
+        archiveSearchQuery = query;
+        
+        // Update clear button visibility
+        if (archiveClearSearchBtn) {
+            archiveClearSearchBtn.style.display = query.length > 0 ? 'flex' : 'none';
+        }
+        
+        // Re-render archived thoughts with search filter
+        loadArchivedThoughts();
+    }
+    
+    /**
+     * Clears the archive search input and resets search state.
+     */
+    function clearArchiveSearch() {
+        if (!archiveSearchInput) return;
+        archiveSearchInput.value = '';
+        archiveSearchQuery = '';
+        if (archiveClearSearchBtn) archiveClearSearchBtn.style.display = 'none';
+        if (archiveSearchResultsCount) archiveSearchResultsCount.textContent = '';
+        loadArchivedThoughts();
     }
     
     /**
@@ -1339,6 +1640,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Small delay to ensure DOM is ready
             setTimeout(() => {
                 window.initializeAnalytics();
+            }, 100);
+        }
+        
+        // Initialize archive view when it becomes active
+        if (viewName === 'archive') {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                loadArchivedThoughts();
+                renderArchiveTagFilter();
             }, 100);
         }
     }
