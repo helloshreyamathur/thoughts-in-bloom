@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sidebar Navigation
     const sidebar = document.querySelector('.sidebar');
-    const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarItems = document.querySelectorAll('.sidebar-item');
     
     // ============================================
@@ -133,12 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Textarea input handler - updates character counter and button state
     thoughtInput.addEventListener('input', updateCharCounter);
-    
-    // Sidebar Toggle
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('expanded');
-        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
-    });
     
     // Home View Search input with debouncing (300ms delay for performance)
     searchInput.addEventListener('input', function() {
@@ -1579,17 +1572,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Sidebar Navigation Logic
-    // Expand/Collapse Sidebar
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('expanded');
-        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
-    });
-    
-    // Restore Sidebar State on Load
-    if (localStorage.getItem('sidebarExpanded') === 'true') {
-        sidebar.classList.add('expanded');
-    }
-    
     // View Switching Logic
     sidebarItems.forEach(item => {
         item.addEventListener('click', () => {
