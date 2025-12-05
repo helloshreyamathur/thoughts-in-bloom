@@ -1206,7 +1206,7 @@ p {
 .constellation-header h1 {
     color: #fff;
     margin-bottom: var(--space-sm);
-    font-size: 2rem;
+    font-size: 3rem;
 }
 
 .constellation-header h1 .bloom {
@@ -1225,18 +1225,20 @@ p {
 /* Controls */
 .constellation-controls {
     position: absolute;
-    top: 120px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: var(--space-xl);
+    right: var(--space-xl);
     z-index: 20;
     display: flex;
-    gap: var(--space-lg);
-    align-items: center;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: stretch;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    padding: var(--space-md) var(--space-lg);
-    border-radius: var(--radius-pill);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 280px;
 }
 
 .constellation-search input {
@@ -1247,7 +1249,7 @@ p {
     color: #fff;
     font-family: var(--font-body);
     font-size: 0.875rem;
-    width: 200px;
+    width: 100%;
     transition: background var(--duration-fast);
 }
 
@@ -1264,8 +1266,8 @@ p {
 .constellation-filters,
 .constellation-layout-toggle {
     display: flex;
-    align-items: center;
-    gap: var(--space-sm);
+    flex-direction: column;
+    gap: var(--space-xs);
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.875rem;
 }
@@ -1273,10 +1275,13 @@ p {
 .constellation-filters label,
 .constellation-layout-toggle label {
     font-weight: 500;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 #connection-strength {
-    width: 100px;
+    width: 100%;
     accent-color: #667eea;
 }
 
@@ -1284,6 +1289,13 @@ p {
     min-width: 40px;
     color: #667eea;
     font-weight: 500;
+    text-align: right;
+}
+
+.constellation-filters > div {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
 #layout-select {
@@ -1295,6 +1307,7 @@ p {
     font-family: var(--font-body);
     font-size: 0.875rem;
     cursor: pointer;
+    width: 100%;
 }
 
 #layout-select option {
@@ -1319,13 +1332,13 @@ p {
 }
 
 /* Node styles */
-.node circle {
-    transition: opacity var(--duration-fast);
+.node path {
+    transition: opacity var(--duration-fast), filter var(--duration-fast);
 }
 
-.node:hover circle {
+.node:hover path {
     stroke-width: 3;
-    filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.6));
+    filter: drop-shadow(0 0 12px currentColor) drop-shadow(0 0 6px currentColor);
 }
 
 .node text {
@@ -1459,11 +1472,11 @@ p {
 /* Responsive - Mobile */
 @media (max-width: 900px) {
     .constellation-controls {
-        flex-direction: column;
-        gap: var(--space-md);
-        top: 100px;
+        top: var(--space-md);
+        right: var(--space-md);
+        left: var(--space-md);
+        min-width: auto;
         padding: var(--space-md);
-        max-width: 90%;
     }
     
     .constellation-search input {
@@ -1473,16 +1486,14 @@ p {
     .constellation-filters,
     .constellation-layout-toggle {
         width: 100%;
-        justify-content: space-between;
     }
     
     #connection-strength {
-        flex: 1;
-        max-width: 150px;
+        width: 100%;
     }
     
     .constellation-header h1 {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     
     .constellation-subtitle {
@@ -1492,10 +1503,16 @@ p {
 
 @media (max-width: 600px) {
     .constellation-controls {
-        position: static;
-        transform: none;
-        margin: 120px auto 0;
-        width: calc(100% - 2 * var(--space-md));
+        position: absolute;
+        top: var(--space-sm);
+        right: var(--space-sm);
+        left: var(--space-sm);
+        min-width: auto;
+        padding: var(--space-sm);
+    }
+    
+    .constellation-header h1 {
+        font-size: 1.5rem;
     }
     
     .node text {
