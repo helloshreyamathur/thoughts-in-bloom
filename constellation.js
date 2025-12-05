@@ -217,13 +217,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 .on('drag', dragged)
                 .on('end', dragEnded));
         
-        // Add circles for nodes
-        node.append('circle')
-            .attr('r', d => 10 + Math.min(d.connections * 2, 20))
+        // Add 4-pointed stars for nodes
+        node.append('path')
+            .attr('d', d => createStarPath(10 + Math.min(d.connections * 2, 20)))
             .attr('fill', d => getNodeColor(d))
             .attr('stroke', '#fff')
             .attr('stroke-width', 2)
-            .style('cursor', 'pointer');
+            .style('cursor', 'pointer')
+            .style('filter', 'drop-shadow(0 0 6px currentColor)');
         
         // Add labels
         node.append('text')
@@ -332,6 +333,43 @@ document.addEventListener('DOMContentLoaded', function() {
         if (simulation) simulation.stop();
     }
     
+    // Star shape configuration
+    const STAR_INNER_RATIO = 0.4; // Inner points are 40% of outer radius
+    
+    // Cache for star paths to improve performance
+    const starPathCache = new Map();
+    
+    /**
+     * Generate 4-pointed star path
+     * @param {number} size - The size of the star (radius to outer points)
+     * @returns {string} SVG path string for 4-pointed star
+     */
+    function createStarPath(size) {
+        // Check cache first
+        const cacheKey = Math.round(size * 10) / 10; // Round to 1 decimal place
+        if (starPathCache.has(cacheKey)) {
+            return starPathCache.get(cacheKey);
+        }
+        
+        const innerRadius = size * STAR_INNER_RATIO;
+        const outerRadius = size;
+        
+        // 4-pointed star: alternating outer and inner points at 45° intervals
+        const points = [];
+        for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI / 4) - (Math.PI / 2); // Start from top
+            const radius = i % 2 === 0 ? outerRadius : innerRadius;
+            const x = Number.parseFloat((Math.cos(angle) * radius).toFixed(2));
+            const y = Number.parseFloat((Math.sin(angle) * radius).toFixed(2));
+            points.push(`${i === 0 ? 'M' : 'L'} ${x},${y}`);
+        }
+        points.push('Z'); // Close path
+        
+        const path = points.join(' ');
+        starPathCache.set(cacheKey, path);
+        return path;
+    }
+    
     /**
      * Get color for node based on tags
      */
@@ -430,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Update visual highlighting
-        g.selectAll('.node circle')
+        g.selectAll('.node path')
             .style('opacity', node => highlightedNodes.has(node.id) ? 1 : 0.3);
         
         g.selectAll('.link')
@@ -447,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleNodeLeave(event, d) {
         highlightedNodes.clear();
         
-        g.selectAll('.node circle')
+        g.selectAll('.node path')
             .style('opacity', 1);
         
         g.selectAll('.link')
