@@ -1515,7 +1515,7 @@ p {
     transition: margin-left 0.3s;
 }
 
-.sidebar.expanded ~ * .insights-container {
+.sidebar.expanded ~ #insights-view .insights-container {
     margin-left: 220px;
 }
 
@@ -1606,25 +1606,35 @@ p {
     animation: slideInFromBottom 0.4s var(--easing-bounce);
 }
 
-/* Pastel gradient backgrounds for cards */
+/* Pastel gradient backgrounds for cards - layered with glassmorphism */
 .insight-card:nth-child(5n+1) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(173, 216, 230, 0.15) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .insight-card:nth-child(5n+2) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 160, 221, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .insight-card:nth-child(5n+3) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 192, 203, 0.10) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .insight-card:nth-child(5n+4) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 218, 185, 0.13) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .insight-card:nth-child(5n+5) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(189, 252, 201, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .insight-card:hover {
@@ -2059,7 +2069,7 @@ p {
     transition: margin-left 0.3s;
 }
 
-.sidebar.expanded ~ * .analytics-container {
+.sidebar.expanded ~ #analytics-view .analytics-container {
     margin-left: 220px;
 }
 
@@ -2150,25 +2160,35 @@ p {
     animation: slideInFromBottom 0.4s var(--easing-bounce);
 }
 
-/* Pastel gradient backgrounds for cards */
+/* Pastel gradient backgrounds for cards - layered with glassmorphism */
 .analytics-card:nth-child(5n+1) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(173, 216, 230, 0.15) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .analytics-card:nth-child(5n+2) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(221, 160, 221, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .analytics-card:nth-child(5n+3) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 192, 203, 0.10) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .analytics-card:nth-child(5n+4) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 218, 185, 0.13) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .analytics-card:nth-child(5n+5) {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(189, 252, 201, 0.12) 100%);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .analytics-card:hover {
