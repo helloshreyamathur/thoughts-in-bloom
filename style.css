@@ -1508,9 +1508,15 @@ p {
    ============================================ */
 
 .insights-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-xl) var(--space-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    margin-left: 64px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.expanded ~ #insights-view .insights-container {
+    margin-left: 220px;
 }
 
 .insights-header {
@@ -2009,9 +2015,15 @@ p {
    ANALYTICS PAGE STYLES
    ============================================ */
 .analytics-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: var(--space-xl) var(--space-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    margin-left: 64px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.expanded ~ #analytics-view .analytics-container {
+    margin-left: 220px;
 }
 
 .analytics-header {
