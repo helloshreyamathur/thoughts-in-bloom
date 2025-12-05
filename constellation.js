@@ -359,8 +359,8 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < 8; i++) {
             const angle = (i * Math.PI / 4) - (Math.PI / 2); // Start from top
             const radius = i % 2 === 0 ? outerRadius : innerRadius;
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
+            const x = Number.parseFloat((Math.cos(angle) * radius).toFixed(2));
+            const y = Number.parseFloat((Math.sin(angle) * radius).toFixed(2));
             points.push(`${i === 0 ? 'M' : 'L'} ${x},${y}`);
         }
         points.push('Z'); // Close path
