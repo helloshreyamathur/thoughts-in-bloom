@@ -1507,18 +1507,6 @@ p {
    INSIGHTS PAGE
    ============================================ */
 
-.insights-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: var(--space-lg) var(--space-md);
-    margin-left: 64px;
-    transition: margin-left 0.3s;
-}
-
-.sidebar.expanded ~ #insights-view .insights-container {
-    margin-left: 220px;
-}
-
 .insights-header {
     text-align: center;
     margin-bottom: var(--space-xl);
@@ -1690,18 +1678,18 @@ p {
 }
 
 /* Insights page uses larger tag badges */
-.insights-container .tag-badge {
+#insights-view .tag-badge {
     padding: 6px 12px;
     font-size: 0.875rem;
     font-weight: 500;
 }
 
-.insights-container .tag-badge.clickable {
+#insights-view .tag-badge.clickable {
     cursor: pointer;
     transition: background 0.2s, transform 0.1s;
 }
 
-.insights-container .tag-badge.clickable:hover {
+#insights-view .tag-badge.clickable:hover {
     background: var(--color-text-dark);
     transform: scale(1.05);
 }
@@ -1990,11 +1978,6 @@ p {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .insights-container {
-        padding: var(--space-lg) var(--space-md);
-        margin-left: 0 !important;
-    }
-    
     .insights-header h1 {
         font-size: 2rem;
     }
@@ -2058,17 +2041,6 @@ p {
 /* ============================================
    ANALYTICS PAGE STYLES
    ============================================ */
-.analytics-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: var(--space-lg) var(--space-md);
-    margin-left: 64px;
-    transition: margin-left 0.3s;
-}
-
-.sidebar.expanded ~ #analytics-view .analytics-container {
-    margin-left: 220px;
-}
 
 .analytics-header {
     text-align: center;
@@ -2214,11 +2186,6 @@ p {
 
 /* Responsive Design for Analytics */
 @media (max-width: 768px) {
-    .analytics-container {
-        padding: var(--space-lg) var(--space-md);
-        margin-left: 0 !important;
-    }
-    
     .analytics-header h1 {
         font-size: 2rem;
     }

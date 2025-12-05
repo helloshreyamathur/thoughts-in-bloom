@@ -729,7 +729,7 @@
 
         // Create main container
         const mainContent = document.createElement('div');
-        mainContent.className = 'insights-container';
+        mainContent.className = 'container';
 
         // Add header
         const header = document.createElement('div');
