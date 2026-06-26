@@ -114,16 +114,16 @@ export default function InsightsPage() {
             {/* Season pills */}
             {seasons.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-sans text-[0.58rem] text-[#B0B0B0] tracking-[0.06em] uppercase mr-1">
+                <span className="font-sans text-[0.75rem] text-[#737373] tracking-[0.06em] uppercase mr-1">
                   Season
                 </span>
                 <button
                   onClick={() => setActiveSeasonId(null)}
-                  className="font-sans text-[0.62rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200"
+                  className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200"
                   style={{
                     background: activeSeasonId === null ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.35)",
                     border: activeSeasonId === null ? "1px solid rgba(201,160,160,0.3)" : "1px solid rgba(0,0,0,0.04)",
-                    color: activeSeasonId === null ? "#1C1C1E" : "#8A8A8A",
+                    color: activeSeasonId === null ? "#1C1C1E" : "#6B6B6B",
                     boxShadow: activeSeasonId === null ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
                   }}
                 >
@@ -133,11 +133,11 @@ export default function InsightsPage() {
                   <button
                     key={s.id}
                     onClick={() => setActiveSeasonId(activeSeasonId === s.id ? null : s.id)}
-                    className="font-sans text-[0.62rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200"
+                    className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200"
                     style={{
                       background: activeSeasonId === s.id ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.35)",
                       border: activeSeasonId === s.id ? "1px solid rgba(201,160,160,0.3)" : "1px solid rgba(0,0,0,0.04)",
-                      color: activeSeasonId === s.id ? "#1C1C1E" : "#8A8A8A",
+                      color: activeSeasonId === s.id ? "#1C1C1E" : "#6B6B6B",
                       boxShadow: activeSeasonId === s.id ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
                     }}
                   >
@@ -150,16 +150,16 @@ export default function InsightsPage() {
             {/* Source pills */}
             {availableSources.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-sans text-[0.58rem] text-[#B0B0B0] tracking-[0.06em] uppercase mr-1">
+                <span className="font-sans text-[0.75rem] text-[#737373] tracking-[0.06em] uppercase mr-1">
                   Source
                 </span>
                 <button
                   onClick={() => setActiveSource(null)}
-                  className="font-sans text-[0.62rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200"
+                  className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200"
                   style={{
                     background: activeSource === null ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.35)",
                     border: activeSource === null ? "1px solid rgba(201,160,160,0.3)" : "1px solid rgba(0,0,0,0.04)",
-                    color: activeSource === null ? "#1C1C1E" : "#8A8A8A",
+                    color: activeSource === null ? "#1C1C1E" : "#6B6B6B",
                     boxShadow: activeSource === null ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
                   }}
                 >
@@ -171,15 +171,15 @@ export default function InsightsPage() {
                     <button
                       key={src}
                       onClick={() => setActiveSource(activeSource === src ? null : src)}
-                      className="font-sans text-[0.62rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200 flex items-center gap-1.5 capitalize"
+                      className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all duration-200 flex items-center gap-1.5 capitalize"
                       style={{
                         background: activeSource === src ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.35)",
                         border: activeSource === src ? `1px solid ${color.text}40` : "1px solid rgba(0,0,0,0.04)",
-                        color: activeSource === src ? color.text : "#8A8A8A",
+                        color: activeSource === src ? color.text : "#6B6B6B",
                         boxShadow: activeSource === src ? "0 2px 8px rgba(0,0,0,0.04)" : "none",
                       }}
                     >
-                      <SourceIcon source={src} size={10} color={activeSource === src ? color.text : "#AAAAAA"} />
+                      <SourceIcon source={src} size={10} color={activeSource === src ? color.text : "#6B6B6B"} />
                       {src}
                     </button>
                   );
@@ -190,14 +190,14 @@ export default function InsightsPage() {
             {/* Active filter indicator */}
             {hasFilters && (
               <div className="flex items-center gap-2">
-                <p className="font-sans text-[0.62rem] text-[#ABABAB] italic">
+                <p className="font-sans text-[0.75rem] text-[#6B6B6B] italic">
                   Showing insights for {activeSeasonId ? seasons.find(s => s.id === activeSeasonId)?.name : "all seasons"}
                   {activeSource ? `, ${activeSource} sources` : ""}
                   {" "}({thoughts.length} thought{thoughts.length !== 1 ? "s" : ""})
                 </p>
                 <button
                   onClick={() => { setActiveSeasonId(null); setActiveSource(null); }}
-                  className="font-sans text-[0.58rem] text-[#C9A0A0] hover:text-[#B08080] transition-colors"
+                  className="font-sans text-[0.75rem] text-[#C9A0A0] hover:text-[#B08080] transition-colors"
                 >
                   Clear filters
                 </button>
@@ -219,7 +219,7 @@ export default function InsightsPage() {
             <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
               How your thinking evolves
             </h2>
-            <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+            <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
               Your dominant themes over the past 8 weeks
             </p>
             <EvolutionTimeline weeks={weeklyBuckets} />
@@ -243,10 +243,10 @@ export default function InsightsPage() {
               {/* Spectrum bar */}
               <div className="mb-4">
                 <div className="flex justify-between mb-2">
-                  <span className="font-sans text-[0.6rem] text-[#8FAF9A] tracking-[0.04em] uppercase">
+                  <span className="font-sans text-[0.75rem] text-[#8FAF9A] tracking-[0.04em] uppercase">
                     Deepening
                   </span>
-                  <span className="font-sans text-[0.6rem] text-[#A09AC9] tracking-[0.04em] uppercase">
+                  <span className="font-sans text-[0.75rem] text-[#A09AC9] tracking-[0.04em] uppercase">
                     Exploring
                   </span>
                 </div>
@@ -286,7 +286,7 @@ export default function InsightsPage() {
               {/* New tags pills */}
               {growthDepth.newTags.length > 0 && (
                 <div>
-                  <span className="font-sans text-[0.58rem] text-[#B0B0B0] tracking-[0.06em] uppercase block mb-1.5">
+                  <span className="font-sans text-[0.75rem] text-[#737373] tracking-[0.06em] uppercase block mb-1.5">
                     New this week
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -295,7 +295,7 @@ export default function InsightsPage() {
                       return (
                         <span
                           key={tag}
-                          className="font-sans text-[0.62rem] px-2 py-0.5 rounded-full"
+                          className="font-sans text-[0.75rem] px-2 py-0.5 rounded-full"
                           style={{ background: color.bg, color: color.text }}
                         >
                           {tag}
@@ -321,7 +321,7 @@ export default function InsightsPage() {
               </h2>
 
               {sourceInsight.patterns.length === 0 ? (
-                <p className="font-sans text-[0.78rem] text-[#BDBDBD] italic">
+                <p className="font-sans text-[0.78rem] text-[#737373] italic">
                   Add source tags to your thoughts to see patterns.
                 </p>
               ) : (
@@ -334,10 +334,10 @@ export default function InsightsPage() {
                         <div key={sp.source}>
                           <div className="flex items-center gap-2 mb-1">
                             <SourceIcon source={sp.source} size={13} color={color.text} />
-                            <span className="font-sans text-[0.72rem] text-[#6B6B6B] capitalize tracking-[0.02em]">
+                            <span className="font-sans text-[0.75rem] text-[#6B6B6B] capitalize tracking-[0.02em]">
                               {sp.source}
                             </span>
-                            <span className="font-sans text-[0.65rem] text-[#B0B0B0] ml-auto">
+                            <span className="font-sans text-[0.75rem] text-[#737373] ml-auto">
                               {sp.count}
                             </span>
                           </div>
@@ -380,12 +380,12 @@ export default function InsightsPage() {
             <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
               Thought arcs
             </h2>
-            <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+            <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
               How your ideas evolve over time
             </p>
 
             {arcs.length === 0 ? (
-              <p className="font-sans text-[0.78rem] text-[#BDBDBD] italic">
+              <p className="font-sans text-[0.78rem] text-[#737373] italic">
                 Arcs emerge when themes recur — keep exploring.
               </p>
             ) : (
@@ -410,7 +410,7 @@ export default function InsightsPage() {
                         >
                           {arc.tag}
                         </span>
-                        <span className="font-sans text-[0.62rem] text-[#B0B0B0] ml-auto">
+                        <span className="font-sans text-[0.75rem] text-[#737373] ml-auto">
                           {arc.thoughts.length} thought{arc.thoughts.length !== 1 ? "s" : ""}
                         </span>
                       </div>
@@ -450,7 +450,7 @@ export default function InsightsPage() {
                       </div>
 
                       {/* Narrative */}
-                      <p className="font-sans text-[0.72rem] text-[#8A8A8A] leading-[1.6] pl-1">
+                      <p className="font-sans text-[0.75rem] text-[#6B6B6B] leading-[1.6] pl-1">
                         {arc.sentence}
                       </p>
                     </div>
@@ -475,7 +475,7 @@ export default function InsightsPage() {
                 Most frequent tags
               </h2>
               {allTagFreq.length === 0 ? (
-                <p className="font-sans text-[0.78rem] text-[#BDBDBD]">No tags yet</p>
+                <p className="font-sans text-[0.78rem] text-[#737373]">No tags yet</p>
               ) : (
                 <div className="flex flex-col gap-3">
                   {allTagFreq.slice(0, 6).map(([tag, count]) => {
@@ -486,7 +486,7 @@ export default function InsightsPage() {
                           <span className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.02em]">
                             {tag}
                           </span>
-                          <span className="font-sans text-[0.7rem] text-[#BDBDBD]">{count}</span>
+                          <span className="font-sans text-[0.75rem] text-[#737373]">{count}</span>
                         </div>
                         <div
                           className="h-1 rounded-full"
@@ -519,13 +519,13 @@ export default function InsightsPage() {
               <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
                 Reflections for you
               </h2>
-              <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+              <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
                 Based on patterns in your garden
               </p>
               <div className="flex flex-col gap-4">
                 {smartPrompts.map((sp, i) => (
                   <div key={i}>
-                    <span className="font-sans text-[0.52rem] text-[#C9A0A0] tracking-[0.1em] uppercase block mb-1.5">
+                    <span className="font-sans text-[0.75rem] text-[#C9A0A0] tracking-[0.1em] uppercase block mb-1.5">
                       {sp.label}
                     </span>
                     <div
@@ -564,12 +564,12 @@ export default function InsightsPage() {
               Thought of the day
             </h2>
             {!dailyThought ? (
-              <p className="font-sans text-[0.78rem] text-[#BDBDBD]">
+              <p className="font-sans text-[0.78rem] text-[#737373]">
                 Add your first thought to see it here.
               </p>
             ) : (
               <div>
-                <p className="font-serif italic text-[1.4rem] text-[#1C1C1E] leading-[1.6] tracking-[-0.01em] mb-4 max-w-[600px]">
+                <p className="font-sans text-[1.4rem] text-[#1C1C1E] leading-[1.6] tracking-[-0.01em] mb-4 max-w-[600px]">
                   &ldquo;{dailyThought.text}&rdquo;
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -578,7 +578,7 @@ export default function InsightsPage() {
                     return (
                       <span
                         key={tag}
-                        className="font-sans text-[0.65rem] px-2 py-0.5 rounded-full"
+                        className="font-sans text-[0.75rem] px-2 py-0.5 rounded-full"
                         style={{
                           background: color.bg,
                           color: color.text,

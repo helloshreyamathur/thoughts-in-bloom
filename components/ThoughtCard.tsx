@@ -107,16 +107,16 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
       )}
 
       <div className="p-6">
-        <p className="font-serif italic text-[1.02rem] text-[#1C1C1E] leading-[1.7] mb-4">
+        <p className="font-sans text-[0.95rem] text-[#1C1C1E] leading-[1.7] mb-4">
           {thought.text}
         </p>
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-sans text-[0.68rem] text-[#6B6B6B] tracking-[0.02em]">
+            <span className="font-sans text-[0.75rem] text-[#595959] tracking-[0.02em]">
               {formatDate(thought.createdAt)}
             </span>
             {thought.source && (
-              <SourceIcon source={thought.source} size={12} color="#BDBDBD" />
+              <SourceIcon source={thought.source} size={12} color="#737373" />
             )}
             {/* Connection dots */}
             {dotCount > 0 && (
@@ -146,7 +146,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
                     e.stopPropagation();
                     onTagClick?.(tag);
                   }}
-                  className="font-sans text-[0.65rem] px-2.5 py-0.5 rounded-full tracking-[0.03em] transition-all duration-150 hover:brightness-90"
+                  className="font-sans text-[0.75rem] px-2.5 py-0.5 rounded-full tracking-[0.03em] transition-all duration-150 hover:brightness-90"
                   style={{
                     background: color.bg,
                     color: color.text,
@@ -174,8 +174,8 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
                 {/* Source label */}
                 {sourceLabel && (
                   <div className="flex items-center gap-1.5 mb-3">
-                    <SourceIcon source={sourceLabel} size={13} color="#9A9A9A" />
-                    <span className="font-sans text-[0.62rem] text-[#9A9A9A] tracking-[0.04em] capitalize">
+                    <SourceIcon source={sourceLabel} size={13} color="#6B6B6B" />
+                    <span className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.04em] capitalize">
                       {sourceLabel}
                     </span>
                   </div>
@@ -184,7 +184,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
                 {/* Connected thoughts */}
                 {connectedThoughts.length > 0 && (
                   <div>
-                    <span className="font-sans text-[0.58rem] text-[#B0B0B0] tracking-[0.06em] uppercase block mb-2">
+                    <span className="font-sans text-[0.75rem] text-[#737373] tracking-[0.06em] uppercase block mb-2">
                       Connected thoughts
                     </span>
                     <div className="space-y-2">
@@ -197,7 +197,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
                             border: "1px solid rgba(0,0,0,0.03)",
                           }}
                         >
-                          <p className="font-serif italic text-[0.82rem] text-[#4A4A4A] leading-[1.6] line-clamp-2">
+                          <p className="font-sans text-[0.82rem] text-[#4A4A4A] leading-[1.6] line-clamp-2">
                             {ct.text}
                           </p>
                           <div className="flex items-center gap-1 mt-1.5">
@@ -206,7 +206,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
                               return (
                                 <span
                                   key={tag}
-                                  className="font-sans text-[0.55rem] px-1.5 py-0.5 rounded-full"
+                                  className="font-sans text-[0.75rem] px-1.5 py-0.5 rounded-full"
                                   style={{
                                     background: color.bg,
                                     color: color.text,
@@ -226,7 +226,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
 
                 {/* No connections message */}
                 {connectedThoughts.length === 0 && !sourceLabel && (
-                  <p className="font-sans text-[0.65rem] text-[#C0C0C0] italic">
+                  <p className="font-sans text-[0.75rem] text-[#707070] italic">
                     No connections yet — add shared tags to link thoughts together.
                   </p>
                 )}
@@ -244,7 +244,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-0 left-0 right-0 h-11 flex items-center justify-end gap-1 px-3"
+            className="absolute bottom-0 left-0 right-0 h-12 flex items-center justify-end gap-1 px-3"
             style={{
               background:
                 "linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%)",
@@ -253,7 +253,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
             {!isArchived && onPin && (
               <button
                 onClick={() => onPin(thought.id)}
-                className="flex items-center font-sans text-[0.65rem] text-[#6B6B6B] hover:text-[#1C1C1E] transition-colors px-1.5 py-1 rounded-lg hover:bg-[rgba(0,0,0,0.04)]"
+                className="flex items-center font-sans text-[0.75rem] text-[#595959] hover:text-[#1C1C1E] transition-colors px-1.5 py-1 rounded-lg hover:bg-[rgba(0,0,0,0.04)]"
                 title={thought.pinned ? "Unpin" : "Pin"}
               >
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
@@ -267,7 +267,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
             {!isArchived && onEdit && (
               <button
                 onClick={() => onEdit(thought)}
-                className="flex items-center font-sans text-[0.65rem] text-[#6B6B6B] hover:text-[#1C1C1E] transition-colors px-1.5 py-1 rounded-lg hover:bg-[rgba(0,0,0,0.04)]"
+                className="flex items-center font-sans text-[0.75rem] text-[#595959] hover:text-[#1C1C1E] transition-colors px-1.5 py-1 rounded-lg hover:bg-[rgba(0,0,0,0.04)]"
                 title="Edit"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -280,7 +280,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
             {!isArchived && onArchive && (
               <button
                 onClick={() => onArchive(thought.id)}
-                className="flex items-center font-sans text-[0.65rem] text-[#6B6B6B] hover:text-[#1C1C1E] transition-colors px-1.5 py-1 rounded-lg hover:bg-[rgba(0,0,0,0.04)]"
+                className="flex items-center font-sans text-[0.75rem] text-[#595959] hover:text-[#1C1C1E] transition-colors px-1.5 py-1 rounded-lg hover:bg-[rgba(0,0,0,0.04)]"
                 title="Archive"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -294,7 +294,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
             {isArchived && onRestore && (
               <button
                 onClick={() => onRestore(thought.id)}
-                className="font-sans text-[0.65rem] text-[#8FAF9A] hover:text-[#6B9A7E] transition-colors px-2 py-1 rounded-lg hover:bg-[rgba(143,175,154,0.08)] tracking-[0.03em]"
+                className="font-sans text-[0.75rem] text-[#8FAF9A] hover:text-[#6B9A7E] transition-colors px-2 py-1 rounded-lg hover:bg-[rgba(143,175,154,0.08)] tracking-[0.03em]"
               >
                 Restore
               </button>

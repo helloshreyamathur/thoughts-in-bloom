@@ -42,14 +42,14 @@ export default function ArchivePage() {
           Archive
         </h1>
         {thoughts.length > 0 && (
-          <p className="font-sans text-[0.8rem] text-[#8A8A8A] font-light">
+          <p className="font-sans text-[0.8rem] text-[#6B6B6B] font-light">
             {thoughts.length} archived thought{thoughts.length !== 1 ? "s" : ""}
           </p>
         )}
         {thoughts.length > 0 && (
           <button
             onClick={handleRestoreAll}
-            className="font-sans text-[0.75rem] text-[#8FAF9A] hover:text-[#6B9A7E] transition-colors mt-2"
+            className="font-sans text-[0.75rem] text-[#537A5E] hover:text-[#3D6B4E] transition-colors mt-2"
           >
             Restore all &rarr;
           </button>
@@ -66,10 +66,10 @@ export default function ArchivePage() {
                 filter: "blur(25px)",
               }}
             />
-            <p className="font-serif italic text-[1.15rem] text-[#C0C0C0] mb-2">
+            <p className="font-serif italic text-[1.15rem] text-[#707070] mb-2">
               Nothing archived yet.
             </p>
-            <p className="font-sans text-[0.75rem] text-[#D0D0D0]">
+            <p className="font-sans text-[0.75rem] text-[#707070]">
               Your active thoughts live in the garden.
             </p>
           </div>

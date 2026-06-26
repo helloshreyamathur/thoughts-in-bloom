@@ -331,7 +331,7 @@ export default function AnalyticsPage() {
               boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
             }}
           >
-            <p className="font-serif italic text-[1.05rem] text-[#4A4A4A] leading-[1.7]">
+            <p className="font-sans text-[1.05rem] text-[#4A4A4A] leading-[1.7]">
               {healthSummary}
             </p>
           </motion.div>
@@ -355,10 +355,10 @@ export default function AnalyticsPage() {
               >
                 {card.value}
               </p>
-              <p className="font-sans text-[0.72rem] text-[#6B6B6B] tracking-[0.03em]">
+              <p className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.03em]">
                 {card.label}
               </p>
-              {card.sublabel && <p className="font-sans text-[0.62rem] text-[#BDBDBD] mt-0.5">{card.sublabel}</p>}
+              {card.sublabel && <p className="font-sans text-[0.75rem] text-[#737373] mt-0.5">{card.sublabel}</p>}
             </motion.div>
           ))}
         </div>
@@ -385,7 +385,7 @@ export default function AnalyticsPage() {
               <>
                 <div className="grid gap-1.5" style={{ gridTemplateColumns: "repeat(7, 1fr)" }}>
                   {DAY_LABELS.map((d) => (
-                    <div key={d} className="text-center font-sans text-[0.58rem] text-[#BDBDBD] mb-1">{d}</div>
+                    <div key={d} className="text-center font-sans text-[0.75rem] text-[#737373] mb-1">{d}</div>
                   ))}
                   {paddedData.map((item, i) => (
                     <div key={i} className="group relative">
@@ -399,7 +399,7 @@ export default function AnalyticsPage() {
                       />
                       {item && (
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none z-10 rounded-lg px-2 py-1" style={{ background: "#1C1C1E", whiteSpace: "nowrap" }}>
-                          <span className="font-sans text-[0.58rem] text-white">
+                          <span className="font-sans text-[0.75rem] text-white">
                             {item.date.getDate()} {MONTHS[item.date.getMonth()]} — {item.count} thought{item.count !== 1 ? "s" : ""}
                           </span>
                         </div>
@@ -408,15 +408,15 @@ export default function AnalyticsPage() {
                   ))}
                 </div>
                 <div className="flex items-center justify-between mt-5">
-                  <span className="font-sans text-[0.62rem] text-[#BDBDBD]">
+                  <span className="font-sans text-[0.75rem] text-[#737373]">
                     {heatmapData[0]?.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="font-sans text-[0.6rem] text-[#BDBDBD]">Less</span>
+                    <span className="font-sans text-[0.75rem] text-[#737373]">Less</span>
                     <div className="w-20 h-2.5 rounded-full" style={{ background: "linear-gradient(90deg, rgba(201,160,160,0.1) 0%, rgba(201,160,160,0.9) 100%)" }} />
-                    <span className="font-sans text-[0.6rem] text-[#BDBDBD]">More</span>
+                    <span className="font-sans text-[0.75rem] text-[#737373]">More</span>
                   </div>
-                  <span className="font-sans text-[0.62rem] text-[#BDBDBD]">Today</span>
+                  <span className="font-sans text-[0.75rem] text-[#737373]">Today</span>
                 </div>
               </>
             );
@@ -437,7 +437,7 @@ export default function AnalyticsPage() {
             <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
               When you think
             </h2>
-            <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+            <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
               {active.length > 0 ? `You're a ${timeLabel} thinker` : "Bloom some thoughts to see your rhythm"}
             </p>
 
@@ -460,7 +460,7 @@ export default function AnalyticsPage() {
                       textAnchor="middle"
                       dominantBaseline="middle"
                       className="font-sans"
-                      style={{ fontSize: "8px", fill: "#C0C0C0" }}
+                      style={{ fontSize: "12px", fill: "#707070" }}
                     >
                       {labels[h / 6]}
                     </text>
@@ -506,7 +506,7 @@ export default function AnalyticsPage() {
             <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
               Weekly rhythm
             </h2>
-            <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+            <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
               Which days feel most reflective
             </p>
 
@@ -526,11 +526,11 @@ export default function AnalyticsPage() {
                       }}
                     />
                   </div>
-                  <span className="font-sans text-[0.55rem] text-[#B0B0B0]">
+                  <span className="font-sans text-[0.75rem] text-[#737373]">
                     {DAY_LABELS[i]}
                   </span>
                   {count > 0 && (
-                    <span className="font-sans text-[0.5rem] text-[#C0C0C0]">{count}</span>
+                    <span className="font-sans text-[0.75rem] text-[#707070]">{count}</span>
                   )}
                 </div>
               ))}
@@ -552,12 +552,12 @@ export default function AnalyticsPage() {
             <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
               Vocabulary growth
             </h2>
-            <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+            <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
               New tags introduced each week
             </p>
 
             {weeklyTags.length === 0 ? (
-              <p className="font-sans text-[0.78rem] text-[#BDBDBD] italic">Add tagged thoughts to track growth.</p>
+              <p className="font-sans text-[0.78rem] text-[#737373] italic">Add tagged thoughts to track growth.</p>
             ) : (
               <div className="flex items-end gap-1.5" style={{ height: "100px" }}>
                 {weeklyTags.map((w, i) => (
@@ -575,15 +575,15 @@ export default function AnalyticsPage() {
                         }}
                       />
                     </div>
-                    <span className="font-sans text-[0.5rem] text-[#C0C0C0]">{w.newCount > 0 ? `+${w.newCount}` : ""}</span>
-                    <span className="font-sans text-[0.48rem] text-[#D0D0D0]">{w.week}</span>
+                    <span className="font-sans text-[0.75rem] text-[#707070]">{w.newCount > 0 ? `+${w.newCount}` : ""}</span>
+                    <span className="font-sans text-[0.75rem] text-[#707070]">{w.week}</span>
                   </div>
                 ))}
               </div>
             )}
 
             {weeklyTags.length > 0 && (
-              <p className="font-sans text-[0.65rem] text-[#ABABAB] mt-4">
+              <p className="font-sans text-[0.75rem] text-[#6B6B6B] mt-4">
                 Total vocabulary: <span className="text-[#8FAF9A]">{weeklyTags[weeklyTags.length - 1]?.totalCount || 0} tags</span>
               </p>
             )}
@@ -601,12 +601,12 @@ export default function AnalyticsPage() {
             <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-1">
               Source diversity
             </h2>
-            <p className="font-sans text-[0.7rem] text-[#ABABAB] mb-5">
+            <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-5">
               Where your ideas originate
             </p>
 
             {sourceDistribution.length === 0 ? (
-              <p className="font-sans text-[0.78rem] text-[#BDBDBD] italic">
+              <p className="font-sans text-[0.78rem] text-[#737373] italic">
                 Tag your thoughts with sources to see this.
               </p>
             ) : (
@@ -646,7 +646,7 @@ export default function AnalyticsPage() {
                     <text x="60" y="58" textAnchor="middle" className="font-sans" style={{ fontSize: "14px", fill: "#6B6B6B" }}>
                       {sourceDistribution.length}
                     </text>
-                    <text x="60" y="70" textAnchor="middle" className="font-sans" style={{ fontSize: "7px", fill: "#B0B0B0" }}>
+                    <text x="60" y="70" textAnchor="middle" className="font-sans" style={{ fontSize: "12px", fill: "#737373" }}>
                       sources
                     </text>
                   </svg>
@@ -658,8 +658,8 @@ export default function AnalyticsPage() {
                     return (
                       <div key={d.source} className="flex items-center gap-1.5">
                         <SourceIcon source={d.source} size={11} color={COLORS[i % COLORS.length]} />
-                        <span className="font-sans text-[0.6rem] text-[#8A8A8A] capitalize">{d.source}</span>
-                        <span className="font-sans text-[0.55rem] text-[#C0C0C0]">{d.count}</span>
+                        <span className="font-sans text-[0.75rem] text-[#6B6B6B] capitalize">{d.source}</span>
+                        <span className="font-sans text-[0.75rem] text-[#707070]">{d.count}</span>
                       </div>
                     );
                   })}

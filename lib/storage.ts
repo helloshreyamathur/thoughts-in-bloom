@@ -21,68 +21,14 @@ export interface Season {
 const STORAGE_KEY = "tib_thoughts";
 const SEASONS_KEY = "tib_seasons";
 
-const SEED_THOUGHTS: Thought[] = [
-  {
-    id: uuidv4(),
-    text: "The most beautiful things are often the ones we almost missed — like the way light bends through old glass, or how a familiar song suddenly means something entirely new.",
-    tags: ["observation", "beauty", "light"],
-    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-    archived: false,
-    source: "observation",
-  },
-  {
-    id: uuidv4(),
-    text: "Creativity isn't about having ideas. It's about having enough faith in your ideas to follow them into the unknown.",
-    tags: ["creativity", "courage", "process"],
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    archived: false,
-    source: "observation",
-  },
-  {
-    id: uuidv4(),
-    text: "I keep returning to the question of what it means to really listen — not just waiting for your turn to speak, but genuinely absorbing what another person is trying to say.",
-    tags: ["connection", "listening", "conversation"],
-    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-    archived: false,
-    source: "conversation",
-  },
-  {
-    id: uuidv4(),
-    text: "Design is the art of making complexity feel simple. Every layer you remove is a gift to the person who comes after you.",
-    tags: ["design", "simplicity", "creativity"],
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    archived: false,
-    source: "observation",
-  },
-  {
-    id: uuidv4(),
-    text: "There is something deeply comforting about the fact that books outlive their authors. It's the closest thing we have to immortality.",
-    tags: ["books", "time", "meaning"],
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    archived: false,
-    source: "book",
-  },
-  {
-    id: uuidv4(),
-    text: "Slow mornings are a form of resistance in a world that profits from your urgency.",
-    tags: ["slowness", "presence", "resistance"],
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    archived: false,
-    source: "observation",
-  },
-];
-
 export function getThoughts(): Thought[] {
   if (typeof window === "undefined") return [];
   const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_THOUGHTS));
-    return SEED_THOUGHTS;
-  }
+  if (!stored) return [];
   try {
     return JSON.parse(stored);
   } catch {
-    return SEED_THOUGHTS;
+    return [];
   }
 }
 

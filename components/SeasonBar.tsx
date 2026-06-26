@@ -52,7 +52,7 @@ export default function SeasonBar({
       <div className="flex items-center gap-2">
         <button
           onClick={() => setCreating(true)}
-          className="font-sans text-[0.62rem] text-[#B0B0B0] hover:text-[#8A8A8A] tracking-[0.04em] transition-colors flex items-center gap-1"
+          className="font-sans text-[0.75rem] text-[#737373] hover:text-[#6B6B6B] tracking-[0.04em] transition-colors flex items-center gap-1"
         >
           <span className="text-[0.8rem] leading-none">+</span> Create a season
         </button>
@@ -65,13 +65,13 @@ export default function SeasonBar({
       {/* All tab */}
       <button
         onClick={() => onSelectSeason(null)}
-        className="font-sans text-[0.65rem] px-3 py-1.5 rounded-full tracking-[0.03em] transition-all duration-200 flex-shrink-0 whitespace-nowrap"
+        className="font-sans text-[0.75rem] px-3 py-1.5 rounded-full tracking-[0.03em] transition-all duration-200 flex-shrink-0 whitespace-nowrap"
         style={pillStyle(activeSeasonId === null)}
       >
-        <span style={{ color: activeSeasonId === null ? "#1C1C1E" : "#8A8A8A" }}>
+        <span style={{ color: activeSeasonId === null ? "#1C1C1E" : "#6B6B6B" }}>
           All
         </span>
-        <span className="ml-1.5 text-[0.55rem] text-[#B0B0B0]">
+        <span className="ml-1.5 text-[0.75rem] text-[#737373]">
           {thoughts.length}
         </span>
       </button>
@@ -81,13 +81,13 @@ export default function SeasonBar({
         <button
           key={season.id}
           onClick={() => onSelectSeason(season.id)}
-          className="font-sans text-[0.65rem] px-3 py-1.5 rounded-full tracking-[0.03em] transition-all duration-200 flex-shrink-0 whitespace-nowrap"
+          className="font-sans text-[0.75rem] px-3 py-1.5 rounded-full tracking-[0.03em] transition-all duration-200 flex-shrink-0 whitespace-nowrap"
           style={pillStyle(activeSeasonId === season.id)}
         >
-          <span style={{ color: activeSeasonId === season.id ? "#1C1C1E" : "#8A8A8A" }}>
+          <span style={{ color: activeSeasonId === season.id ? "#1C1C1E" : "#6B6B6B" }}>
             {season.name}
           </span>
-          <span className="ml-1.5 text-[0.55rem] text-[#B0B0B0]">
+          <span className="ml-1.5 text-[0.75rem] text-[#737373]">
             {getSeasonCount(season.id)}
           </span>
         </button>
@@ -114,14 +114,14 @@ export default function SeasonBar({
               }}
               onBlur={() => { if (!newName.trim()) { setCreating(false); setNewName(""); } }}
               placeholder="Name this season..."
-              className="font-sans text-[0.65rem] text-[#6B6B6B] placeholder-[#C0C0C0] bg-[rgba(255,255,255,0.5)] rounded-full px-3 py-1.5 w-[140px]"
+              className="font-sans text-[0.75rem] text-[#6B6B6B] placeholder-[#707070] bg-[rgba(255,255,255,0.5)] rounded-full px-3 py-1.5 w-[140px]"
               style={{ border: "1px solid rgba(201,160,160,0.2)" }}
             />
           </motion.div>
         ) : (
           <button
             onClick={() => setCreating(true)}
-            className="font-sans text-[0.72rem] text-[#C0C0C0] hover:text-[#8A8A8A] transition-colors flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full hover:bg-[rgba(0,0,0,0.03)]"
+            className="font-sans text-[0.75rem] text-[#707070] hover:text-[#6B6B6B] transition-colors flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full hover:bg-[rgba(0,0,0,0.03)]"
             title="Create season"
           >
             +

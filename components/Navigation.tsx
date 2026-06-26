@@ -60,7 +60,7 @@ export default function Navigation() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative font-sans text-[0.75rem] tracking-[0.06em] uppercase text-[#8A8A8A] hover:text-[#1C1C1E] transition-colors duration-200"
+                className="relative font-sans text-[0.75rem] tracking-[0.06em] uppercase text-[#6B6B6B] hover:text-[#1C1C1E] transition-colors duration-200"
               >
                 {link.label}
                 {pathname === link.href && (
@@ -126,7 +126,7 @@ export default function Navigation() {
                   <Link
                     href={link.href}
                     className={`block py-3 font-sans text-[0.85rem] tracking-[0.04em] transition-colors ${
-                      pathname === link.href ? "text-[#1C1C1E]" : "text-[#8A8A8A]"
+                      pathname === link.href ? "text-[#1C1C1E]" : "text-[#6B6B6B]"
                     }`}
                   >
                     {link.label}

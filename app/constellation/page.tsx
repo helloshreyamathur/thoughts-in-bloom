@@ -319,7 +319,7 @@ function MiniRadialGraph({ tagNode, allTagNodes, onSelectTag }: {
       .attr("text-anchor", "middle")
       .attr("font-family", "'Cormorant Garamond', serif")
       .attr("font-style", "italic")
-      .attr("font-size", "10px")
+      .attr("font-size", "12px")
       .attr("fill", "#6B6B6B")
       .text(tagNode.tag);
 
@@ -345,8 +345,8 @@ function MiniRadialGraph({ tagNode, allTagNodes, onSelectTag }: {
         .attr("text-anchor", "middle")
         .attr("font-family", "'Cormorant Garamond', serif")
         .attr("font-style", "italic")
-        .attr("font-size", "9px")
-        .attr("fill", "#8A8A8A")
+        .attr("font-size", "12px")
+        .attr("fill", "#6B6B6B")
         .style("cursor", "pointer")
         .text(cp.tag)
         .on("click", () => {
@@ -381,7 +381,7 @@ function ThoughtTimeline({ thoughts, tagColor }: { thoughts: Thought[]; tagColor
     <div className="px-8 pb-5">
       <h3
         className="font-sans uppercase mb-3"
-        style={{ fontSize: "11px", letterSpacing: "0.08em", color: "#8A8A8A" }}
+        style={{ fontSize: "12px", letterSpacing: "0.08em", color: "#6B6B6B" }}
       >
         Timeline
       </h3>
@@ -410,7 +410,7 @@ function ThoughtTimeline({ thoughts, tagColor }: { thoughts: Thought[]; tagColor
                   boxShadow: `0 0 8px ${tagColor}33`,
                 }}
               />
-              <p className="font-sans text-[8px] text-[#A8A8A8] mt-1 text-center whitespace-nowrap" style={{ transform: "translateX(-25%)" }}>
+              <p className="font-sans text-[12px] text-[#737373] mt-1 text-center whitespace-nowrap" style={{ transform: "translateX(-25%)" }}>
                 {formatDate(t.createdAt)}
               </p>
             </div>
@@ -582,15 +582,15 @@ export default function ConstellationPage() {
         .attr("y", d.baseScale * 20 + 16)
         .attr("font-family", "'Cormorant Garamond', serif")
         .attr("font-style", "italic")
-        .attr("font-size", "11px")
+        .attr("font-size", "12px")
         .attr("fill", "#6B6B6B")
         .text(d.tagNode.tag);
       g.append("text")
         .attr("text-anchor", "middle")
         .attr("y", d.baseScale * 20 + 29)
         .attr("font-family", "'Inter', sans-serif")
-        .attr("font-size", "9px")
-        .attr("fill", "#A8A8A8")
+        .attr("font-size", "12px")
+        .attr("fill", "#737373")
         .text(`${d.tagNode.thoughts.length} thought${d.tagNode.thoughts.length !== 1 ? "s" : ""}`);
     });
 
@@ -731,7 +731,7 @@ export default function ConstellationPage() {
               className="mx-auto w-[120px] h-[120px] mb-6"
               style={{ background: "radial-gradient(circle, rgba(160,154,201,0.12) 0%, transparent 70%)", filter: "blur(25px)" }}
             />
-            <p className="font-serif italic text-[1.1rem] text-[#C0C0C0]">
+            <p className="font-serif italic text-[1.1rem] text-[#707070]">
               Add thoughts to see your constellation.
             </p>
           </div>
@@ -754,7 +754,7 @@ export default function ConstellationPage() {
           }}
         >
           <div>
-            <label className="font-sans text-[0.62rem] text-[#8A8A8A] tracking-[0.08em] uppercase mb-2 block">
+            <label className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.08em] uppercase mb-2 block">
               Connection strength
             </label>
             <input
@@ -765,7 +765,7 @@ export default function ConstellationPage() {
             />
           </div>
           <div>
-            <label className="font-sans text-[0.62rem] text-[#8A8A8A] tracking-[0.08em] uppercase mb-2 block">
+            <label className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.08em] uppercase mb-2 block">
               Layout
             </label>
             <div className="flex gap-2">
@@ -773,10 +773,10 @@ export default function ConstellationPage() {
                 <button
                   key={l}
                   onClick={() => setLayout(l)}
-                  className="font-sans text-[0.65rem] px-2.5 py-1.5 rounded-lg capitalize transition-all duration-200"
+                  className="font-sans text-[0.75rem] px-2.5 py-1.5 rounded-lg capitalize transition-all duration-200"
                   style={{
                     background: layout === l ? "rgba(201,160,160,0.18)" : "transparent",
-                    color: layout === l ? "#C9A0A0" : "#8A8A8A",
+                    color: layout === l ? "#C9A0A0" : "#6B6B6B",
                     border: `1px solid ${layout === l ? "rgba(201,160,160,0.25)" : "rgba(0,0,0,0.06)"}`,
                   }}
                 >
@@ -788,7 +788,7 @@ export default function ConstellationPage() {
         </div>
 
         {/* Legend — inline with controls */}
-        <p className="font-sans text-[0.55rem] text-[#A8A8A8] leading-[1.5] tracking-[0.02em] pb-1 max-w-[220px]">
+        <p className="font-sans text-[0.75rem] text-[#737373] leading-[1.5] tracking-[0.02em] pb-1 max-w-[220px]">
           shape size = thought count &middot; line weight = co-occurrence &middot; click any theme to explore
         </p>
       </div>
@@ -828,7 +828,7 @@ export default function ConstellationPage() {
             {/* Close button */}
             <button
               onClick={() => selectTag(null)}
-              className="absolute top-5 right-5 w-7 h-7 flex items-center justify-center rounded-full text-[16px] text-[#B0B0B0] hover:text-[#8A8A8A] hover:bg-[rgba(0,0,0,0.04)] transition-all leading-none"
+              className="absolute top-5 right-5 w-7 h-7 flex items-center justify-center rounded-full text-[16px] text-[#737373] hover:text-[#6B6B6B] hover:bg-[rgba(0,0,0,0.04)] transition-all leading-none"
               aria-label="Close panel"
             >
               &times;
@@ -839,7 +839,7 @@ export default function ConstellationPage() {
               <p className="font-serif italic leading-[1.4]" style={{ fontSize: "1.5rem", color: "#1C1C1E" }}>
                 {selectedTag.tag}
               </p>
-              <p className="font-sans text-[0.72rem] text-[#A8A8A8] mt-1">
+              <p className="font-sans text-[0.72rem] text-[#737373] mt-1">
                 {selectedTag.thoughts.length} thought{selectedTag.thoughts.length !== 1 ? "s" : ""} carry this theme
               </p>
             </div>
@@ -872,7 +872,7 @@ export default function ConstellationPage() {
 
             {/* Thoughts */}
             <div className="px-8 pt-3 pb-4">
-              <h3 className="font-sans uppercase mb-3" style={{ fontSize: "11px", letterSpacing: "0.08em", color: "#8A8A8A" }}>
+              <h3 className="font-sans uppercase mb-3" style={{ fontSize: "12px", letterSpacing: "0.08em", color: "#6B6B6B" }}>
                 Thoughts
               </h3>
               <div className="flex flex-col gap-2.5">
@@ -880,17 +880,17 @@ export default function ConstellationPage() {
                   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                   .map((thought) => (
                     <div key={thought.id} className="rounded-lg p-3" style={{ background: "rgba(0,0,0,0.02)" }}>
-                      <p className="font-serif italic text-[0.82rem] text-[#4A4A4A] leading-[1.55] mb-1.5">
+                      <p className="font-sans text-[0.82rem] text-[#4A4A4A] leading-[1.55] mb-1.5">
                         {thought.text.length > 100 ? thought.text.slice(0, 98) + "\u2026" : thought.text}
                       </p>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-sans text-[0.58rem] text-[#B0B0B0]">{formatDate(thought.createdAt)}</span>
+                        <span className="font-sans text-[0.75rem] text-[#737373]">{formatDate(thought.createdAt)}</span>
                         {thought.tags.filter((t) => t !== selectedTag.tag).map((t) => (
                           <button
                             key={t}
                             onClick={() => { const node = allTagNodes.find((n) => n.tag === t); if (node) selectTag(node); }}
-                            className="font-sans text-[0.55rem] px-1.5 py-0.5 rounded-full hover:bg-[rgba(201,160,160,0.15)] transition-colors"
-                            style={{ background: "rgba(201,160,160,0.08)", color: "#A8A8A8" }}
+                            className="font-sans text-[0.75rem] px-1.5 py-0.5 rounded-full hover:bg-[rgba(201,160,160,0.15)] transition-colors"
+                            style={{ background: "rgba(201,160,160,0.08)", color: "#737373" }}
                           >
                             {t}
                           </button>
@@ -906,7 +906,7 @@ export default function ConstellationPage() {
 
             {/* Patterns */}
             <div className="px-8 pt-5 pb-4">
-              <h3 className="font-sans uppercase mb-3" style={{ fontSize: "11px", letterSpacing: "0.08em", color: "#8A8A8A" }}>
+              <h3 className="font-sans uppercase mb-3" style={{ fontSize: "12px", letterSpacing: "0.08em", color: "#6B6B6B" }}>
                 Patterns
               </h3>
               <div className="flex flex-col gap-2.5">

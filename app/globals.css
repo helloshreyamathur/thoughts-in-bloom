@@ -23,7 +23,8 @@
 
   textarea:focus-visible,
   input:focus-visible {
-    outline: none;
+    outline: 2px solid rgba(139, 94, 94, 0.4);
+    outline-offset: 2px;
   }
 
   ::-webkit-scrollbar {

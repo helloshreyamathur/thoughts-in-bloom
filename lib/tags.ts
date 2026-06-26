@@ -1,9 +1,9 @@
 // Shared tag color utilities — single source of truth
 
 export const TAG_COLORS = [
-  { bg: "rgba(201, 160, 160, 0.18)", text: "#C9A0A0" },
-  { bg: "rgba(143, 175, 154, 0.18)", text: "#8FAF9A" },
-  { bg: "rgba(160, 154, 201, 0.18)", text: "#A09AC9" },
+  { bg: "rgba(201, 160, 160, 0.18)", text: "#8B5E5E" },
+  { bg: "rgba(143, 175, 154, 0.18)", text: "#4D7256" },
+  { bg: "rgba(160, 154, 201, 0.18)", text: "#635C9A" },
 ];
 
 export function getTagColor(tag: string) {

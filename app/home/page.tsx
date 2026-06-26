@@ -371,7 +371,7 @@ export default function HomePage() {
                   if (nameInput.trim()) handleNameSubmit();
                 }}
                 placeholder="what's your name?"
-                className="font-serif italic text-[1.6rem] md:text-[1.9rem] text-[#1C1C1E] leading-[1.2] tracking-[-0.02em] font-light bg-transparent border-b border-[rgba(201,160,160,0.3)] pb-0.5 w-[200px] placeholder-[#D0D0D0]"
+                className="font-serif italic text-[1.6rem] md:text-[1.9rem] text-[#1C1C1E] leading-[1.2] tracking-[-0.02em] font-light bg-transparent border-b border-[rgba(201,160,160,0.3)] pb-0.5 w-[200px] placeholder-[#707070]"
               />
             </div>
           ) : (
@@ -379,7 +379,7 @@ export default function HomePage() {
               {greeting}{userName ? `, ${userName}` : ""}
             </h1>
           )}
-          <p className="font-sans text-[0.68rem] text-[#B0B0B0] tracking-[0.04em]">
+          <p className="font-sans text-[0.75rem] text-[#737373] tracking-[0.04em]">
             {today}
           </p>
         </motion.div>
@@ -416,8 +416,8 @@ export default function HomePage() {
       {/* Keyboard hint */}
       {mounted && filteredThoughts.length > 0 && focusedIndex === -1 && (
         <div className="max-w-[1100px] mx-auto mb-3">
-          <p className="font-sans text-[0.58rem] text-[#D0D0D0] tracking-[0.04em]">
-            Press <kbd className="px-1 py-0.5 rounded text-[0.55rem] bg-[rgba(0,0,0,0.04)] text-[#B0B0B0]">j</kbd> / <kbd className="px-1 py-0.5 rounded text-[0.55rem] bg-[rgba(0,0,0,0.04)] text-[#B0B0B0]">k</kbd> to navigate
+          <p className="font-sans text-[0.75rem] text-[#707070] tracking-[0.04em]">
+            Press <kbd className="px-1 py-0.5 rounded text-[0.75rem] bg-[rgba(0,0,0,0.04)] text-[#737373]">j</kbd> / <kbd className="px-1 py-0.5 rounded text-[0.75rem] bg-[rgba(0,0,0,0.04)] text-[#737373]">k</kbd> to navigate
           </p>
         </div>
       )}
@@ -448,21 +448,21 @@ export default function HomePage() {
             />
             {thoughts.length === 0 ? (
               <>
-                <p className="font-serif italic text-[1.05rem] text-[#C0C0C0] mb-2">
+                <p className="font-sans text-[1.05rem] text-[#707070] mb-2">
                   Your garden is waiting for its first thought.
                 </p>
-                <p className="font-sans text-[0.7rem] text-[#D0D0D0]">
+                <p className="font-sans text-[0.75rem] text-[#707070]">
                   Write something above to begin.
                 </p>
               </>
             ) : (
               <>
-                <p className="font-serif italic text-[1.05rem] text-[#C0C0C0] mb-2">
+                <p className="font-sans text-[1.05rem] text-[#707070] mb-2">
                   No thoughts match your filters.
                 </p>
                 <button
                   onClick={handleClearAll}
-                  className="font-sans text-[0.7rem] text-[#C9A0A0] hover:text-[#B08080] transition-colors"
+                  className="font-sans text-[0.75rem] text-[#C9A0A0] hover:text-[#B08080] transition-colors"
                 >
                   Clear all filters
                 </button>
@@ -533,12 +533,12 @@ export default function HomePage() {
                 onChange={(e) => {
                   if (e.target.value.length <= 280) setEditText(e.target.value);
                 }}
-                className="w-full font-serif italic text-[1rem] text-[#1C1C1E] bg-transparent resize-none leading-[1.75] pb-3 relative"
+                className="w-full font-sans text-[1rem] text-[#1C1C1E] bg-transparent resize-none leading-[1.75] pb-3 relative"
                 style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}
                 rows={4}
               />
               <div className="mt-4 mb-2">
-                <span className="font-sans text-[0.62rem] text-[#ABABAB] tracking-[0.08em] uppercase mb-2 block">
+                <span className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.08em] uppercase mb-2 block">
                   Tags
                 </span>
                 <div className="flex flex-wrap items-center gap-1.5 pb-3" style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
@@ -547,7 +547,7 @@ export default function HomePage() {
                     return (
                       <span
                         key={tag}
-                        className="font-sans text-[0.68rem] px-2.5 py-1 rounded-full tracking-[0.03em] cursor-pointer hover:brightness-95 transition-all"
+                        className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] cursor-pointer hover:brightness-95 transition-all"
                         style={{ background: color.bg, color: color.text }}
                         onClick={() => setEditTags(editTags.filter((t) => t !== tag))}
                       >
@@ -569,16 +569,16 @@ export default function HomePage() {
               {/* Season selector in edit modal */}
               {seasons.length > 0 && (
                 <div className="mt-3 mb-2">
-                  <span className="font-sans text-[0.62rem] text-[#ABABAB] tracking-[0.08em] uppercase mb-2 block">
+                  <span className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.08em] uppercase mb-2 block">
                     Season
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     <button
                       onClick={() => setEditSeasonId(undefined)}
-                      className="font-sans text-[0.65rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all"
+                      className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all"
                       style={{
                         background: !editSeasonId ? "rgba(201,160,160,0.15)" : "rgba(0,0,0,0.03)",
-                        color: !editSeasonId ? "#C9A0A0" : "#A8A8A8",
+                        color: !editSeasonId ? "#C9A0A0" : "#737373",
                       }}
                     >
                       None
@@ -587,10 +587,10 @@ export default function HomePage() {
                       <button
                         key={s.id}
                         onClick={() => setEditSeasonId(s.id)}
-                        className="font-sans text-[0.65rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all"
+                        className="font-sans text-[0.75rem] px-2.5 py-1 rounded-full tracking-[0.03em] transition-all"
                         style={{
                           background: editSeasonId === s.id ? "rgba(201,160,160,0.15)" : "rgba(0,0,0,0.03)",
-                          color: editSeasonId === s.id ? "#C9A0A0" : "#A8A8A8",
+                          color: editSeasonId === s.id ? "#C9A0A0" : "#737373",
                         }}
                       >
                         {s.name}
@@ -603,7 +603,7 @@ export default function HomePage() {
               <div className="flex justify-end gap-3 mt-5 relative">
                 <button
                   onClick={() => setEditingThought(null)}
-                  className="font-sans text-[0.78rem] text-[#8A8A8A] hover:text-[#1C1C1E] transition-colors px-4 py-2 rounded-xl hover:bg-[rgba(0,0,0,0.03)]"
+                  className="font-sans text-[0.78rem] text-[#6B6B6B] hover:text-[#1C1C1E] transition-colors px-4 py-2 rounded-xl hover:bg-[rgba(0,0,0,0.03)]"
                 >
                   Cancel
                 </button>

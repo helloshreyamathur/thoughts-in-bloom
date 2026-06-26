@@ -42,7 +42,7 @@ export default function EvolutionTimeline({ weeks }: EvolutionTimelineProps) {
   if (topTags.length === 0) {
     return (
       <div className="flex items-center justify-center h-[180px]">
-        <p className="font-sans text-[0.78rem] text-[#BDBDBD] italic">
+        <p className="font-sans text-[0.78rem] text-[#737373] italic">
           Keep blooming — your evolution will appear after a few thoughts.
         </p>
       </div>
@@ -164,8 +164,8 @@ export default function EvolutionTimeline({ weeks }: EvolutionTimelineProps) {
             textAnchor="middle"
             className="font-sans"
             style={{
-              fontSize: "9px",
-              fill: hoveredWeek === i ? "#6B6B6B" : "#C0C0C0",
+              fontSize: "12px",
+              fill: hoveredWeek === i ? "#6B6B6B" : "#707070",
               transition: "fill 0.15s",
             }}
           >
@@ -188,7 +188,7 @@ export default function EvolutionTimeline({ weeks }: EvolutionTimelineProps) {
             boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
           }}
         >
-          <p className="font-sans text-[0.62rem] text-[#8A8A8A] mb-1.5">
+          <p className="font-sans text-[0.75rem] text-[#6B6B6B] mb-1.5">
             Week of {streamData[hoveredWeek].week.weekLabel}
           </p>
           {topTags.map((tag, idx) => {
@@ -200,17 +200,17 @@ export default function EvolutionTimeline({ weeks }: EvolutionTimelineProps) {
                   className="w-2 h-2 rounded-full"
                   style={{ background: STREAM_COLORS[idx] }}
                 />
-                <span className="font-sans text-[0.62rem] text-[#6B6B6B]">
+                <span className="font-sans text-[0.75rem] text-[#6B6B6B]">
                   {tag}
                 </span>
-                <span className="font-sans text-[0.58rem] text-[#B0B0B0] ml-auto">
+                <span className="font-sans text-[0.75rem] text-[#737373] ml-auto">
                   {val}
                 </span>
               </div>
             );
           })}
           {streamData[hoveredWeek].total === 0 && (
-            <p className="font-sans text-[0.6rem] text-[#C0C0C0] italic">
+            <p className="font-sans text-[0.75rem] text-[#707070] italic">
               No thoughts this week
             </p>
           )}
@@ -225,7 +225,7 @@ export default function EvolutionTimeline({ weeks }: EvolutionTimelineProps) {
               className="w-2 h-2 rounded-full"
               style={{ background: STREAM_COLORS[idx], opacity: 0.6 }}
             />
-            <span className="font-sans text-[0.6rem] text-[#9A9A9A] tracking-[0.02em]">
+            <span className="font-sans text-[0.75rem] text-[#6B6B6B] tracking-[0.02em]">
               {tag}
             </span>
           </div>

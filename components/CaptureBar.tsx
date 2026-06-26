@@ -105,7 +105,7 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
   };
 
   const charCountColor =
-    text.length >= 275 ? "#C97070" : text.length > 240 ? "#C9A0A0" : "#BDBDBD";
+    text.length >= 275 ? "#C97070" : text.length > 240 ? "#C9A0A0" : "#737373";
 
   const activeSeason = seasons.find((s) => s.id === seasonId);
 
@@ -141,7 +141,7 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.3 }}
-                  className="absolute top-0 left-0 font-serif italic text-[0.95rem] text-[#C0C0C0] pointer-events-none leading-[1.6]"
+                  className="absolute top-0 left-0 font-sans text-[0.95rem] text-[#707070] pointer-events-none leading-[1.6]"
                 >
                   {prompt}
                 </motion.span>
@@ -159,7 +159,8 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
               onKeyDown={handleTextareaKeyDown}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
-              className="w-full font-serif italic text-[0.95rem] text-[#1C1C1E] bg-transparent resize-none leading-[1.6]"
+              aria-label="Write a new thought"
+              className="w-full font-sans text-[0.95rem] text-[#1C1C1E] bg-transparent resize-none leading-[1.6]"
               rows={1}
               style={{ minHeight: "26px", maxHeight: "80px" }}
             />
@@ -206,7 +207,7 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.15 }}
-                  className="font-sans text-[0.6rem] px-2 py-0.5 rounded-full cursor-pointer hover:brightness-95 transition-all flex-shrink-0"
+                  className="font-sans text-[0.75rem] px-2 py-0.5 rounded-full cursor-pointer hover:brightness-95 transition-all flex-shrink-0"
                   style={{ background: color.bg, color: color.text }}
                   onClick={() => setTags(tags.filter((t) => t !== tag))}
                 >
@@ -222,7 +223,8 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               placeholder={tags.length === 0 ? "tags..." : ""}
-              className="font-sans text-[0.68rem] text-[#6B6B6B] placeholder-[#C8C8C8] bg-transparent min-w-[50px] flex-1"
+              aria-label="Add tags"
+              className="font-sans text-[0.75rem] text-[#6B6B6B] placeholder-[#949494] bg-transparent min-w-[50px] flex-1"
             />
           </div>
 
@@ -238,10 +240,10 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
                 <button
                   key={s.id}
                   onClick={() => setSource(isActive ? undefined : s.id)}
-                  className="p-1 rounded-md transition-all duration-150"
+                  className="p-2 rounded-md transition-all duration-150 min-w-[44px] min-h-[44px] flex items-center justify-center"
                   style={{
                     background: isActive ? "rgba(201,160,160,0.15)" : "transparent",
-                    color: isActive ? "#C9A0A0" : "#C0C0C0",
+                    color: isActive ? "#8B5E5E" : "#707070",
                   }}
                   title={s.label}
                 >
@@ -258,10 +260,10 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
               <div className="relative flex-shrink-0" ref={seasonPickerRef}>
                 <button
                   onClick={() => setShowSeasonPicker(!showSeasonPicker)}
-                  className="font-sans text-[0.6rem] px-2 py-0.5 rounded-full transition-all duration-150 flex items-center gap-1"
+                  className="font-sans text-[0.75rem] px-2 py-0.5 rounded-full transition-all duration-150 flex items-center gap-1"
                   style={{
                     background: activeSeason ? "rgba(201,160,160,0.12)" : "rgba(0,0,0,0.03)",
-                    color: activeSeason ? "#C9A0A0" : "#B0B0B0",
+                    color: activeSeason ? "#C9A0A0" : "#737373",
                     border: activeSeason ? "1px solid rgba(201,160,160,0.2)" : "1px solid transparent",
                   }}
                   title={activeSeason ? `Season: ${activeSeason.name}` : "No season"}
@@ -297,9 +299,9 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
                           onSeasonChange?.(undefined);
                           setShowSeasonPicker(false);
                         }}
-                        className="w-full text-left font-sans text-[0.62rem] px-3 py-1.5 transition-colors hover:bg-[rgba(0,0,0,0.03)]"
+                        className="w-full text-left font-sans text-[0.75rem] px-3 py-1.5 transition-colors hover:bg-[rgba(0,0,0,0.03)]"
                         style={{
-                          color: !seasonId ? "#C9A0A0" : "#8A8A8A",
+                          color: !seasonId ? "#C9A0A0" : "#6B6B6B",
                           fontWeight: !seasonId ? 500 : 400,
                         }}
                       >
@@ -312,9 +314,9 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
                             onSeasonChange?.(s.id);
                             setShowSeasonPicker(false);
                           }}
-                          className="w-full text-left font-sans text-[0.62rem] px-3 py-1.5 transition-colors hover:bg-[rgba(0,0,0,0.03)]"
+                          className="w-full text-left font-sans text-[0.75rem] px-3 py-1.5 transition-colors hover:bg-[rgba(0,0,0,0.03)]"
                           style={{
-                            color: seasonId === s.id ? "#C9A0A0" : "#8A8A8A",
+                            color: seasonId === s.id ? "#C9A0A0" : "#6B6B6B",
                             fontWeight: seasonId === s.id ? 500 : 400,
                           }}
                         >
@@ -335,13 +337,13 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
           <div className="flex items-center gap-2 flex-shrink-0">
             {text.length > 200 && (
               <span
-                className="font-sans text-[0.58rem] tracking-[0.02em] transition-colors duration-200"
+                className="font-sans text-[0.75rem] tracking-[0.02em] transition-colors duration-200"
                 style={{ color: charCountColor }}
               >
                 {text.length}/280
               </span>
             )}
-            <span className="font-sans text-[0.55rem] text-[#D0D0D0] hidden sm:inline">
+            <span className="font-sans text-[0.75rem] text-[#707070] hidden sm:inline">
               ⌘ Enter
             </span>
           </div>
