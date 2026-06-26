@@ -316,26 +316,7 @@ export default function AnalyticsPage() {
           </p>
         </div>
 
-        {/* Garden Health Summary */}
-        {active.length > 0 && (
-          <motion.div
-            custom={0}
-            initial="hidden"
-            animate="visible"
-            variants={cardVariants}
-            className="rounded-2xl p-7 mb-6 relative overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, rgba(201,160,160,0.06) 0%, rgba(143,175,154,0.04) 100%)",
-              backdropFilter: "blur(16px) saturate(1.2)",
-              border: "1px solid rgba(255,255,255,0.5)",
-              boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
-            }}
-          >
-            <p className="font-sans text-[1.05rem] text-[#4A4A4A] leading-[1.7]">
-              {healthSummary}
-            </p>
-          </motion.div>
-        )}
+        {/* Garden Health Summary removed */}
 
         {/* Metric cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -369,10 +350,10 @@ export default function AnalyticsPage() {
           initial="hidden"
           animate="visible"
           variants={cardVariants}
-          className="rounded-2xl p-7 overflow-hidden relative mb-6"
+          className="rounded-2xl p-5 overflow-hidden relative mb-6"
           style={glassStyle}
         >
-          <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-6">
+          <h2 className="font-serif italic text-[1.15rem] text-[#1C1C1E] mb-4">
             30-day activity
           </h2>
           {(() => {
@@ -383,18 +364,18 @@ export default function AnalyticsPage() {
             ];
             return (
               <>
-                <div className="grid gap-1.5" style={{ gridTemplateColumns: "repeat(7, 1fr)" }}>
+                <div className="grid gap-1" style={{ gridTemplateColumns: "repeat(7, 1fr)", maxWidth: "420px", margin: "0 auto" }}>
                   {DAY_LABELS.map((d) => (
-                    <div key={d} className="text-center font-sans text-[0.75rem] text-[#737373] mb-1">{d}</div>
+                    <div key={d} className="text-center font-sans text-[0.7rem] text-[#737373] mb-0.5">{d}</div>
                   ))}
                   {paddedData.map((item, i) => (
                     <div key={i} className="group relative">
                       <div
-                        className="w-full rounded-[4px] transition-transform hover:scale-110"
+                        className="w-full rounded-[3px] transition-transform hover:scale-110"
                         style={{
                           aspectRatio: "1",
                           background: item ? getHeatColor(item.count, maxCount) : "transparent",
-                          minHeight: "28px",
+                          maxHeight: "36px",
                         }}
                       />
                       {item && (
@@ -407,16 +388,16 @@ export default function AnalyticsPage() {
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center justify-between mt-5">
-                  <span className="font-sans text-[0.75rem] text-[#737373]">
+                <div className="flex items-center justify-between mt-3" style={{ maxWidth: "420px", margin: "12px auto 0" }}>
+                  <span className="font-sans text-[0.7rem] text-[#737373]">
                     {heatmapData[0]?.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-sans text-[0.75rem] text-[#737373]">Less</span>
-                    <div className="w-20 h-2.5 rounded-full" style={{ background: "linear-gradient(90deg, rgba(201,160,160,0.1) 0%, rgba(201,160,160,0.9) 100%)" }} />
-                    <span className="font-sans text-[0.75rem] text-[#737373]">More</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-sans text-[0.7rem] text-[#737373]">Less</span>
+                    <div className="w-14 h-2 rounded-full" style={{ background: "linear-gradient(90deg, rgba(201,160,160,0.1) 0%, rgba(201,160,160,0.9) 100%)" }} />
+                    <span className="font-sans text-[0.7rem] text-[#737373]">More</span>
                   </div>
-                  <span className="font-sans text-[0.75rem] text-[#737373]">Today</span>
+                  <span className="font-sans text-[0.7rem] text-[#737373]">Today</span>
                 </div>
               </>
             );

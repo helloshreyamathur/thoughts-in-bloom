@@ -107,7 +107,7 @@ const ThoughtCard = forwardRef<HTMLDivElement, ThoughtCardProps>(function Though
       )}
 
       <div className="p-6">
-        <p className="font-sans text-[0.95rem] text-[#1C1C1E] leading-[1.7] mb-4">
+        <p className="font-sans text-[0.84rem] text-[#1C1C1E] leading-[1.65] mb-4">
           {thought.text}
         </p>
         <div className="flex items-center justify-between gap-3">

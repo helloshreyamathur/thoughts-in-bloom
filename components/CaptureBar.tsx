@@ -182,10 +182,15 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
             </AnimatePresence>
             <motion.button
               onClick={handleSubmit}
-              whileHover={{ x: 1 }}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               disabled={!text.trim() || blooming}
-              className="font-sans text-[0.72rem] text-[#1C1C1E] tracking-[0.04em] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+              className="font-sans text-[0.75rem] tracking-[0.04em] disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200 px-3.5 py-1.5 rounded-full"
+              style={{
+                background: text.trim() ? "rgba(201,160,160,0.2)" : "transparent",
+                color: text.trim() ? "#8B5E5E" : "#737373",
+                border: text.trim() ? "1px solid rgba(201,160,160,0.3)" : "1px solid transparent",
+              }}
             >
               {blooming ? "Bloomed \u2713" : "Bloom \u2192"}
             </motion.button>
@@ -232,23 +237,27 @@ export default function CaptureBar({ onBloom, seasonId, seasons = [], onSeasonCh
           <div className="h-3 w-px bg-[rgba(0,0,0,0.06)] flex-shrink-0" />
 
           {/* Source icons */}
-          <div className="flex items-center gap-0.5 flex-shrink-0">
+          <div className="flex items-center gap-0 flex-shrink-0">
             {SOURCE_TYPES.map((s) => {
               const Icon = SOURCE_ICONS[s.id];
               const isActive = source === s.id;
               return (
-                <button
-                  key={s.id}
-                  onClick={() => setSource(isActive ? undefined : s.id)}
-                  className="p-2 rounded-md transition-all duration-150 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                  style={{
-                    background: isActive ? "rgba(201,160,160,0.15)" : "transparent",
-                    color: isActive ? "#8B5E5E" : "#707070",
-                  }}
-                  title={s.label}
-                >
-                  <Icon size={13} />
-                </button>
+                <div key={s.id} className="relative group">
+                  <button
+                    onClick={() => setSource(isActive ? undefined : s.id)}
+                    className="p-1.5 rounded-md transition-all duration-150 flex items-center justify-center"
+                    style={{
+                      background: isActive ? "rgba(201,160,160,0.15)" : "transparent",
+                      color: isActive ? "#8B5E5E" : "#707070",
+                    }}
+                    aria-label={s.label}
+                  >
+                    <Icon size={14} />
+                  </button>
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded-md text-[0.7rem] font-sans text-white bg-[#1C1C1E] opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap">
+                    {s.label}
+                  </span>
+                </div>
               );
             })}
           </div>

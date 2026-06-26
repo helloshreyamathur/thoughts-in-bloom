@@ -731,7 +731,7 @@ export default function ConstellationPage() {
               className="mx-auto w-[120px] h-[120px] mb-6"
               style={{ background: "radial-gradient(circle, rgba(160,154,201,0.12) 0%, transparent 70%)", filter: "blur(25px)" }}
             />
-            <p className="font-serif italic text-[1.1rem] text-[#707070]">
+            <p className="font-sans text-[0.9rem] text-[#707070]">
               Add thoughts to see your constellation.
             </p>
           </div>
@@ -836,10 +836,10 @@ export default function ConstellationPage() {
 
             {/* Tag name + count */}
             <div style={{ padding: "28px 32px 4px" }}>
-              <p className="font-serif italic leading-[1.4]" style={{ fontSize: "1.5rem", color: "#1C1C1E" }}>
+              <p className="font-sans font-medium leading-[1.4]" style={{ fontSize: "1.25rem", color: "#1C1C1E" }}>
                 {selectedTag.tag}
               </p>
-              <p className="font-sans text-[0.72rem] text-[#737373] mt-1">
+              <p className="font-sans text-[0.75rem] text-[#737373] mt-1">
                 {selectedTag.thoughts.length} thought{selectedTag.thoughts.length !== 1 ? "s" : ""} carry this theme
               </p>
             </div>
@@ -854,7 +854,7 @@ export default function ConstellationPage() {
             {/* Companion tag pills (only if no graph shown, i.e. isolated tag) */}
             {selectedTag.companionTags.length === 0 && (
               <div className="px-8 pt-3 pb-4">
-                <p className="font-serif italic text-[0.82rem] text-[#A0A0A0] leading-[1.55]">
+                <p className="font-sans text-[0.82rem] text-[#737373] leading-[1.55]">
                   This theme stands alone \u2014 not yet connected to any other ideas in your garden.
                 </p>
               </div>
@@ -913,7 +913,7 @@ export default function ConstellationPage() {
                 {insights.slice(0, 3).map((insight, i) => (
                   <div key={i} className="flex gap-2.5 items-start">
                     <div className="mt-[6px] flex-shrink-0" style={{ width: "5px", height: "5px", borderRadius: "50%", background: selectedTagColor, opacity: 0.5 }} />
-                    <p className="font-serif italic text-[0.8rem] leading-[1.55]" style={{ color: "#7A7A7A" }}>
+                    <p className="font-sans text-[0.8rem] leading-[1.55]" style={{ color: "#6B6B6B" }}>
                       {insight}
                     </p>
                   </div>
@@ -927,7 +927,7 @@ export default function ConstellationPage() {
             {/* Synthesis */}
             <div className="px-8 pt-5 pb-10">
               <div className="rounded-xl p-4" style={{ background: `linear-gradient(135deg, ${selectedTagColor}08, ${selectedTagColor}14)` }}>
-                <p className="font-serif italic" style={{ fontSize: "0.85rem", color: "#6A6A6A", lineHeight: 1.65 }}>
+                <p className="font-sans" style={{ fontSize: "0.82rem", color: "#6B6B6B", lineHeight: 1.65 }}>
                   {synthesis}
                 </p>
               </div>
